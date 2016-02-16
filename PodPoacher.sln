@@ -7,6 +7,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PodPoacherConsole", "PodPoa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PodPoacherLibrary", "PodPoacherLibrary\PodPoacherLibrary.vcxproj", "{A5F1D4AA-2536-4A51-8A9F-4445B10B0DDB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{73B801DF-224F-47A6-AF44-22EDB6D3E1EE}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

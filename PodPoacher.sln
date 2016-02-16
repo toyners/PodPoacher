@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PodPoacherConsole", "PodPoacherConsole\PodPoacherConsole.vcxproj", "{213F0083-74CE-4581-9D2E-89405012E479}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PodPoacherLibrary", "PodPoacherLibrary\PodPoacherLibrary.vcxproj", "{A5F1D4AA-2536-4A51-8A9F-4445B10B0DDB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{213F0083-74CE-4581-9D2E-89405012E479}.Debug|x64.ActiveCfg = Debug|x64
+		{213F0083-74CE-4581-9D2E-89405012E479}.Debug|x64.Build.0 = Debug|x64
+		{213F0083-74CE-4581-9D2E-89405012E479}.Debug|x86.ActiveCfg = Debug|Win32
+		{213F0083-74CE-4581-9D2E-89405012E479}.Debug|x86.Build.0 = Debug|Win32
+		{213F0083-74CE-4581-9D2E-89405012E479}.Release|x64.ActiveCfg = Release|x64
+		{213F0083-74CE-4581-9D2E-89405012E479}.Release|x64.Build.0 = Release|x64
+		{213F0083-74CE-4581-9D2E-89405012E479}.Release|x86.ActiveCfg = Release|Win32
+		{213F0083-74CE-4581-9D2E-89405012E479}.Release|x86.Build.0 = Release|Win32
+		{A5F1D4AA-2536-4A51-8A9F-4445B10B0DDB}.Debug|x64.ActiveCfg = Debug|x64
+		{A5F1D4AA-2536-4A51-8A9F-4445B10B0DDB}.Debug|x64.Build.0 = Debug|x64
+		{A5F1D4AA-2536-4A51-8A9F-4445B10B0DDB}.Debug|x86.ActiveCfg = Debug|Win32
+		{A5F1D4AA-2536-4A51-8A9F-4445B10B0DDB}.Debug|x86.Build.0 = Debug|Win32
+		{A5F1D4AA-2536-4A51-8A9F-4445B10B0DDB}.Release|x64.ActiveCfg = Release|x64
+		{A5F1D4AA-2536-4A51-8A9F-4445B10B0DDB}.Release|x64.Build.0 = Release|x64
+		{A5F1D4AA-2536-4A51-8A9F-4445B10B0DDB}.Release|x86.ActiveCfg = Release|Win32
+		{A5F1D4AA-2536-4A51-8A9F-4445B10B0DDB}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

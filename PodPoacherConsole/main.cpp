@@ -10,13 +10,11 @@
 #include <iostream>
 
 using namespace std;
-using namespace Jabberwocky::BasicHTTPLibrary;
 
-void getRSSFile(string url, string rssFilePath)
+void downloadRSSFile(string url, string rssFilePath)
 {
   cout << "Getting RSS file..." << endl;
-  HTTPFileDownload fileDownload;
-  fileDownload.DownloadFile(url, rssFilePath);
+  HTTPFileDownload::downloadTextFile(url, rssFilePath);
   cout << "RSS file downloaded." << endl;
 }
 
@@ -39,7 +37,7 @@ void displayParsingResults(RSSContentHandler* contentHandler)
   cout << "Parsing results displayed." << endl;
 }
 
-void parseRSSFile(string rssFilePath)
+string parseRSSFile(string rssFilePath)
 {
   cout << "Parsing RSS file..." << endl;
   RSSContentHandler contentHandler;
@@ -50,34 +48,35 @@ void parseRSSFile(string rssFilePath)
   cout << "RSS file parsed." << endl;
 
   displayParsingResults(&contentHandler);
+
+  return contentHandler.getChannel()->getPodcast(0)->getURL();
 }
 
-void streamPodcastFile(string url, string filePath)
+void downloadPodcastFile(string url, string filePath)
 {
   cout << "Streaming MP3 file..." << endl;
-  HTTPFileStreamer podcastStreamer;
-  podcastStreamer.StreamFile(url, filePath);
+  HTTPFileDownload::downloadBinaryFile(url, filePath, 0, 1024);
   cout << "MP3 file downloaded." << endl;
 }
 
 int main()
 {
   //string rssURL = "http://www.giantbomb.com/podcast-xml/giant-bombcast";
-  //string rssFilePath = "C:\\Projects\\PodPoacher\\Test\\giant-bomb.rss";
+  //string rssFilePath = "C:\\Projects\\PodPoacher_Test\\giant-bomb.rss";
 
   string rssURL = "http://www.bbc.co.uk/programmes/b00lvdrj/episodes/downloads.rss";
-  string rssFilePath = "C:\\Projects\\PodPoacher\\Test\\bbc.rss";
+  string rssFilePath = "C:\\Projects\\PodPoacher_Test\\podcasts.rss";
 
-  string podcastURL = "http://www.giantbomb.com/podcasts/download/1501/Giant_Bombcast_02_09_2016-02-09-2016-8270465901.mp3";
-  string podcastFilePath = "C:\\Projects\\PodPoacher\\Test\\giantbomb.mp3";
+  //string podcastURL = "http://www.giantbomb.com/podcasts/download/1501/Giant_Bombcast_02_09_2016-02-09-2016-8270465901.mp3";
+  string podcastFilePath = "C:\\Projects\\PodPoacher_Test\\podcast.mp3";
 
   try
   {
-    //getRSSFile(rssURL, rssFilePath);
+    downloadRSSFile(rssURL, rssFilePath);
 
-    parseRSSFile(rssFilePath);
+    string url = parseRSSFile(rssFilePath);
 
-    //streamPodcastFile(url, podcastFilePath);
+    downloadPodcastFile(url, podcastFilePath);
   }
   catch (exception& e)
   {

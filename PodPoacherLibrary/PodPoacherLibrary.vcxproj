@@ -84,7 +84,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.6.1\Foundation\include;C:\Projects\POCO\poco-1.6.1\XML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.6.1\Net\include;C:\Projects\POCO\poco-1.6.1\Foundation\include;C:\Projects\POCO\poco-1.6.1\XML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -111,7 +111,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.6.1\Foundation\include;C:\Projects\POCO\poco-1.6.1\XML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.6.1\Net\include;C:\Projects\POCO\poco-1.6.1\Foundation\include;C:\Projects\POCO\poco-1.6.1\XML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,6 +139,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HTTPFileDownload.h" />
     <ClInclude Include="PodcastChannel.h" />
     <ClInclude Include="PodcastDetails.h" />
     <ClInclude Include="RSSContentHandler.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="XMLFileParser.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="HTTPFileDownload.cpp" />
     <ClCompile Include="PodcastChannel.cpp" />
     <ClCompile Include="PodcastDetails.cpp" />
     <ClCompile Include="RSSContentHandler.cpp" />

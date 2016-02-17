@@ -9,14 +9,13 @@ using Poco::XML::XMLString;
 
 using namespace std;
 
-RSSContentHandler::RSSContentHandler()
+RSSContentHandler::RSSContentHandler(PodcastChannel* podcastChannel)
 {
-  channel = new PodcastChannel();
+  channel = podcastChannel;
 }
 
 RSSContentHandler::~RSSContentHandler()
 {
-  delete channel;
 }
 
 void RSSContentHandler::startElement(const XMLString& uri, const XMLString& localName, const XMLString& qname, const Attributes& attributes)

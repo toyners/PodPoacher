@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PodPoacherConsole", "PodPoacherConsole\PodPoacherConsole.vcxproj", "{213F0083-74CE-4581-9D2E-89405012E479}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A5F1D4AA-2536-4A51-8A9F-4445B10B0DDB} = {A5F1D4AA-2536-4A51-8A9F-4445B10B0DDB}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PodPoacherLibrary", "PodPoacherLibrary\PodPoacherLibrary.vcxproj", "{A5F1D4AA-2536-4A51-8A9F-4445B10B0DDB}"
 EndProject

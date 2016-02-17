@@ -26,7 +26,7 @@ private:
   long podcastSize;
 
 public:
-  RSSContentHandler();
+  RSSContentHandler(PodcastChannel* podcastChannel);
   ~RSSContentHandler();
   void setDocumentLocator(const Poco::XML::Locator * loc);
   void startDocument();

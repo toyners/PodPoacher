@@ -37,10 +37,11 @@ void displayParsingResults(RSSContentHandler* contentHandler)
   cout << "Parsing results displayed." << endl;
 }
 
-string parseRSSFile(string rssFilePath)
+string parseRSSFile(string rssURL, string rssFilePath)
 {
   cout << "Parsing RSS file..." << endl;
-  RSSContentHandler contentHandler;
+  PodcastChannel podcastChannel(rssURL);
+  RSSContentHandler contentHandler(&podcastChannel);
   cout << "RSS content handler created." << endl;
   XMLFileParser parser(&contentHandler);
   cout << "Parsing." << endl;
@@ -73,8 +74,8 @@ int main()
   try
   {
     downloadRSSFile(rssURL, rssFilePath);
-
-    string url = parseRSSFile(rssFilePath);
+    
+    string url = parseRSSFile(rssURL, rssFilePath);
 
     downloadPodcastFile(url, podcastFilePath);
   }

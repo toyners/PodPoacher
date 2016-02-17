@@ -39,6 +39,9 @@
     <ClInclude Include="HTTPFileDownload.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PodcastStorage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

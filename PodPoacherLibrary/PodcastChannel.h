@@ -8,23 +8,24 @@ class PodcastChannel
 {
 private:
   std::list<PodcastDetails*>* podcasts;
-  std::string channelTitle;
-  std::string channelDescription;
-  std::string channelWebsite;
+  std::string title;
+  std::string description;
+  std::string website;
+  std::string feedURL;
 
 public:
   PodcastChannel();
-  ~PodcastChannel();
+  ~PodcastChannel();   
 
-  std::string getTitle();
-  std::string getDescription();
-  std::string getWebsite();
-  int getPodcastCount();
+  std::string getTitle() { return title; }
+  std::string getDescription() { return description; }
+  std::string getWebsite() { return website; }
+  int getPodcastCount() { return podcasts->size(); }
   PodcastDetails* getPodcast(int index);
 
-  void setTitle(std::string title);
-  void setDescription(std::string description);
-  void setWebsite(std::string website);
+  void setTitle(std::string channelTitle);
+  void setDescription(std::string channelDescription);
+  void setWebsite(std::string channelWebsite);
   void addPodcastDetails(std::string title, std::string description, std::string pubDate, std::string url, long fileSize);
 };
 

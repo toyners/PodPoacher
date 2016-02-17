@@ -16,26 +16,6 @@ PodcastChannel::~PodcastChannel()
   delete podcasts;
 }
 
-string PodcastChannel::getTitle()
-{
-  return channelTitle;
-}
-
-std::string PodcastChannel::getDescription()
-{
-  return channelDescription;
-}
-
-string PodcastChannel::getWebsite()
-{
-  return channelWebsite;
-}
-
-int PodcastChannel::getPodcastCount()
-{
-  return podcasts->size();
-}
-
 PodcastDetails* PodcastChannel::getPodcast(int index)
 {
   if (podcasts->size() == 0)
@@ -61,27 +41,27 @@ PodcastDetails* PodcastChannel::getPodcast(int index)
   return it._Ptr->_Myval;
 }
 
-void PodcastChannel::setTitle(std::string title)
+void PodcastChannel::setTitle(string channelTitle)
 {
-  if (channelTitle == "" && title != "")
+  if (title == "" && channelTitle != "")
   {
-    channelTitle = title;
+    title = channelTitle;
   }
 }
 
-void PodcastChannel::setDescription(std::string description)
+void PodcastChannel::setDescription(string channelDescription)
 {
-  if (channelDescription == "" && description != "")
+  if (description == "" && channelDescription != "")
   {
-    channelDescription = description;
+    description = channelDescription;
   }
 }
 
-void PodcastChannel::setWebsite(std::string website)
+void PodcastChannel::setWebsite(string channelWebsite)
 {
-  if (channelWebsite == "" && website != "")
+  if (website == "" && channelWebsite != "")
   {
-    channelWebsite = website;
+    website = channelWebsite;
   }
 }
 

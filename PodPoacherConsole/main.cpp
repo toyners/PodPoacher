@@ -76,8 +76,7 @@ void FileProgress(long filePosition)
 void downloadPodcastFile(string url, string filePath)
 {
   cout << "Streaming MP3 file..." << endl;
-  HTTPFileDownload::setProgressCallbacks(&FileProgress);
-  HTTPFileDownload::downloadBinaryFile(url, filePath, 1024);
+  HTTPFileDownload::downloadBinaryFile(url, filePath, &FileProgress, 4096);
   cout << endl;
   cout << "MP3 file downloaded." << endl;
 }
@@ -95,7 +94,7 @@ int main()
 
   try
   {
-    downloadRSSFile(rssURL, rssFilePath);
+    //downloadRSSFile(rssURL, rssFilePath);
     
     string url = parseRSSFile(rssURL, rssFilePath);
 

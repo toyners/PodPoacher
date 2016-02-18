@@ -24,12 +24,6 @@ using namespace std;
 #define stringify( name ) # name
 
 static bool factoryRegistered;
-static FileProgressCallback fileProgressCallback;
-
-void HTTPFileDownload::setProgressCallbacks(FileProgressCallback progressCallback)
-{
-  fileProgressCallback = progressCallback;
-}
 
 void HTTPFileDownload::downloadTextFile(string url, string filePath)
 {
@@ -60,7 +54,7 @@ void HTTPFileDownload::downloadTextFile(string url, string filePath)
   file.close();
 }
 
-void HTTPFileDownload::downloadBinaryFile(string url, string filePath, int bufferSize)
+void HTTPFileDownload::downloadBinaryFile(string url, string filePath, FileProgressCallback progressCallback, int bufferSize)
 {
   if (!factoryRegistered)
   {
@@ -69,28 +63,27 @@ void HTTPFileDownload::downloadBinaryFile(string url, string filePath, int buffe
   }
 
   URI uri(url);
+  istream* rs = URIStreamOpener::defaultOpener().open(uri);
 
   ofstream file;
   file.open(filePath, ios::out | ios::trunc | ios::binary);
 
-  auto_ptr<istream> pStr(URIStreamOpener::defaultOpener().open(uri));
-
-  istream& rs = *pStr.get();
   char* buffer = new char[bufferSize];
   long writeCount = 0;
-  while (!rs.eof())
+  while (!rs->eof())
   {
-    rs.read(buffer, bufferSize);
-    streamsize readCount = rs.gcount();
+    rs->read(buffer, bufferSize);
+    streamsize readCount = rs->gcount();
     file.write(buffer, readCount);
 
-    if (fileProgressCallback != 0)
+    if (progressCallback != 0)
     {
       writeCount += readCount;
-      fileProgressCallback(writeCount);
+      progressCallback(writeCount);
     }
   }
 
   delete[] buffer;
+  delete rs;
   file.close();
 }

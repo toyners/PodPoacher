@@ -37,6 +37,9 @@ void displayParsingResults(RSSContentHandler* contentHandler)
   cout << "Parsing results displayed." << endl;
 }
 
+//long fileSize;
+long tickSize;
+
 string parseRSSFile(string rssURL, string rssFilePath)
 {
   cout << "Parsing RSS file..." << endl;
@@ -50,13 +53,32 @@ string parseRSSFile(string rssURL, string rssFilePath)
 
   displayParsingResults(&contentHandler);
 
-  return contentHandler.getChannel()->getPodcast(0)->getURL();
+  PodcastDetails* podcast = contentHandler.getChannel()->getPodcast(0);
+  //fileSize = podcast->getFileSize();
+  tickSize = podcast->getFileSize() / 20;
+
+  return podcast->getURL();
+}
+
+long tickCount = 0;
+
+void FileProgress(long filePosition)
+{
+  int ticks = filePosition / tickSize;
+  while (ticks > tickCount)
+  {
+    tickCount++;
+    //cout << ".";
+    cout << filePosition << endl;
+  }
 }
 
 void downloadPodcastFile(string url, string filePath)
 {
   cout << "Streaming MP3 file..." << endl;
-  HTTPFileDownload::downloadBinaryFile(url, filePath, 0, 1024);
+  HTTPFileDownload::setProgressCallbacks(&FileProgress);
+  HTTPFileDownload::downloadBinaryFile(url, filePath, 1024);
+  cout << endl;
   cout << "MP3 file downloaded." << endl;
 }
 

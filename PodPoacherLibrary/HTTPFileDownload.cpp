@@ -24,6 +24,12 @@ using namespace std;
 #define stringify( name ) # name
 
 static bool factoryRegistered;
+static FileProgressCallback fileProgressCallback;
+
+void HTTPFileDownload::setProgressCallbacks(FileProgressCallback progressCallback)
+{
+  fileProgressCallback = progressCallback;
+}
 
 void HTTPFileDownload::downloadTextFile(string url, string filePath)
 {
@@ -54,7 +60,7 @@ void HTTPFileDownload::downloadTextFile(string url, string filePath)
   file.close();
 }
 
-void HTTPFileDownload::downloadBinaryFile(string url, string filePath, FileProgressCallback fileProgressCallback, int bufferSize)
+void HTTPFileDownload::downloadBinaryFile(string url, string filePath, int bufferSize)
 {
   if (!factoryRegistered)
   {

@@ -23,8 +23,6 @@ using namespace std;
 
 #define stringify( name ) # name
 
-static bool factoryRegistered;
-
 void HTTPFileDownload::downloadTextFile(string url, string filePath)
 {
   URI uri(url);
@@ -56,11 +54,7 @@ void HTTPFileDownload::downloadTextFile(string url, string filePath)
 
 void HTTPFileDownload::downloadBinaryFile(string url, string filePath, FileProgressCallback progressCallback, int bufferSize)
 {
-  if (!factoryRegistered)
-  {
-    HTTPStreamFactory::registerFactory();
-    factoryRegistered = true;
-  }
+  HTTPStreamFactory::registerFactory();
 
   URI uri(url);
   istream* rs = URIStreamOpener::defaultOpener().open(uri);
@@ -86,4 +80,6 @@ void HTTPFileDownload::downloadBinaryFile(string url, string filePath, FileProgr
   delete[] buffer;
   delete rs;
   file.close();
+
+  HTTPStreamFactory::unregisterFactory();
 }

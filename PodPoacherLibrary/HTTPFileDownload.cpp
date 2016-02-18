@@ -42,7 +42,7 @@ void HTTPFileDownload::downloadTextFile(string url, string filePath)
 
   if (response.getStatus() != Poco::Net::HTTPResponse::HTTP_OK)
   {
-    string message = "Can't get file from '" + url + "'. Status is " + stringify(response.getStatus()) + ". Reason is '" + response.getReason() + "'.";
+    string message = "Can't get file from '" + url + "'. Status is " + std::to_string(response.getStatus()) + ". Reason is '" + response.getReason() + "'.";
     throw new exception(message.data());
   }
 

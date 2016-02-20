@@ -6,8 +6,10 @@
 #include "XMLFileParser.h"
 #include "HTTPFileStreamer.h"
 #include "RSSContentHandler.h"
+#include "FileBasedStorage.h"
 #include <string>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -81,7 +83,7 @@ void downloadPodcastFile(string url, string filePath)
   cout << "MP3 file downloaded." << endl;
 }
 
-int main()
+int SimpleTest()
 {
   //string rssURL = "http://www.giantbomb.com/podcast-xml/giant-bombcast";
   //string rssFilePath = "C:\\Projects\\PodPoacher_Test\\giant-bomb.rss";
@@ -95,7 +97,7 @@ int main()
   try
   {
     //downloadRSSFile(rssURL, rssFilePath);
-    
+
     string url = parseRSSFile(rssURL, rssFilePath);
 
     downloadPodcastFile(url, podcastFilePath);
@@ -109,5 +111,47 @@ int main()
   string value;
   cin >> value;
   return 0;
+}
+
+void ScanChannels(vector<PodcastChannel*> channels)
+{
+}
+
+int main()
+{
+  FileBasedStorage storage = FileBasedStorage("channels.txt");
+
+  string input;
+
+  while (true)
+  {
+    cout << "[A]dd channel, [D]isplay channels, [S]can channels or [E]xit:";
+    cin >> input;
+
+    if (input == "E" || input == "e")
+    {
+      return 0;
+    }
+
+    if (input == "A" || input == "a")
+    {
+      cout << "Enter feed URL: ";
+      cin >> input;
+      PodcastChannel channel(input);
+      storage.AddChannel(channel);
+    }
+
+    if (input == "D" || input == "d")
+    {
+      vector<PodcastChannel*> channels = storage.GetChannels();
+      //cout << channels
+    }
+
+    if (input == "S" || input == "s")
+    {
+      vector<PodcastChannel*> channels = storage.GetChannels();
+      ScanChannels(channels);
+    }
+  }
 }
 

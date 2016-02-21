@@ -32,7 +32,7 @@ FileBasedStorage::~FileBasedStorage()
   }
 }
 
-void FileBasedStorage::AddChannel(PodcastChannel& channel)
+void FileBasedStorage::addChannel(PodcastChannel& channel)
 {
   ofstream outputFile;
   string line = channel.getFeedURL();
@@ -50,7 +50,7 @@ void FileBasedStorage::AddChannel(PodcastChannel& channel)
   }
 }
 
-vector<PodcastChannel*>& FileBasedStorage::GetChannels()
+vector<PodcastChannel*>& FileBasedStorage::getChannels()
 {
   if (channelListIsLoaded)
   {
@@ -72,7 +72,7 @@ vector<PodcastChannel*>& FileBasedStorage::GetChannels()
   return channelList;
 }
 
-void FileBasedStorage::LoadChannel(PodcastChannel& channel)
+void FileBasedStorage::loadChannel(PodcastChannel& channel)
 {
   ifstream file;
   file.open(getChannelFileName(channel).data());
@@ -95,7 +95,7 @@ void FileBasedStorage::LoadChannel(PodcastChannel& channel)
   file.close();
 }
 
-void FileBasedStorage::UpdateChannel(PodcastChannel& channel)
+void FileBasedStorage::updateChannel(PodcastChannel& channel)
 {
   const char* outputpName = getChannelFileName(channel).data();
   string newName(outputpName);

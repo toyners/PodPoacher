@@ -10,10 +10,10 @@ public:
   FileBasedStorage(std::string storagePath);
   ~FileBasedStorage();
 
-  void AddChannel(PodcastChannel& channel);
-  std::vector<PodcastChannel*>& GetChannels();
-  void LoadChannel(PodcastChannel& channel);
-  void UpdateChannel(PodcastChannel& channel);
+  void addChannel(PodcastChannel& channel);
+  std::vector<PodcastChannel*>& getChannels();
+  void loadChannel(PodcastChannel& channel);
+  void updateChannel(PodcastChannel& channel);
 
 private:
   std::string getChannelFileName(PodcastChannel& channel);

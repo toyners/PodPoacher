@@ -8,8 +8,8 @@
 class PodcastStorage
 {
 public:
-  virtual void AddChannel(PodcastChannel& channel) = 0;
-  virtual std::vector<PodcastChannel*>& GetChannels() = 0;
-  virtual void LoadChannel(PodcastChannel& channel) = 0;
-  virtual void UpdateChannel(PodcastChannel& channel) = 0;
+  virtual void addChannel(PodcastChannel& channel) = 0;
+  virtual std::vector<PodcastChannel*>& getChannels() = 0;
+  virtual void loadChannel(PodcastChannel& channel) = 0;
+  virtual void updateChannel(PodcastChannel& channel) = 0;
 };

@@ -140,18 +140,18 @@ int main()
       cout << "Enter feed URL: ";
       cin >> input;
       PodcastChannel channel(input);
-      storage.AddChannel(channel);
+      storage.addChannel(channel);
     }
 
     if (input == "D" || input == "d")
     {
-      vector<PodcastChannel*> channels = storage.GetChannels();
+      vector<PodcastChannel*> channels = storage.getChannels();
       //cout << channels
     }
 
     if (input == "S" || input == "s")
     {
-      vector<PodcastChannel*> channels = storage.GetChannels();
+      vector<PodcastChannel*> channels = storage.getChannels();
       ScanChannels(channels);
     }
   }

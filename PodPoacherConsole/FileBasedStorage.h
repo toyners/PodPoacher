@@ -16,7 +16,6 @@ public:
   void UpdateChannel(PodcastChannel& channel);
 
 private:
-  //int GetNextKeyFromStorage(const std::string& storagePath);
   std::string getChannelFileName(PodcastChannel& channel);
   void getTokensFromLine(const std::string& line, std::vector<std::string>& tokens);
 };

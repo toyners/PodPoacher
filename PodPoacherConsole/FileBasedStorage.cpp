@@ -146,21 +146,3 @@ void FileBasedStorage::getTokensFromLine(const string& line, vector<string>& tok
     tokens.push_back(item);
   }
 }
-
-/*int FileBasedStorage::GetNextKeyFromStorage(const string& storagePath)
-{
-  ifstream inputFile;
-  inputFile.open(storagePath);
-
-  int nextKey = 1;
-  while (!inputFile.eof())
-  {
-    string line;
-    getline(inputFile, line);
-    nextKey++;
-  }
-
-  inputFile.close();
-
-  return nextKey;
-}*/

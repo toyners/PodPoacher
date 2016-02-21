@@ -96,7 +96,7 @@ int SimpleTest()
 
   try
   {
-    //downloadRSSFile(rssURL, rssFilePath);
+    downloadRSSFile(rssURL, rssFilePath);
 
     string url = parseRSSFile(rssURL, rssFilePath);
 
@@ -119,6 +119,8 @@ void ScanChannels(vector<PodcastChannel*> channels)
 
 int main()
 {
+  SimpleTest();
+  return 0;
   FileBasedStorage storage = FileBasedStorage("channels.txt");
 
   string input;

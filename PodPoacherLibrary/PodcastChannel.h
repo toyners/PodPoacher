@@ -12,15 +12,18 @@ private:
   std::string description;
   std::string website;
   std::string feedURL;
+  std::string publishedCount;
 
 public:
-  PodcastChannel(std::string feedURL);
+  PodcastChannel(const std::string& url);
+  PodcastChannel(std::string url, std::string channelTitle, std::string channelDescription, std::string channelWebsite, std::string channelCount);
   ~PodcastChannel();   
 
   std::string getTitle() { return title; }
   std::string getDescription() { return description; }
   std::string getWebsite() { return website; }
   std::string getFeedURL() { return feedURL; }
+  std::string getPublishedCount() { return publishedCount; }
   int getPodcastCount() { return podcasts->size(); }
   PodcastDetails* getPodcast(int index);
 

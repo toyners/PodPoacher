@@ -7,17 +7,23 @@
 #include "HTTPFileStreamer.h"
 #include "RSSContentHandler.h"
 #include "FileBasedStorage.h"
+#include "UI.h"
 #include <string>
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
+string workingPath;
+PodcastStorage* storage;
+long tickSize;
+long tickCount = 0;
+
 void downloadRSSFile(string url, string rssFilePath)
 {
-  cout << "Getting RSS file..." << endl;
+  cout << "Getting RSS file...";
   HTTPFileDownload::downloadTextFile(url, rssFilePath);
-  cout << "RSS file downloaded." << endl;
+  cout << "DONE." << endl;
 }
 
 void displayParsingResults(RSSContentHandler* contentHandler)
@@ -39,9 +45,6 @@ void displayParsingResults(RSSContentHandler* contentHandler)
   cout << "Parsing results displayed." << endl;
 }
 
-//long fileSize;
-long tickSize;
-
 string parseRSSFile(string rssURL, string rssFilePath)
 {
   cout << "Parsing RSS file..." << endl;
@@ -62,8 +65,6 @@ string parseRSSFile(string rssURL, string rssFilePath)
   return podcast->getURL();
 }
 
-long tickCount = 0;
-
 void FileProgress(long filePosition)
 {
   int ticks = filePosition / tickSize;
@@ -77,10 +78,10 @@ void FileProgress(long filePosition)
 
 void downloadPodcastFile(string url, string filePath)
 {
-  cout << "Streaming MP3 file..." << endl;
+  cout << "Streaming MP3 file...";
   HTTPFileDownload::downloadBinaryFile(url, filePath, &FileProgress, 4096);
   cout << endl;
-  cout << "MP3 file downloaded." << endl;
+  cout << "DONE." << endl;
 }
 
 int SimpleTest()
@@ -113,47 +114,99 @@ int SimpleTest()
   return 0;
 }
 
-void ScanChannels(vector<PodcastChannel*> channels)
+int indexOfChannelInList(const string& feedURL, vector<PodcastChannel*>& channels)
 {
+  for (int i = 0; i < channels.size(); i++)
+  {
+    PodcastChannel* channel = channels[i];
+    if (channel->getFeedURL() == feedURL)
+    {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+void displayChannelDetails(int number, PodcastChannel& channel)
+{
+  cout << "[" << to_string(number) << "] " << channel.getTitle() << endl;
+  cout << "    " << channel.getDescription() << endl;
+  cout << "    Podcasts: " << channel.getPublishedCount() << endl;
+  cout << endl;
+}
+
+void displayChannels(vector<PodcastChannel*>& channels)
+{
+  for (int i = 0; i < channels.size(); i++)
+  {
+    displayChannelDetails(i + 1, *channels[i]);
+    cout << endl;
+  }
+}
+
+void displayChannel(int number)
+{
+  vector<PodcastChannel*>& channels = storage->getChannels();
+  if (number == -1)
+  {
+    displayChannels(channels);
+    return;
+  }
+
+  displayChannelDetails(number, *channels[number - 1]);
+}
+
+void addChannel()
+{
+  string input;
+  cout << "Enter feed URL: ";
+  cin >> input;
+
+  vector<PodcastChannel*>& channels = storage->getChannels();
+
+  int index;
+  if ((index = indexOfChannelInList(input, channels)) != -1)
+  {
+    cout << "Channel already in storage:" << endl;
+    displayChannelDetails(index + 1, *channels[index]);
+    return;
+  }
+
+  string rssFilePath = workingPath + "podcast.rss";
+
+  downloadRSSFile(input, rssFilePath);
+
+  cout << "Parsing RSS file...";
+  PodcastChannel* podcastChannel = new PodcastChannel(input);
+  RSSContentHandler contentHandler(podcastChannel);
+  XMLFileParser parser(&contentHandler);
+  parser.ParseFile(rssFilePath);
+  cout << "DONE." << endl;
+
+  storage->addChannel(*podcastChannel);
+}
+
+void scanChannel(int number)
+{
+}
+
+int getChannelCount()
+{
+  return storage->getChannels().size();
 }
 
 int main()
 {
-  SimpleTest();
+  //SimpleTest();
+  //return 0;
+
+  workingPath = "C:\\Projects\\PodPoacher_Test\\Working\\";
+  storage = new FileBasedStorage("C:\\Projects\\PodPoacher_Test\\Data\\");
+  UI ui(addChannel, displayChannel, getChannelCount, scanChannel);
+
+  ui.topLevel();
+
   return 0;
-  FileBasedStorage storage = FileBasedStorage("channels.txt");
-
-  string input;
-
-  while (true)
-  {
-    cout << "[A]dd channel, [D]isplay channels, [S]can channels or [E]xit:";
-    cin >> input;
-
-    if (input == "E" || input == "e")
-    {
-      return 0;
-    }
-
-    if (input == "A" || input == "a")
-    {
-      cout << "Enter feed URL: ";
-      cin >> input;
-      PodcastChannel channel(input);
-      storage.addChannel(channel);
-    }
-
-    if (input == "D" || input == "d")
-    {
-      vector<PodcastChannel*> channels = storage.getChannels();
-      //cout << channels
-    }
-
-    if (input == "S" || input == "s")
-    {
-      vector<PodcastChannel*> channels = storage.getChannels();
-      ScanChannels(channels);
-    }
-  }
 }
 

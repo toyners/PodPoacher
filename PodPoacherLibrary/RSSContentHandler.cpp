@@ -20,6 +20,11 @@ RSSContentHandler::~RSSContentHandler()
 
 void RSSContentHandler::startElement(const XMLString& uri, const XMLString& localName, const XMLString& qname, const Attributes& attributes)
 {
+  if (qname != localName)
+  {
+    return;
+  }
+
   if (!inItems)
   {
     if (localName == "title")
@@ -127,7 +132,8 @@ void RSSContentHandler::characters(const XMLChar ch[], int start, int length)
 
   if (inChannelWebsiteEntity)
   {
-    channel->setWebsite(string(&ch[start], length));
+    string data(&ch[start], length);
+    channel->setWebsite(data);
     inChannelWebsiteEntity = false;
     return;
   }
@@ -158,7 +164,6 @@ PodcastChannel * RSSContentHandler::getChannel()
 {
   return channel;
 }
-
 
 void RSSContentHandler::setDocumentLocator(const Locator * loc) {}
 

@@ -9,19 +9,19 @@ using namespace std;
 
 string storagePath;
 string channelPath;
-int nextKey = -1;
 vector<PodcastChannel*> channelList;
-bool channelListIsLoaded;
 
 FileBasedStorage::FileBasedStorage(string path)
 {
-  if (path[path.size() - 1] != '\\')
+  if (path.size() > 0 && path[path.size() - 1] != '\\')
   {
     path += '\\';
   }
 
   storagePath = path;
   channelPath = path + "channels.txt";
+
+  loadChannelHeaders();
 }
 
 FileBasedStorage::~FileBasedStorage()
@@ -35,14 +35,18 @@ FileBasedStorage::~FileBasedStorage()
 void FileBasedStorage::addChannel(PodcastChannel& channel)
 {
   ofstream outputFile;
-  string line = channel.getFeedURL();
+  outputFile.open(channelPath, ios::app);
 
-  outputFile.open(storagePath, ios::app);
-  outputFile.write(line.data(), line.size());
+  outputFile << channel.getFeedURL() << "|" 
+    << channel.getTitle() << "|"
+    << channel.getDescription() << "|"
+    << channel.getWebsite() << "|"
+    << channel.getPublishedCount() << "|"
+    << endl;
+
   outputFile.close();
 
   channelList.push_back(&channel);
-  channelListIsLoaded = true;
 
   if (channel.getPodcastCount() > 0)
   {
@@ -52,23 +56,6 @@ void FileBasedStorage::addChannel(PodcastChannel& channel)
 
 vector<PodcastChannel*>& FileBasedStorage::getChannels()
 {
-  if (channelListIsLoaded)
-  {
-    return channelList;
-  }
-
-  ifstream inputFile;
-  inputFile.open(storagePath);
-  while (!inputFile.eof())
-  {
-    string line;
-    getline(inputFile, line);
-    
-    PodcastChannel podcastChannel(line);
-    channelList.push_back(&podcastChannel);
-  }
-
-  channelListIsLoaded = true;
   return channelList;
 }
 
@@ -97,23 +84,23 @@ void FileBasedStorage::loadChannel(PodcastChannel& channel)
 
 void FileBasedStorage::updateChannel(PodcastChannel& channel)
 {
-  const char* outputpName = getChannelFileName(channel).data();
-  string newName(outputpName);
-  newName += "_old";
+  const char* outputName = getChannelFileName(channel).data();
+  string newName(outputName);
+  newName = storagePath + newName + "_old";
 
   const char* backupName = newName.data();
-  rename(outputpName, backupName);
+  rename(outputName, backupName);
 
   ofstream file;
-  file.open(outputpName, ios::trunc);
+  file.open(outputName, ios::trunc);
 
   for (int i = 0; i < channel.getPodcastCount(); i++)
   {
     PodcastDetails* podcastDetails = channel.getPodcast(0);
-    file << podcastDetails->getTitle() << ","
-      << podcastDetails->getDescription() << ","
-      << podcastDetails->getPublishedDate() << ","
-      << podcastDetails->getURL() << ","
+    file << podcastDetails->getTitle() << "|"
+      << podcastDetails->getDescription() << "|"
+      << podcastDetails->getPublishedDate() << "|"
+      << podcastDetails->getURL() << "|"
       << to_string(podcastDetails->getFileSize()) << "\\n";
   }
 
@@ -141,8 +128,47 @@ void FileBasedStorage::getTokensFromLine(const string& line, vector<string>& tok
   stringstream ss(line);
   string item;
   tokens.clear();
-  while (getline(ss, item, ','))
+  while (getline(ss, item, '|'))
   {
     tokens.push_back(item);
   }
+}
+
+void FileBasedStorage::loadChannelHeaders()
+{
+  ifstream file;
+  file.open(channelPath);
+
+  if (!file.good())
+  {
+    // File does not exist so nothing to load.
+    return;
+  }
+
+  vector<string> tokens;
+  while (!file.eof())
+  {
+    string line;
+    getline(file, line);
+
+    if (line.size() == 0)
+    {
+      continue;
+    }
+
+    getTokensFromLine(line, tokens);
+
+    PodcastChannel* podcastChannel = new PodcastChannel
+      (
+      tokens[0],
+      tokens[1],
+      tokens[2],
+      tokens[3],
+      tokens[4]
+      );
+
+    channelList.push_back(podcastChannel);
+  }
+
+  file.close();
 }

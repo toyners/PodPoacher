@@ -156,12 +156,8 @@ void displayChannel(int number)
   displayChannelDetails(number, *channels[number - 1]);
 }
 
-void addChannel()
+void addChannel(string input)
 {
-  string input;
-  cout << "Enter feed URL: ";
-  cin >> input;
-
   vector<PodcastChannel*>& channels = storage->getChannels();
 
   int index;
@@ -181,7 +177,54 @@ void addChannel()
   RSSContentHandler contentHandler(podcastChannel);
   XMLFileParser parser(&contentHandler);
   parser.ParseFile(rssFilePath);
-  cout << "DONE." << endl;
+  cout << "DONE." << endl << endl;
+
+  int count = podcastChannel->getPodcastCount();
+  cout << count << " Podcasts found." << endl;
+
+  for (int i = 1; i < count + 1; i++)
+  {
+    string number = "[" + to_string(i) + "] ";
+    string indent(number.size(), ' ');
+    PodcastDetails* podcast = podcastChannel->getPodcast(i - 1);
+    cout << number << "TITLE: " << podcast->getTitle() << endl;
+    cout << indent << "DESCRIPTION: " << podcast->getDescription() << endl;
+    cout << indent << "PUB DATE: " << podcast->getPublishedDate() << " SIZE: " << podcast->getFileSize() << endl;
+    
+    if (podcast->isDownloaded() || podcast->isIgnored())
+    {
+      if (podcast->isIgnored())
+      {
+        cout << indent << "IGNORED ";
+      }
+      else
+      {
+        cout << indent << "        ";
+      }
+
+      if (podcast->isDownloaded())
+      {
+        cout << "DOWNLOAD DATE: " << podcast->getDownloadDate();
+      }
+
+      cout << endl;
+    }
+
+    cout << endl;
+
+    if (i > 0 && i % 5 == 0)
+    {
+      cout << (count - i) << " Podcasts to go. [C]ontinue or [S]top" << endl;
+      cin >> input;
+
+      char c = tolower(input[0]);
+      if (c == 's')
+      {
+        break;
+      }
+    }
+  }
+  
 
   storage->addChannel(*podcastChannel);
 }

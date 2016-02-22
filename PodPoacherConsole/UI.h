@@ -2,7 +2,7 @@
 
 #include "PodcastStorage.h"
 
-typedef void(*AddChannelCallback)();
+typedef void(*AddChannelCallback)(std::string);
 typedef void(*DisplayChannelsCallback)(int);
 typedef int(*GetChannelCountCallback)();
 typedef void(*ScanChannelCallback)(int);
@@ -24,6 +24,7 @@ public:
 private:
   void displayChannelsUI();
   void scanChannelsUI();
+  void addChannelUI();
   bool tryConvertInputToNumber(std::string input, int& number);
 };
 

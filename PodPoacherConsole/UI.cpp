@@ -41,7 +41,7 @@ void UI::topLevel()
 
     if (input == 'A' || input == 'a')
     {
-      addChannel();
+      addChannelUI();
     }
 
     if (input == 'D' || input == 'd')
@@ -110,6 +110,15 @@ void UI::scanChannelsUI()
       scanChannel(number);
     }
   }
+}
+
+void UI::addChannelUI()
+{
+  string input;
+  cout << "Enter feed URL: ";
+  cin >> input;
+
+  addChannel(input);
 }
 
 bool UI::tryConvertInputToNumber(string input, int& number)

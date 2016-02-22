@@ -14,6 +14,7 @@ private:
   bool inChannelTitleEntity;
   bool inChannelDescriptionEntity;
   bool inChannelWebsiteEntity;
+  bool inChannelPubDateEntity;
 
   bool inPodcastTitleEntity;
   bool inPodcastDescriptionEntity;

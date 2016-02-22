@@ -11,13 +11,13 @@ PodcastChannel::PodcastChannel(const string& url)
   podcasts = new list<PodcastDetails*>;
 }
 
-PodcastChannel::PodcastChannel(string url, string channelTitle, string channelDescription, string channelWebsite, string channelCount)
+PodcastChannel::PodcastChannel(string url, string channelTitle, string channelDescription, string channelWebsite, string date)
 {
   feedURL = url;
   title = channelTitle;
   description = channelDescription;
   website = channelWebsite;
-  publishedCount = channelCount;
+  publishedDate = date;
   podcasts = new list<PodcastDetails*>;
 }
 
@@ -76,7 +76,20 @@ void PodcastChannel::setWebsite(string channelWebsite)
   }
 }
 
-void PodcastChannel::addPodcastDetails(std::string title, std::string description, std::string pubDate, std::string url, long fileSize)
+void PodcastChannel::setPublishDate(string date)
+{
+  if (publishedDate == "" && date != "")
+  {
+    publishedDate = date;
+  }
+}
+
+void PodcastChannel::addPodcastDetails(string title, string description, string pubDate, string url, long fileSize)
+{
+  addPodcastDetails(title, description, pubDate, url, fileSize, false, "");
+}
+
+void PodcastChannel::addPodcastDetails(string title, string description, string pubDate, string url, long fileSize, bool ignored, string downloadDate)
 {
   PodcastDetails* podcast = new PodcastDetails(
     title,
@@ -84,6 +97,9 @@ void PodcastChannel::addPodcastDetails(std::string title, std::string descriptio
     pubDate,
     url,
     fileSize);
+
+  podcast->setIgnored(ignored);
+  podcast->setDownloadDate(downloadDate);
 
   podcasts->push_back(podcast);
 }

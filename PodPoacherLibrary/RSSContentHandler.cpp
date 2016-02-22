@@ -44,6 +44,12 @@ void RSSContentHandler::startElement(const XMLString& uri, const XMLString& loca
       inChannelWebsiteEntity = true;
       return;
     }
+
+    if (localName == "pubDate")
+    {
+      inChannelPubDateEntity = true;
+      return;
+    }
   }
 
   if (localName == "item")
@@ -135,6 +141,13 @@ void RSSContentHandler::characters(const XMLChar ch[], int start, int length)
     string data(&ch[start], length);
     channel->setWebsite(data);
     inChannelWebsiteEntity = false;
+    return;
+  }
+
+  if (inChannelPubDateEntity)
+  {
+    channel->setPublishDate(string(&ch[start], length));
+    inChannelPubDateEntity = false;
     return;
   }
 

@@ -132,7 +132,7 @@ void displayChannelDetails(int number, PodcastChannel& channel)
 {
   cout << "[" << to_string(number) << "] " << channel.getTitle() << endl;
   cout << "    " << channel.getDescription() << endl;
-  cout << "    Podcasts: " << channel.getPublishedCount() << endl;
+  cout << "    Podcasts: " << channel.getPodcastCount() << endl;
   cout << endl;
 }
 
@@ -141,7 +141,6 @@ void displayChannels(vector<PodcastChannel*>& channels)
   for (int i = 0; i < channels.size(); i++)
   {
     displayChannelDetails(i + 1, *channels[i]);
-    cout << endl;
   }
 }
 
@@ -187,8 +186,43 @@ void addChannel()
   storage->addChannel(*podcastChannel);
 }
 
+PodcastChannel* createChannelFromFeed(string feedURL)
+{
+  string rssFilePath = workingPath + "podcast.rss";
+
+  downloadRSSFile(feedURL, rssFilePath);
+
+  cout << "Parsing RSS file...";
+  PodcastChannel* podcastChannel = new PodcastChannel(feedURL);
+  RSSContentHandler contentHandler(podcastChannel);
+  XMLFileParser parser(&contentHandler);
+  parser.ParseFile(rssFilePath);
+  cout << "DONE." << endl;
+
+  return podcastChannel;
+}
+
+void scanChannels(vector<PodcastChannel*>& channels)
+{
+
+}
+
 void scanChannel(int number)
 {
+  vector<PodcastChannel*>& channels = storage->getChannels();
+  if (number == -1)
+  {
+    scanChannels(channels);
+    return;
+  }
+
+  PodcastChannel* originalChannel = channels[number - 1];
+  PodcastChannel* newChannel = createChannelFromFeed(originalChannel->getFeedURL());
+
+  if (newChannel->getPublishedDate() == originalChannel->getPublishedDate())
+  {
+
+  }
 }
 
 int getChannelCount()

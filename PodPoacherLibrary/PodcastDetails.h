@@ -11,7 +11,6 @@ private:
   std::string pubDate;
   std::string url;
   long fileSize;
-  bool ignored;
   std::string downloadDate;
 
 public:
@@ -24,9 +23,7 @@ public:
   std::string getURL();
   std::string getDownloadDate() { return downloadDate; }
   long getFileSize();
-  bool isIgnored() { return ignored; }
   bool isDownloaded() { return !downloadDate.empty(); }
-  void setIgnored(bool value);
   void setDownloadDate(std::string date);
 };
 

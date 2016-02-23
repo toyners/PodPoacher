@@ -36,7 +36,7 @@ public:
   void setPublishDate(std::string date);
 
   void addPodcastDetails(std::string title, std::string description, std::string pubDate, std::string url, long fileSize);
-  void addPodcastDetails(std::string title, std::string description, std::string pubDate, std::string url, long fileSize, bool ignored, std::string downloadDate);
+  void addPodcastDetails(std::string title, std::string description, std::string pubDate, std::string url, long fileSize, std::string downloadDate);
 };
 
 

@@ -183,7 +183,6 @@ void FileBasedStorage::serialisePodcasts(const string& fileName, PodcastChannel&
       << podcast.getURL() << "|"
       << podcast.getPublishedDate() << "|"
       << podcast.getFileSize() << "|"
-      << podcast.isIgnored() << "|"
       << podcast.getDownloadDate() << "|"
       << endl;
   }
@@ -215,7 +214,6 @@ void FileBasedStorage::deserialisePodcasts(const string& fileName, PodcastChanne
       tokens[2],
       tokens[3],
       stol(tokens[4]),
-      tokens[5] == "true",
-      tokens[6]);
+      tokens[5]);
   }
 }

@@ -39,12 +39,8 @@ long PodcastDetails::getFileSize()
   return fileSize;
 }
 
-void PodcastDetails::setIgnored(bool value)
-{
-  ignored = value;
-}
-
-void PodcastDetails::setDownloadDate(std::string date)
-{
-  downloadDate = date;
+  void PodcastDetails::setDownloadDate(std::string date)
+  {
+    downloadDate = date;
+  }
 }

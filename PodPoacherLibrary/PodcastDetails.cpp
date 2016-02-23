@@ -39,7 +39,9 @@ long PodcastDetails::getFileSize()
   return fileSize;
 }
 
-  void PodcastDetails::setDownloadDate(std::string date)
+void PodcastDetails::setDownloadDate(std::string date)
+{
+  if (downloadDate == "")
   {
     downloadDate = date;
   }

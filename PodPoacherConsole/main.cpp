@@ -141,14 +141,14 @@ string getDate()
 {
   time_t t = time(0);   // get time now
   struct tm * now = localtime(&t);
-  return to_string(now->tm_mday) + " " + to_string(now->tm_mon) + " " + to_string(now->tm_year + 1900);
+  return to_string(now->tm_mday) + "-" + to_string(now->tm_mon) + "-" + to_string(now->tm_year + 1900);
 }
 
 string getTime()
 {
   time_t t = time(0);   // get time now
   struct tm * now = localtime(&t);
-  return to_string(now->tm_hour) + ":" + to_string(now->tm_min) + ":" + to_string(now->tm_sec);
+  return to_string(now->tm_hour) + "-" + to_string(now->tm_min) + "-" + to_string(now->tm_sec);
 }
 
 void downloadPodcastFile(string url, string filePath, long fileSize)

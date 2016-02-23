@@ -87,29 +87,19 @@ void FileBasedStorage::loadChannel(PodcastChannel& channel)
 
 void FileBasedStorage::updateChannel(PodcastChannel& channel)
 {
-  const char* outputName = getChannelFileName(channel).data();
-  string newName(outputName);
-  newName = storagePath + newName + "_old";
+  string channelFileName = getChannelFileName(channel);
+  
+  string backupPath = storagePath + channelFileName + "_old";
+  string outputPath = storagePath + channelFileName;
 
-  const char* backupName = newName.data();
-  rename(outputName, backupName);
+  const char* backupPathPtr = backupPath.data();
+  const char* outputPathPtr = outputPath.data();
 
-  ofstream file;
-  file.open(outputName, ios::trunc);
+  int result = rename(outputPathPtr, backupPathPtr);
 
-  for (int i = 0; i < channel.getPodcastCount(); i++)
-  {
-    PodcastDetails* podcastDetails = channel.getPodcast(0);
-    file << podcastDetails->getTitle() << "|"
-      << podcastDetails->getDescription() << "|"
-      << podcastDetails->getPublishedDate() << "|"
-      << podcastDetails->getURL() << "|"
-      << to_string(podcastDetails->getFileSize()) << "\\n";
-  }
+  serialisePodcasts(outputPath, channel);
 
-  file.close();
-
-  remove(backupName);
+  remove(backupPathPtr);
 }
 
 string FileBasedStorage::getChannelFileName(PodcastChannel& channel)

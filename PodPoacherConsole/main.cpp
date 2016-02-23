@@ -89,54 +89,6 @@ void displayChannel(int number)
   displayChannelDetails(number, *channels[number - 1]);
 }
 
-void displayPodcasts(PodcastChannel& channel)
-{
-  int count = channel.getPodcastCount();
-  for (int i = 1; i < count + 1; i++)
-  {
-    string number = "<" + to_string(i) + "> ";
-    string indent(number.size(), ' ');
-    PodcastDetails* podcast = channel.getPodcast(i - 1);
-    cout << number << "TITLE: " << podcast->getTitle() << endl;
-    cout << indent << "DESCRIPTION: " << podcast->getDescription() << endl;
-    cout << indent << "PUB DATE: " << podcast->getPublishedDate() << " SIZE: " << podcast->getFileSize() << endl;
-
-    if (podcast->isDownloaded() || podcast->isIgnored())
-    {
-      if (podcast->isIgnored())
-      {
-        cout << indent << "IGNORED ";
-      }
-      else
-      {
-        cout << indent << "        ";
-      }
-
-      if (podcast->isDownloaded())
-      {
-        cout << "DOWNLOAD DATE: " << podcast->getDownloadDate();
-      }
-
-      cout << endl;
-    }
-
-    cout << endl;
-
-    if (i > 0 && i % 5 == 0)
-    {
-      string input;
-      cout << (count - i) << " Podcasts to go. [C]ontinue or [S]top" << endl;
-      cin >> input;
-
-      char c = tolower(input[0]);
-      if (c == 's')
-      {
-        break;
-      }
-    }
-  }
-}
-
 string getDate()
 {
   time_t t = time(0);   // get time now

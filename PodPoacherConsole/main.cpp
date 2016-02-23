@@ -47,13 +47,6 @@ void FileProgress(long filePosition)
   }
 }
 
-void downloadPodcastFile(string url, string filePath)
-{
-  cout << "Getting MP3 file";
-  HTTPFileDownload::downloadBinaryFile(url, filePath, &FileProgress, 4096);
-  cout << "DONE." << endl;
-}
-
 int indexOfChannelInList(const string& feedURL, vector<PodcastChannel*>& channels)
 {
   for (int i = 0; i < channels.size(); i++)
@@ -144,18 +137,38 @@ void displayPodcasts(PodcastChannel& channel)
   }
 }
 
-void downloadPodcast(PodcastDetails& podcast)
-{
-  tickSize = podcast.getFileSize() / 20;
-  tickCount = 0;
-  downloadPodcastFile(podcast.getURL(), currentChannel->getDirectory() + "podcast.mp3");
-}
-
-string getTodaysDate()
+string getDate()
 {
   time_t t = time(0);   // get time now
   struct tm * now = localtime(&t);
   return to_string(now->tm_mday) + " " + to_string(now->tm_mon) + " " + to_string(now->tm_year + 1900);
+}
+
+string getTime()
+{
+  time_t t = time(0);   // get time now
+  struct tm * now = localtime(&t);
+  return to_string(now->tm_hour) + ":" + to_string(now->tm_min) + ":" + to_string(now->tm_sec);
+}
+
+void downloadPodcastFile(string url, string filePath, long fileSize)
+{
+  tickSize = fileSize / 20;
+  tickCount = 0;
+
+  cout << "Getting MP3 file";
+  HTTPFileDownload::downloadBinaryFile(url, filePath, &FileProgress, 4096);
+  cout << "DONE." << endl;
+}
+
+void downloadPodcast(int number)
+{
+  PodcastDetails* podcast = currentChannel->getPodcast(number - 1);
+  string date = getDate();
+  string time = getTime();
+  string filePath = currentChannel->getDirectory() + podcast->getTitle() + " " + date + " " + time + ".mp3";
+  downloadPodcastFile(podcast->getURL(), filePath, podcast->getFileSize());
+  podcast->setDownloadDate(date + " " + time);
 }
 
 void downloadPodcasts(int number)
@@ -164,15 +177,15 @@ void downloadPodcasts(int number)
   {
     for (int i = 1; i <= currentChannel->getPodcastCount(); i++)
     {
-      downloadPodcasts(i);
+      downloadPodcast(i);
     }
-
-    return;
+  }
+  else
+  {
+    downloadPodcast(number);
   }
 
-  PodcastDetails* podcast = currentChannel->getPodcast(number - 1);
-  downloadPodcast(*podcast);
-  podcast->setDownloadDate(getTodaysDate());
+  storage->updateChannel(*currentChannel);
 }
 
 void verifyChannelIsNotInList(string url)

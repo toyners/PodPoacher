@@ -9,6 +9,13 @@ PodcastChannel::PodcastChannel(const string& url, const string& directory)
 {
   feedURL = url;
   podcastDirectory = directory;
+  
+  // Ensure that the directory has a trailing back slash.
+  if (podcastDirectory.size() > 0 && podcastDirectory[podcastDirectory.size() - 1] != '\\')
+  {
+    podcastDirectory += '\\';
+  }
+
   podcasts = new list<PodcastDetails*>;
 }
 

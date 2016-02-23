@@ -80,7 +80,7 @@ void UI::displayChannelsUI()
     }
 
     int number;
-    if (tryConvertInputToNumber(input, number))
+    if (tryConvertInputToNumber(input, number, channelCount))
     {
       displayChannel(number);
     }
@@ -108,7 +108,7 @@ void UI::scanChannelsUI()
     }
 
     int number;
-    if (tryConvertInputToNumber(input, number))
+    if (tryConvertInputToNumber(input, number, channelCount))
     {
       scanChannel(number);
     }
@@ -127,14 +127,14 @@ void UI::addChannelUI()
 
   PodcastChannel* channel = addChannel(url, directory);
 
-  int count = channel->getPodcastCount();
-  cout << count << " Podcasts loaded." << endl << endl;
+  int podcastCount = channel->getPodcastCount();
+  cout << podcastCount << " Podcasts loaded." << endl << endl;
 
   // Display podcasts, download all or download some
   while (true)
   {
     string input;
-    cout << "[D]isplay podcasts, Download [A]ll podcasts, Download individual podcasts [1 - " << count << "] or [B]ack" << endl;
+    cout << "[D]isplay podcasts, Download [A]ll podcasts, Download individual podcasts [1 - " << podcastCount << "] or [B]ack" << endl;
     cin >> input;
     char c = tolower(input[0]);
 
@@ -156,7 +156,7 @@ void UI::addChannelUI()
     }
 
     int number;
-    if (tryConvertInputToNumber(input, number))
+    if (tryConvertInputToNumber(input, number, podcastCount))
     {
       download(number);
       continue;
@@ -164,22 +164,21 @@ void UI::addChannelUI()
   }
 }
 
-bool UI::tryConvertInputToNumber(string input, int& number)
+bool UI::tryConvertInputToNumber(string input, int& number, int podcastCount)
 {
-  int channelCount = getChannelCount();
   try
   {
     number = stoi(input);
 
     if (number <= 0)
     {
-      cout << "'" << input << "' is negative! Range is [1 - " << channelCount << "]" << endl;
+      cout << "'" << input << "' is negative! Range is [1 - " << podcastCount << "]" << endl;
       return false;
     }
 
-    if (number > channelCount)
+    if (number > podcastCount)
     {
-      cout << "'" << input << "' is out of range! Range is [1 - " << channelCount << "]" << endl;
+      cout << "'" << input << "' is out of range! Range is [1 - " << podcastCount << "]" << endl;
       return false;
     }
 
@@ -187,11 +186,11 @@ bool UI::tryConvertInputToNumber(string input, int& number)
   }
   catch (invalid_argument& i)
   {
-    cout << "'" << input << "' is not a valid option! Options are [A], [B] or [1 - " << channelCount << "]" << endl;
+    cout << "'" << input << "' is not a valid option! Options are [A], [B] or [1 - " << podcastCount << "]" << endl;
   }
   catch (out_of_range& o)
   {
-    cout << "'" << input << "' is out of range! Range is [1 - " << channelCount << "]" << endl;
+    cout << "'" << input << "' is out of range! Range is [1 - " << podcastCount << "]" << endl;
   }
 
   return false;
@@ -223,7 +222,7 @@ bool UI::haltRollingPodcastDisplay(int total, int remaining)
     }
 
     int number;
-    if (tryConvertInputToNumber(input, number))
+    if (tryConvertInputToNumber(input, number, total))
     {
       download(number);
       continue;

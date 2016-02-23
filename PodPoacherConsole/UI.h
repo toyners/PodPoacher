@@ -28,7 +28,7 @@ private:
   void displayChannelsUI();
   void scanChannelsUI();
   void addChannelUI();
-  bool tryConvertInputToNumber(std::string input, int& number);
+  bool tryConvertInputToNumber(std::string input, int& number, int total);
   void displayPodcasts(PodcastChannel& channel);
   bool haltRollingPodcastDisplay(int total, int remaining);
 };

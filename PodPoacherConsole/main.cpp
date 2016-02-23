@@ -27,25 +27,6 @@ void downloadRSSFile(string url, string rssFilePath)
   cout << "DONE." << endl;
 }
 
-void displayParsingResults(RSSContentHandler* contentHandler)
-{
-  PodcastChannel* channel = contentHandler->getChannel();
-  cout << "Displaying parsing results" << endl;
-  cout << "CHANNEL TITLE: " << channel->getTitle() << endl;
-  cout << "CHANNEL DESCRIPTION: " << channel->getDescription() << endl;
-  cout << "CHANNEL WEBSITE: " << channel->getWebsite() << endl;
-  cout << "PODCAST COUNT: " << channel->getPodcastCount() << endl;
-
-  PodcastDetails* podcast = channel->getPodcast(0);
-  cout << "TITLE: " << podcast->getTitle() << endl;
-  cout << "DESCRIPTION: " << podcast->getDescription() << endl;
-  cout << "PUB DATE: " << podcast->getPublishedDate() << endl;
-  cout << "URL: " << podcast->getURL() << endl;
-  cout << "FILE SIZE: " << podcast->getFileSize() << endl;
-
-  cout << "Parsing results displayed." << endl;
-}
-
 void parseRSSFile(string url, string rssFilePath, PodcastChannel* channel)
 {
   cout << "Parsing RSS file...";
@@ -72,36 +53,6 @@ void downloadPodcastFile(string url, string filePath)
   HTTPFileDownload::downloadBinaryFile(url, filePath, &FileProgress, 4096);
   cout << endl;
   cout << "DONE." << endl;
-}
-
-int SimpleTest()
-{
-  //string rssURL = "http://www.giantbomb.com/podcast-xml/giant-bombcast";
-  //string rssFilePath = "C:\\Projects\\PodPoacher_Test\\giant-bomb.rss";
-
-  string rssURL = "http://www.bbc.co.uk/programmes/b00lvdrj/episodes/downloads.rss";
-  string rssFilePath = "C:\\Projects\\PodPoacher_Test\\podcasts.rss";
-
-  //string podcastURL = "http://www.giantbomb.com/podcasts/download/1501/Giant_Bombcast_02_09_2016-02-09-2016-8270465901.mp3";
-  string podcastFilePath = "C:\\Projects\\PodPoacher_Test\\podcast.mp3";
-
-  try
-  {
-    //downloadRSSFile(rssURL, rssFilePath);
-
-    //string url = parseRSSFile(rssURL, rssFilePath);
-
-    //downloadPodcastFile(url, podcastFilePath);
-  }
-  catch (exception& e)
-  {
-    cout << e.what() << endl;
-  }
-
-  cout << "Finished.";
-  string value;
-  cin >> value;
-  return 0;
 }
 
 int indexOfChannelInList(const string& feedURL, vector<PodcastChannel*>& channels)

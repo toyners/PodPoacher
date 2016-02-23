@@ -122,7 +122,7 @@ void UI::addChannelUI()
   cin >> url;
 
   string directory;
-  cout << endl << "Enter directory for podcasts: ";
+  cout << "Enter directory for podcasts: ";
   cin >> directory;
 
   PodcastChannel* channel = addChannel(url, directory);
@@ -197,6 +197,40 @@ bool UI::tryConvertInputToNumber(string input, int& number)
   return false;
 }
 
+bool UI::haltRollingPodcastDisplay(int total, int remaining)
+{
+  while (true)
+  {
+    string input;
+    cout << remaining << " Podcasts to go. [D]own, Download [A]ll podcasts, Download individual podcasts [1 - " << total << "] or [B]reak" << endl;
+    cin >> input;
+
+    char c = tolower(input[0]);
+    if (c == 'b')
+    {
+      return false;
+    }
+
+    if (c == 'd')
+    {
+      return true;
+    }
+
+    if (c == 'a')
+    {
+      download(-1);
+      continue;
+    }
+
+    int number;
+    if (tryConvertInputToNumber(input, number))
+    {
+      download(number);
+      continue;
+    }
+  }
+}
+
 void UI::displayPodcasts(PodcastChannel& channel)
 {
   int count = channel.getPodcastCount();
@@ -205,8 +239,8 @@ void UI::displayPodcasts(PodcastChannel& channel)
     string number = "<" + to_string(i) + "> ";
     string indent(number.size(), ' ');
     PodcastDetails* podcast = channel.getPodcast(i - 1);
-    cout << number << "TITLE: " << podcast->getTitle()
-      << " PUB DATE: " << podcast->getPublishedDate() 
+    cout << number << "TITLE: " << podcast->getTitle() << endl
+      << indent << "PUB DATE: " << podcast->getPublishedDate() 
       << " SIZE: " << podcast->getFileSize();
 
     if (podcast->isDownloaded())
@@ -218,27 +252,9 @@ void UI::displayPodcasts(PodcastChannel& channel)
 
     if (i > 0 && i % 5 == 0)
     {
-      string input;
-      cout << (count - i) << " Podcasts to go. [D]own, Download [A]ll podcasts, Download individual podcasts [1 - " << count << "] or [B]reak" << endl;
-      cin >> input;
-
-      char c = tolower(input[0]);
-      if (c == 's')
+      if (!haltRollingPodcastDisplay(count, count - i))
       {
         break;
-      }
-
-      if (c == 'a')
-      {
-        download(-1);
-        continue;
-      }
-
-      int number;
-      if (tryConvertInputToNumber(input, number))
-      {
-        download(number);
-        continue;
       }
     }
   }

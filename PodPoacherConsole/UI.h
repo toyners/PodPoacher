@@ -30,5 +30,6 @@ private:
   void addChannelUI();
   bool tryConvertInputToNumber(std::string input, int& number);
   void displayPodcasts(PodcastChannel& channel);
+  bool haltRollingPodcastDisplay(int total, int remaining);
 };
 

@@ -49,7 +49,7 @@ void FileProgress(long filePosition)
 
 void downloadPodcastFile(string url, string filePath)
 {
-  cout << "Getting MP3 file...";
+  cout << "Getting MP3 file";
   HTTPFileDownload::downloadBinaryFile(url, filePath, &FileProgress, 4096);
   cout << "DONE." << endl;
 }

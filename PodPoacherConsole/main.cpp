@@ -63,9 +63,11 @@ int indexOfChannelInList(const string& feedURL, vector<PodcastChannel*>& channel
 
 void displayChannelDetails(int number, PodcastChannel& channel)
 {
-  cout << "[" << to_string(number) << "] " << channel.getTitle() << endl;
-  cout << "    " << channel.getDirectory() << endl;
-  cout << "    Podcasts: " << channel.getPodcastCount() << " Published Date: " << channel.getPublishedDate() << endl;
+  string label = "[" + to_string(number) + "] ";
+  string indent(label.size(), ' ');
+  cout << label << channel.getTitle() << endl;
+  cout << indent << channel.getDirectory() << endl;
+  cout << indent << "PODCASTS: " << channel.getPodcastCount() << "  PUBLISHED DATE: " << channel.getPublishedDate() << endl;
   cout << endl;
 }
 

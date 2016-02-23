@@ -2,10 +2,12 @@
 
 #include "PodcastStorage.h"
 
-typedef void(*AddChannelCallback)(std::string);
+typedef PodcastChannel*(*AddChannelCallback)(std::string, std::string);
 typedef void(*DisplayChannelsCallback)(int);
+typedef void(*DisplayPodcastsCallback)(int);
 typedef int(*GetChannelCountCallback)();
 typedef void(*ScanChannelCallback)(int);
+typedef void(*DownloadCallback)(int);
 
 class UI
 {
@@ -14,7 +16,8 @@ public:
     AddChannelCallback addChannelCallBack,
     DisplayChannelsCallback displayChannelsCallBack, 
     GetChannelCountCallback getChannelCountCallBack,
-    ScanChannelCallback scanChannelCallBack
+    ScanChannelCallback scanChannelCallBack,
+    DownloadCallback downloadCallBack
     );
 
   ~UI();
@@ -26,5 +29,6 @@ private:
   void scanChannelsUI();
   void addChannelUI();
   bool tryConvertInputToNumber(std::string input, int& number);
+  void displayPodcasts(PodcastChannel& channel);
 };
 

@@ -5,17 +5,19 @@
 
 using namespace std;
 
-PodcastChannel::PodcastChannel(const string& url)
+PodcastChannel::PodcastChannel(const string& url, const string& directory)
 {
   feedURL = url;
+  podcastDirectory = directory;
   podcasts = new list<PodcastDetails*>;
 }
 
-PodcastChannel::PodcastChannel(string url, string channelTitle, string channelDescription, string channelWebsite, string date)
+PodcastChannel::PodcastChannel(string url, string channelTitle, string channelDescription, string channelDirectory, string channelWebsite, string date)
 {
   feedURL = url;
   title = channelTitle;
   description = channelDescription;
+  podcastDirectory = channelDirectory;
   website = channelWebsite;
   publishedDate = date;
   podcasts = new list<PodcastDetails*>;

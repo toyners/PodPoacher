@@ -18,6 +18,7 @@ string workingPath;
 PodcastStorage* storage;
 long tickSize;
 long tickCount = 0;
+PodcastChannel* currentChannel;
 
 void downloadRSSFile(string url, string rssFilePath)
 {
@@ -45,24 +46,13 @@ void displayParsingResults(RSSContentHandler* contentHandler)
   cout << "Parsing results displayed." << endl;
 }
 
-string parseRSSFile(string rssURL, string rssFilePath)
+void parseRSSFile(string url, string rssFilePath, PodcastChannel* channel)
 {
-  cout << "Parsing RSS file..." << endl;
-  PodcastChannel podcastChannel(rssURL);
-  RSSContentHandler contentHandler(&podcastChannel);
-  cout << "RSS content handler created." << endl;
+  cout << "Parsing RSS file...";
+  RSSContentHandler contentHandler(channel);
   XMLFileParser parser(&contentHandler);
-  cout << "Parsing." << endl;
   parser.ParseFile(rssFilePath);
-  cout << "RSS file parsed." << endl;
-
-  displayParsingResults(&contentHandler);
-
-  PodcastDetails* podcast = contentHandler.getChannel()->getPodcast(0);
-  //fileSize = podcast->getFileSize();
-  tickSize = podcast->getFileSize() / 20;
-
-  return podcast->getURL();
+  cout << "DONE." << endl;
 }
 
 void FileProgress(long filePosition)
@@ -97,11 +87,11 @@ int SimpleTest()
 
   try
   {
-    downloadRSSFile(rssURL, rssFilePath);
+    //downloadRSSFile(rssURL, rssFilePath);
 
-    string url = parseRSSFile(rssURL, rssFilePath);
+    //string url = parseRSSFile(rssURL, rssFilePath);
 
-    downloadPodcastFile(url, podcastFilePath);
+    //downloadPodcastFile(url, podcastFilePath);
   }
   catch (exception& e)
   {
@@ -131,8 +121,8 @@ int indexOfChannelInList(const string& feedURL, vector<PodcastChannel*>& channel
 void displayChannelDetails(int number, PodcastChannel& channel)
 {
   cout << "[" << to_string(number) << "] " << channel.getTitle() << endl;
-  cout << "    " << channel.getDescription() << endl;
-  cout << "    Podcasts: " << channel.getPodcastCount() << endl;
+  cout << "    " << channel.getDirectory() << endl;
+  cout << "    Podcasts: " << channel.getPodcastCount() << " Published Date: " << channel.getPublishedDate() << endl;
   cout << endl;
 }
 
@@ -156,41 +146,18 @@ void displayChannel(int number)
   displayChannelDetails(number, *channels[number - 1]);
 }
 
-void addChannel(string input)
+void displayPodcasts(PodcastChannel& channel)
 {
-  vector<PodcastChannel*>& channels = storage->getChannels();
-
-  int index;
-  if ((index = indexOfChannelInList(input, channels)) != -1)
-  {
-    cout << "Channel already in storage:" << endl;
-    displayChannelDetails(index + 1, *channels[index]);
-    return;
-  }
-
-  string rssFilePath = workingPath + "podcast.rss";
-
-  downloadRSSFile(input, rssFilePath);
-
-  cout << "Parsing RSS file...";
-  PodcastChannel* podcastChannel = new PodcastChannel(input);
-  RSSContentHandler contentHandler(podcastChannel);
-  XMLFileParser parser(&contentHandler);
-  parser.ParseFile(rssFilePath);
-  cout << "DONE." << endl << endl;
-
-  int count = podcastChannel->getPodcastCount();
-  cout << count << " Podcasts found." << endl;
-
+  int count = channel.getPodcastCount();
   for (int i = 1; i < count + 1; i++)
   {
-    string number = "[" + to_string(i) + "] ";
+    string number = "<" + to_string(i) + "> ";
     string indent(number.size(), ' ');
-    PodcastDetails* podcast = podcastChannel->getPodcast(i - 1);
+    PodcastDetails* podcast = channel.getPodcast(i - 1);
     cout << number << "TITLE: " << podcast->getTitle() << endl;
     cout << indent << "DESCRIPTION: " << podcast->getDescription() << endl;
     cout << indent << "PUB DATE: " << podcast->getPublishedDate() << " SIZE: " << podcast->getFileSize() << endl;
-    
+
     if (podcast->isDownloaded() || podcast->isIgnored())
     {
       if (podcast->isIgnored())
@@ -214,6 +181,7 @@ void addChannel(string input)
 
     if (i > 0 && i % 5 == 0)
     {
+      string input;
       cout << (count - i) << " Podcasts to go. [C]ontinue or [S]top" << endl;
       cin >> input;
 
@@ -224,25 +192,52 @@ void addChannel(string input)
       }
     }
   }
-  
-
-  storage->addChannel(*podcastChannel);
 }
 
-PodcastChannel* createChannelFromFeed(string feedURL)
+void downloadPodcasts(int index)
+{
+}
+
+void verifyChannelIsNotInList(string url)
+{
+  vector<PodcastChannel*>& channels = storage->getChannels();
+
+  int index;
+  if ((index = indexOfChannelInList(url, channels)) != -1)
+  {
+    string message = "Channel already in storage!" + channels[index]->getTitle();
+    throw new invalid_argument(message.data());
+  }
+}
+
+PodcastChannel* addChannel(string url, string directory)
+{
+  verifyChannelIsNotInList(url);
+
+  string rssFilePath = workingPath + "podcast.rss";
+  downloadRSSFile(url, rssFilePath);
+
+  currentChannel = new PodcastChannel(url, directory);
+  parseRSSFile(url, rssFilePath, currentChannel);
+
+  storage->addChannel(*currentChannel);
+
+  return currentChannel;
+}
+
+PodcastChannel* createChannelFromFeed(string feedURL, string directory)
 {
   string rssFilePath = workingPath + "podcast.rss";
 
   downloadRSSFile(feedURL, rssFilePath);
+  
+  PodcastChannel* channel = new PodcastChannel(feedURL, directory);
+
+  parseRSSFile(feedURL, rssFilePath, channel);
 
   cout << "Parsing RSS file...";
-  PodcastChannel* podcastChannel = new PodcastChannel(feedURL);
-  RSSContentHandler contentHandler(podcastChannel);
-  XMLFileParser parser(&contentHandler);
-  parser.ParseFile(rssFilePath);
-  cout << "DONE." << endl;
-
-  return podcastChannel;
+  
+  return channel;
 }
 
 void scanChannels(vector<PodcastChannel*>& channels)
@@ -260,7 +255,7 @@ void scanChannel(int number)
   }
 
   PodcastChannel* originalChannel = channels[number - 1];
-  PodcastChannel* newChannel = createChannelFromFeed(originalChannel->getFeedURL());
+  PodcastChannel* newChannel = createChannelFromFeed(originalChannel->getFeedURL(), originalChannel->getDirectory());
 
   if (newChannel->getPublishedDate() == originalChannel->getPublishedDate())
   {
@@ -280,7 +275,7 @@ int main()
 
   workingPath = "C:\\Projects\\PodPoacher_Test\\Working\\";
   storage = new FileBasedStorage("C:\\Projects\\PodPoacher_Test\\Data\\");
-  UI ui(addChannel, displayChannel, getChannelCount, scanChannel);
+  UI ui(addChannel, displayChannel, getChannelCount, scanChannel, downloadPodcasts);
 
   ui.topLevel();
 

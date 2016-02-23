@@ -11,13 +11,14 @@ private:
   std::string title;
   std::string description;
   std::string website;
+  std::string podcastDirectory;
   std::string feedURL;
   std::string publishedCount;
   std::string publishedDate;
 
 public:
-  PodcastChannel(const std::string& url);
-  PodcastChannel(std::string url, std::string channelTitle, std::string channelDescription, std::string channelWebsite, std::string date);
+  PodcastChannel(const std::string& url, const std::string& directory);
+  PodcastChannel(std::string url, std::string channelTitle, std::string channelDescription, std::string channelDirectory, std::string channelWebsite, std::string date);
   ~PodcastChannel();   
 
   std::string getTitle() { return title; }
@@ -25,6 +26,7 @@ public:
   std::string getWebsite() { return website; }
   std::string getFeedURL() { return feedURL; }
   std::string getPublishedDate() { return publishedDate; }
+  std::string getDirectory() { return podcastDirectory; }
   int getPodcastCount() { return podcasts->size(); }
   PodcastDetails* getPodcast(int index);
 

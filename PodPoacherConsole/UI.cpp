@@ -11,17 +11,20 @@ AddChannelCallback addChannel;
 DisplayChannelsCallback displayChannel;
 GetChannelCountCallback getChannelCount;
 ScanChannelCallback scanChannel;
+DownloadCallback download;
 
 UI::UI(
   AddChannelCallback addChannelCallBack,
   DisplayChannelsCallback displayChannelsCallBack,
   GetChannelCountCallback getChannelCountCallBack,
-  ScanChannelCallback scanChannelCallBack
+  ScanChannelCallback scanChannelCallBack,
+  DownloadCallback downloadCallBack
   )
 {
   addChannel = addChannelCallBack;
   displayChannel = displayChannelsCallBack;
   getChannelCount = getChannelCountCallBack;
+  download = downloadCallBack;
 }
 
 UI::~UI() {}
@@ -114,11 +117,51 @@ void UI::scanChannelsUI()
 
 void UI::addChannelUI()
 {
-  string input;
+  string url;
   cout << "Enter feed URL: ";
-  cin >> input;
+  cin >> url;
 
-  addChannel(input);
+  string directory;
+  cout << endl << "Enter directory for podcasts: ";
+  cin >> directory;
+
+  PodcastChannel* channel = addChannel(url, directory);
+
+  int count = channel->getPodcastCount();
+  cout << count << " Podcasts loaded." << endl << endl;
+
+  // Display podcasts, download all or download some
+  while (true)
+  {
+    string input;
+    cout << "[D]isplay podcasts, Download [A]ll podcasts, Download individual podcasts [1 - " << count << "] or [B]ack" << endl;
+    cin >> input;
+    char c = tolower(input[0]);
+
+    if (c == 'b')
+    {
+      break;
+    }
+
+    if (c == 'd')
+    {
+      displayPodcasts(*channel);
+      continue;
+    }
+
+    if (c == 'a')
+    {
+      download(-1);
+      continue;
+    }
+
+    int number;
+    if (tryConvertInputToNumber(input, number))
+    {
+      download(number);
+      continue;
+    }
+  }
 }
 
 bool UI::tryConvertInputToNumber(string input, int& number)
@@ -152,4 +195,51 @@ bool UI::tryConvertInputToNumber(string input, int& number)
   }
 
   return false;
+}
+
+void UI::displayPodcasts(PodcastChannel& channel)
+{
+  int count = channel.getPodcastCount();
+  for (int i = 1; i < count + 1; i++)
+  {
+    string number = "<" + to_string(i) + "> ";
+    string indent(number.size(), ' ');
+    PodcastDetails* podcast = channel.getPodcast(i - 1);
+    cout << number << "TITLE: " << podcast->getTitle()
+      << " PUB DATE: " << podcast->getPublishedDate() 
+      << " SIZE: " << podcast->getFileSize();
+
+    if (podcast->isDownloaded())
+    {
+      cout << "DOWNLOAD DATE: " << podcast->getDownloadDate();
+    }
+
+    cout << endl;
+
+    if (i > 0 && i % 5 == 0)
+    {
+      string input;
+      cout << (count - i) << " Podcasts to go. [D]own, Download [A]ll podcasts, Download individual podcasts [1 - " << count << "] or [B]reak" << endl;
+      cin >> input;
+
+      char c = tolower(input[0]);
+      if (c == 's')
+      {
+        break;
+      }
+
+      if (c == 'a')
+      {
+        download(-1);
+        continue;
+      }
+
+      int number;
+      if (tryConvertInputToNumber(input, number))
+      {
+        download(number);
+        continue;
+      }
+    }
+  }
 }

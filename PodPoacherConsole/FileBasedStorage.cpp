@@ -40,6 +40,7 @@ void FileBasedStorage::addChannel(PodcastChannel& channel)
   outputFile << channel.getFeedURL() << "|"
     << channel.getTitle() << "|"
     << channel.getDescription() << "|"
+    << channel.getDirectory() << "|"
     << channel.getWebsite() << "|"
     << channel.getPublishedDate() << "|"
     << endl;
@@ -165,7 +166,8 @@ void FileBasedStorage::deserialiseChannels()
       tokens[1],
       tokens[2],
       tokens[3],
-      tokens[4]
+      tokens[4],
+      tokens[5]
       );
 
     string fileName = storagePath + to_string(channelList.size() + 1) + ".txt";

@@ -115,12 +115,12 @@ void downloadPodcastFile(string url, string filePath, long fileSize)
   cout << "DONE." << endl;
 }
 
-void downloadPodcast(int number)
+void downloadPodcast(PodcastChannel* channel, int number)
 {
-  PodcastDetails* podcast = currentChannel->getPodcast(number - 1);
+  PodcastDetails* podcast = channel->getPodcast(number - 1);
   string date = getDate();
   string time = getTime();
-  string filePath = currentChannel->getDirectory() + podcast->getTitle() + " " + date + " " + time + ".mp3";
+  string filePath = channel->getDirectory() + podcast->getTitle() + " " + date + " " + time + ".mp3";
   downloadPodcastFile(podcast->getURL(), filePath, podcast->getFileSize());
   podcast->setDownloadDate(date + " " + time);
 }
@@ -131,12 +131,12 @@ void downloadPodcasts(int number)
   {
     for (int i = 1; i <= currentChannel->getPodcastCount(); i++)
     {
-      downloadPodcast(i);
+      downloadPodcast(currentChannel, i);
     }
   }
   else
   {
-    downloadPodcast(number);
+    downloadPodcast(currentChannel, number);
   }
 
   storage->updateChannel(*currentChannel);
@@ -184,26 +184,47 @@ PodcastChannel* createChannelFromFeed(string feedURL, string directory)
   return channel;
 }
 
-void scanChannels(vector<PodcastChannel*>& channels)
-{
-
-}
-
 void scanChannel(int number)
 {
-  vector<PodcastChannel*>& channels = storage->getChannels();
-  if (number == -1)
-  {
-    scanChannels(channels);
-    return;
-  }
-
+  vector<PodcastChannel*> channels = storage->getChannels();
   PodcastChannel* originalChannel = channels[number - 1];
   PodcastChannel* newChannel = createChannelFromFeed(originalChannel->getFeedURL(), originalChannel->getDirectory());
 
   if (newChannel->getPublishedDate() == originalChannel->getPublishedDate())
   {
+    return;
+  }
 
+  // Get the number of podcasts to download.
+  string latestPublishDate = originalChannel->getPodcast(0)->getPublishedDate();
+  for (int i = 0; i < newChannel->getPodcastCount(); i++)
+  {
+    PodcastDetails* podcast = newChannel->getPodcast(i);
+    if (latestPublishDate == podcast->getPublishedDate())
+    {
+      break;
+    }
+
+    downloadPodcast(newChannel, i);
+  }
+
+  delete originalChannel;
+  channels[number - 1] = newChannel;
+  storage->updateChannel(*newChannel);
+}
+
+void scanChannels(int number)
+{
+  if (number == -1)
+  {
+    for (int i = 1; i <= storage->getChannels().size(); i++)
+    {
+      scanChannel(i);
+    }
+  }
+  else
+  {
+    scanChannel(number);
   }
 }
 
@@ -219,7 +240,7 @@ int main()
 
   workingPath = "C:\\Projects\\PodPoacher_Test\\Working\\";
   storage = new FileBasedStorage("C:\\Projects\\PodPoacher_Test\\Data\\");
-  UI ui(addChannel, displayChannel, getChannelCount, scanChannel, downloadPodcasts);
+  UI ui(addChannel, displayChannel, getChannelCount, scanChannels, downloadPodcasts);
 
   ui.topLevel();
 

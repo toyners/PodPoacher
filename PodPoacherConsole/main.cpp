@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <ctime>
 
 using namespace std;
 
@@ -42,16 +43,14 @@ void FileProgress(long filePosition)
   while (ticks > tickCount)
   {
     tickCount++;
-    //cout << ".";
-    cout << filePosition << endl;
+    cout << ".";
   }
 }
 
 void downloadPodcastFile(string url, string filePath)
 {
-  cout << "Streaming MP3 file...";
+  cout << "Getting MP3 file...";
   HTTPFileDownload::downloadBinaryFile(url, filePath, &FileProgress, 4096);
-  cout << endl;
   cout << "DONE." << endl;
 }
 
@@ -145,8 +144,35 @@ void displayPodcasts(PodcastChannel& channel)
   }
 }
 
-void downloadPodcasts(int index)
+void downloadPodcast(PodcastDetails& podcast)
 {
+  tickSize = podcast.getFileSize() / 20;
+  tickCount = 0;
+  downloadPodcastFile(podcast.getURL(), currentChannel->getDirectory() + "podcast.mp3");
+}
+
+string getTodaysDate()
+{
+  time_t t = time(0);   // get time now
+  struct tm * now = localtime(&t);
+  return to_string(now->tm_mday) + " " + to_string(now->tm_mon) + " " + to_string(now->tm_year + 1900);
+}
+
+void downloadPodcasts(int number)
+{
+  if (number == -1)
+  {
+    for (int i = 1; i <= currentChannel->getPodcastCount(); i++)
+    {
+      downloadPodcasts(i);
+    }
+
+    return;
+  }
+
+  PodcastDetails* podcast = currentChannel->getPodcast(number - 1);
+  downloadPodcast(*podcast);
+  podcast->setDownloadDate(getTodaysDate());
 }
 
 void verifyChannelIsNotInList(string url)

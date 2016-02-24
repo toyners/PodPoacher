@@ -120,11 +120,11 @@ string getReadableFileSize(long size)
   float sizeInMB = sizeInKB / 1024;
   if (sizeInMB < 0)
   {
-    sprintf(buffer, "%.2f", sizeInKB);
+    sprintf(buffer, "%.1f", sizeInKB);
     return string(buffer) + " KB";
   }
 
-  sprintf(buffer, "%.2f", sizeInMB);
+  sprintf(buffer, "%.1f", sizeInMB);
   return string(buffer) + " MB";
 }
 

@@ -134,7 +134,6 @@ long downloadPodcastFile(string url, string filePath, long fileSize)
   tickCount = 0;
   filePosition = 0;
 
-  cout << "Getting MP3 file";
   HTTPFileDownload::downloadBinaryFile(url, filePath, &FileProgress, 4096);
   cout << "DONE. " << getReadableFileSize(filePosition) << endl;
   return filePosition;
@@ -155,13 +154,16 @@ void downloadPodcasts(int number)
 {
   if (number == -1)
   {
-    for (int i = 1; i <= currentChannel->getPodcastCount(); i++)
+    int count = currentChannel->getPodcastCount();
+    for (int i = 1; i <= count; i++)
     {
+      cout << "Getting MP3 file [" << i << " of " << count << "]";
       downloadPodcast(currentChannel, i);
     }
   }
   else
   {
+    cout << "Getting MP3 file";
     downloadPodcast(currentChannel, number);
   }
 
@@ -231,6 +233,7 @@ void scanChannel(int number)
       break;
     }
 
+    cout << "Getting MP3 file";
     downloadPodcast(newChannel, i);
   }
 

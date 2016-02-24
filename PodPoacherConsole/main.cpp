@@ -20,6 +20,7 @@ PodcastStorage* storage;
 long tickSize;
 long tickCount = 0;
 PodcastChannel* currentChannel;
+long filePosition;
 
 void downloadRSSFile(string url, string rssFilePath)
 {
@@ -37,14 +38,16 @@ void parseRSSFile(string url, string rssFilePath, PodcastChannel* channel)
   cout << "DONE." << endl;
 }
 
-void FileProgress(long filePosition)
+void FileProgress(long position)
 {
-  int ticks = filePosition / tickSize;
+  int ticks = position / tickSize;
   while (ticks > tickCount)
   {
     tickCount++;
     cout << ".";
   }
+
+  filePosition = position;
 }
 
 int indexOfChannelInList(const string& feedURL, vector<PodcastChannel*>& channels)
@@ -105,14 +108,35 @@ string getTime()
   return to_string(now->tm_hour) + "-" + to_string(now->tm_min) + "-" + to_string(now->tm_sec);
 }
 
+string getReadableFileSize(long size)
+{
+  char buffer[25];
+  float sizeInKB = (float)size / 1024;
+  if (sizeInKB < 0)
+  {
+    return to_string(size) + " b";
+  }
+
+  float sizeInMB = sizeInKB / 1024;
+  if (sizeInMB < 0)
+  {
+    sprintf(buffer, "%.2f", sizeInKB);
+    return string(buffer) + " KB";
+  }
+
+  sprintf(buffer, "%.2f", sizeInMB);
+  return string(buffer) + " MB";
+}
+
 void downloadPodcastFile(string url, string filePath, long fileSize)
 {
   tickSize = fileSize / 20;
   tickCount = 0;
+  filePosition = 0;
 
   cout << "Getting MP3 file";
   HTTPFileDownload::downloadBinaryFile(url, filePath, &FileProgress, 4096);
-  cout << "DONE." << endl;
+  cout << "DONE. " << getReadableFileSize(filePosition) << endl;
 }
 
 void downloadPodcast(PodcastChannel* channel, int number)

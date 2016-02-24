@@ -25,5 +25,6 @@ public:
   long getFileSize();
   bool isDownloaded() { return !downloadDate.empty(); }
   void setDownloadDate(std::string date);
+  void setFileSize(long size) { fileSize = size; }
 };
 

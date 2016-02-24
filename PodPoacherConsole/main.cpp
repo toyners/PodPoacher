@@ -128,7 +128,7 @@ string getReadableFileSize(long size)
   return string(buffer) + " MB";
 }
 
-void downloadPodcastFile(string url, string filePath, long fileSize)
+long downloadPodcastFile(string url, string filePath, long fileSize)
 {
   tickSize = fileSize / 20;
   tickCount = 0;
@@ -137,6 +137,7 @@ void downloadPodcastFile(string url, string filePath, long fileSize)
   cout << "Getting MP3 file";
   HTTPFileDownload::downloadBinaryFile(url, filePath, &FileProgress, 4096);
   cout << "DONE. " << getReadableFileSize(filePosition) << endl;
+  return filePosition;
 }
 
 void downloadPodcast(PodcastChannel* channel, int number)
@@ -145,7 +146,8 @@ void downloadPodcast(PodcastChannel* channel, int number)
   string date = getDate();
   string time = getTime();
   string filePath = channel->getDirectory() + podcast->getTitle() + " " + date + " " + time + ".mp3";
-  downloadPodcastFile(podcast->getURL(), filePath, podcast->getFileSize());
+  long fileSize = downloadPodcastFile(podcast->getURL(), filePath, podcast->getFileSize());
+  podcast->setFileSize(fileSize);
   podcast->setDownloadDate(date + " " + time);
 }
 

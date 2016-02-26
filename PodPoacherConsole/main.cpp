@@ -12,6 +12,7 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include <fstream>
 
 using namespace std;
 
@@ -262,10 +263,33 @@ int getChannelCount()
   return storage->getChannels().size();
 }
 
-int main()
+string getWorkingDirectory()
 {
-  workingPath = "C:\\Projects\\PodPoacher_Test\\Working\\";
-  storage = new FileBasedStorage("C:\\Projects\\PodPoacher_Test\\Data\\");
+  char* pathPtr;
+  _get_pgmptr(&pathPtr);
+  string path(pathPtr);
+  path = path.substr(0, path.find_last_of('\\') + 1);
+
+  ifstream configFile;
+  configFile.open(path + "config.txt");
+  if (!configFile.good())
+  {
+    throw new ios::failure("Config file not opened.");
+  }
+
+  string line;
+  getline(configFile, line);
+  configFile.close();
+
+  return line;
+}
+
+int main(int argc, char* argv[])
+{
+  workingPath = getWorkingDirectory();
+
+  storage = new FileBasedStorage(workingPath);
+  
   UI ui(addChannel, displayChannel, getChannelCount, scanChannels, downloadPodcasts);
 
   ui.topLevel();

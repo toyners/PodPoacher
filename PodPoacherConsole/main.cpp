@@ -151,6 +151,18 @@ void downloadPodcast(PodcastChannel* channel, int number)
   podcast->setDownloadDate(date + " " + time);
 }
 
+void downloadSinglePodcast(PodcastChannel* channel, int number)
+{
+  cout << "Getting MP3 file";
+  downloadPodcast(channel, number);
+}
+
+void downloadOneOfMultiplePodcasts(PodcastChannel* channel, int number, int total)
+{
+  cout << "Getting MP3 file [" << number << " of " << total << "]";
+  downloadPodcast(channel, number);
+}
+
 void downloadPodcasts(int number)
 {
   if (number == -1)
@@ -158,14 +170,12 @@ void downloadPodcasts(int number)
     int count = currentChannel->getPodcastCount();
     for (int i = 1; i <= count; i++)
     {
-      cout << "Getting MP3 file [" << i << " of " << count << "]";
-      downloadPodcast(currentChannel, i);
+      downloadOneOfMultiplePodcasts(currentChannel, i, count);
     }
   }
   else
   {
-    cout << "Getting MP3 file";
-    downloadPodcast(currentChannel, number);
+    downloadSinglePodcast(currentChannel, number);
   }
 
   storage->updateChannel(*currentChannel);
@@ -208,8 +218,6 @@ PodcastChannel* createChannelFromFeed(string feedURL, string directory)
 
   parseRSSFile(feedURL, rssFilePath, channel);
 
-  cout << "Parsing RSS file...";
-  
   return channel;
 }
 
@@ -217,15 +225,19 @@ void scanChannel(int number)
 {
   vector<PodcastChannel*> channels = storage->getChannels();
   PodcastChannel* originalChannel = channels[number - 1];
+
+  cout << "Scanning \"" + originalChannel->getTitle() << "\"" << endl;
   PodcastChannel* newChannel = createChannelFromFeed(originalChannel->getFeedURL(), originalChannel->getDirectory());
 
   if (newChannel->getPublishedDate() == originalChannel->getPublishedDate())
   {
+    cout << "Scan completed. No change to \"" + originalChannel->getTitle() << "\"" << endl << endl;
     return;
   }
 
   // Get the number of podcasts to download.
   string latestPublishDate = originalChannel->getPodcast(0)->getPublishedDate();
+  int newPodcastCount = newChannel->getPodcastCount() - originalChannel->getPodcastCount();
   for (int i = 0; i < newChannel->getPodcastCount(); i++)
   {
     PodcastDetails* podcast = newChannel->getPodcast(i);
@@ -234,9 +246,10 @@ void scanChannel(int number)
       break;
     }
 
-    cout << "Getting MP3 file";
-    downloadPodcast(newChannel, i);
+    downloadOneOfMultiplePodcasts(newChannel, i, newPodcastCount);
   }
+
+  cout << "Scan completed. " << newPodcastCount << " podcast(s) added to \"" << originalChannel->getTitle() + "\"" << endl << endl;
 
   delete originalChannel;
   channels[number - 1] = newChannel;

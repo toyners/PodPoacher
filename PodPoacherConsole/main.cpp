@@ -144,7 +144,7 @@ void downloadPodcast(PodcastChannel* channel, int number)
   PodcastDetails* podcast = channel->getPodcast(number - 1);
   string date = getDate();
   string time = getTime();
-  string filePath = channel->getDirectory() + podcast->getTitle() + " " + date + " " + time + ".mp3";
+  string filePath = channel->getDirectory() + channel->getTitle() + "_" + podcast->getTitle() + "_" + date + "_" + time + ".mp3";
   long fileSize = downloadPodcastFile(podcast->getURL(), filePath, podcast->getFileSize());
   podcast->setFileSize(fileSize);
   podcast->setDownloadDate(date + " " + time);

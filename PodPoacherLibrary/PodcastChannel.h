@@ -22,7 +22,7 @@ public:
   ~PodcastChannel();   
 
   std::string getTitle() { return title; }
-  std::string getDescription();
+  std::string getDescription() { return description; }
   std::string getWebsite() { return website; }
   std::string getFeedURL() { return feedURL; }
   std::string getPublishedDate() { return publishedDate; }

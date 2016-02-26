@@ -6,7 +6,7 @@ typedef PodcastChannel*(*AddChannelCallback)(std::string, std::string);
 typedef void(*DisplayChannelsCallback)(int);
 typedef void(*DisplayPodcastsCallback)(int);
 typedef int(*GetChannelCountCallback)();
-typedef void(*ScanChannelCallback)(int);
+typedef void(*ScanChannelsCallback)(int);
 typedef void(*DownloadCallback)(int);
 
 class UI
@@ -16,7 +16,7 @@ public:
     AddChannelCallback addChannelCallBack,
     DisplayChannelsCallback displayChannelsCallBack, 
     GetChannelCountCallback getChannelCountCallBack,
-    ScanChannelCallback scanChannelCallBack,
+    ScanChannelsCallback scanChannelsCallBack,
     DownloadCallback downloadCallBack
     );
 

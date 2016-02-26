@@ -10,20 +10,21 @@ using namespace std;
 AddChannelCallback addChannel;
 DisplayChannelsCallback displayChannel;
 GetChannelCountCallback getChannelCount;
-ScanChannelCallback scanChannel;
+ScanChannelsCallback scanChannels;
 DownloadCallback download;
 
 UI::UI(
   AddChannelCallback addChannelCallBack,
   DisplayChannelsCallback displayChannelsCallBack,
   GetChannelCountCallback getChannelCountCallBack,
-  ScanChannelCallback scanChannelCallBack,
+  ScanChannelsCallback scanChannelsCallBack,
   DownloadCallback downloadCallBack
   )
 {
   addChannel = addChannelCallBack;
   displayChannel = displayChannelsCallBack;
   getChannelCount = getChannelCountCallBack;
+  scanChannels = scanChannelsCallBack;
   download = downloadCallBack;
 }
 
@@ -54,7 +55,7 @@ void UI::topLevel()
 
     if (input == 'S' || input == 's')
     {
-      //scanChannels(channels);
+      scanChannelsUI();
     }
   }
 }
@@ -103,14 +104,14 @@ void UI::scanChannelsUI()
 
     if (input == "A" || input == "a")
     {
-      scanChannel(-1);
+      scanChannels(-1);
       continue;
     }
 
     int number;
     if (tryConvertInputToNumber(input, number, channelCount))
     {
-      scanChannel(number);
+      scanChannels(number);
     }
   }
 }

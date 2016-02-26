@@ -191,5 +191,23 @@ void RSSContentHandler::skippedEntity(const XMLString& name) {}
 string RSSContentHandler::getCleanString(const Poco::XML::XMLChar ch[], int start, int length)
 {
   string text(&ch[start], length);
+
+  int index = 0;
+  while (index < length && text[index] == '\n')
+  {
+    text = text.substr(1, --length);
+  }
+
+  if (length == 0)
+  {
+    return "";
+  }
+
+  index = length - 1;
+  while (length > 0 && text[length - 1] == '\n')
+  {
+    text = text.substr(0, --length);
+  }
+
   return text;
 }

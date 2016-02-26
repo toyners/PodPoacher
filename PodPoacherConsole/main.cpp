@@ -264,9 +264,6 @@ int getChannelCount()
 
 int main()
 {
-  //SimpleTest();
-  //return 0;
-
   workingPath = "C:\\Projects\\PodPoacher_Test\\Working\\";
   storage = new FileBasedStorage("C:\\Projects\\PodPoacher_Test\\Data\\");
   UI ui(addChannel, displayChannel, getChannelCount, scanChannels, downloadPodcasts);

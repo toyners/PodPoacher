@@ -124,58 +124,52 @@ void RSSContentHandler::characters(const XMLChar ch[], int start, int length)
 {
   if (inChannelTitleEntity)
   {
-    channel->setTitle(string(&ch[start], length));
+    channel->setTitle(getCleanString(ch, start, length));
     inChannelTitleEntity = false;
     return;
   }
 
   if (inChannelDescriptionEntity)
   {
-    channel->setDescription(string(&ch[start], length));
+    channel->setDescription(getCleanString(ch, start, length));
     inChannelDescriptionEntity = false;
     return;
   }
 
   if (inChannelWebsiteEntity)
   {
-    string data(&ch[start], length);
-    channel->setWebsite(data);
+    channel->setWebsite(getCleanString(ch, start, length));
     inChannelWebsiteEntity = false;
     return;
   }
 
   if (inChannelPubDateEntity)
   {
-    channel->setPublishDate(string(&ch[start], length));
+    channel->setPublishDate(getCleanString(ch, start, length));
     inChannelPubDateEntity = false;
     return;
   }
 
   if (inPodcastTitleEntity)
   {
-    podcastTitle = string(&ch[start], length);
+    podcastTitle = getCleanString(ch, start, length);
     inPodcastTitleEntity = false;
     return;
   }
 
   if (inPodcastDescriptionEntity)
   {
-    podcastDescription = string(&ch[start], length);
+    podcastDescription = getCleanString(ch, start, length);
     inPodcastDescriptionEntity = false;
     return;
   }
 
   if (inPodcastPubDateEntity)
   {
-    podcastPubDate = string(&ch[start], length);
+    podcastPubDate = getCleanString(ch, start, length);
     inPodcastPubDateEntity = false;
     return;
   }
-}
-
-PodcastChannel * RSSContentHandler::getChannel()
-{
-  return channel;
 }
 
 void RSSContentHandler::setDocumentLocator(const Locator * loc) {}
@@ -193,3 +187,9 @@ void RSSContentHandler::startPrefixMapping(const XMLString& prefix, const XMLStr
 void RSSContentHandler::endPrefixMapping(const XMLString& prefix) {}
 
 void RSSContentHandler::skippedEntity(const XMLString& name) {}
+
+string RSSContentHandler::getCleanString(const Poco::XML::XMLChar ch[], int start, int length)
+{
+  string text(&ch[start], length);
+  return text;
+}

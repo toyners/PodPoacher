@@ -19,9 +19,10 @@ public:
 private:
   std::string getChannelFileName(PodcastChannel& channel);
   void getTokensFromLine(const std::string& line, std::vector<std::string>& tokens);
-  void deserialiseChannels();
+  void deserialiseChannelsComplete();
+  void serialiseChannelsOnly();
   void serialisePodcasts(const std::string& fileName, PodcastChannel& channel);
   void deserialisePodcasts(const std::string& fileName, PodcastChannel& channel);
-  void serialiseChannel(PodcastChannel& channel, const std::string& channelFileName);
+  std::string createBackup(const std::string& filePath);
 };
 

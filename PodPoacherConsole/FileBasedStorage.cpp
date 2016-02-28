@@ -21,7 +21,7 @@ FileBasedStorage::FileBasedStorage(string path)
   storagePath = path;
   channelPath = path + "channels.txt";
 
-  deserialiseChannels();
+  deserialiseChannelsComplete();
 }
 
 FileBasedStorage::~FileBasedStorage()
@@ -71,7 +71,7 @@ void FileBasedStorage::updateChannel(PodcastChannel& channel)
 {
   string channelFileName = getChannelFileName(channel);
   
-  serialiseChannel(channel, channelFileName);
+  serialisePodcasts(channelFileName, channel);
 }
 
 void FileBasedStorage::updateChannel(PodcastChannel& oldChannel, PodcastChannel& newChannel)
@@ -81,8 +81,10 @@ void FileBasedStorage::updateChannel(PodcastChannel& oldChannel, PodcastChannel&
     if (channelList[i] == &oldChannel)
     {
       channelList[i] == &newChannel;
-      serialiseChannel(newChannel, to_string(i + 1) + ".txt");
       delete &oldChannel;
+
+      serialisePodcasts(to_string(i + 1) + ".txt", newChannel);
+      serialiseChannelsOnly();
       return;
     }
   }
@@ -114,7 +116,7 @@ void FileBasedStorage::getTokensFromLine(const string& line, vector<string>& tok
   }
 }
 
-void FileBasedStorage::deserialiseChannels()
+void FileBasedStorage::deserialiseChannelsComplete()
 {
   ifstream file;
   file.open(channelPath);
@@ -157,10 +159,37 @@ void FileBasedStorage::deserialiseChannels()
   file.close();
 }
 
-void FileBasedStorage::serialisePodcasts(const string& fileName, PodcastChannel& channel)
+void FileBasedStorage::serialiseChannelsOnly()
 {
+  string backupPath = createBackup(channelPath);
+
   ofstream outputFile;
-  outputFile.open(fileName);
+  outputFile.open(channelPath, ios::trunc);
+
+  for (int index = 0; index < channelList.size(); index++)
+  {
+    PodcastChannel& channel = *channelList[index];
+
+    outputFile << channel.getFeedURL() << "|"
+      << channel.getTitle() << "|"
+      << channel.getDescription() << "|"
+      << channel.getDirectory() << "|"
+      << channel.getWebsite() << "|"
+      << channel.getPublishedDate() << "|"
+      << endl;
+  }
+
+  outputFile.close();
+
+  remove(backupPath.data());
+}
+
+void FileBasedStorage::serialisePodcasts(const string& filePath, PodcastChannel& channel)
+{
+  string backupPath = createBackup(filePath);
+
+  ofstream outputFile;
+  outputFile.open(filePath);
 
   for (int i = 0; i < channel.getPodcastCount(); i++)
   {
@@ -176,6 +205,8 @@ void FileBasedStorage::serialisePodcasts(const string& fileName, PodcastChannel&
   }
 
   outputFile.close();
+
+  remove(backupPath.data());
 }
 
 void FileBasedStorage::deserialisePodcasts(const string& fileName, PodcastChannel& channel)
@@ -206,17 +237,14 @@ void FileBasedStorage::deserialisePodcasts(const string& fileName, PodcastChanne
   }
 }
 
-void FileBasedStorage::serialiseChannel(PodcastChannel& channel, const string& channelFileName)
+string FileBasedStorage::createBackup(const string& filePath)
 {
-  string backupPath = storagePath + channelFileName + "_old";
-  string outputPath = storagePath + channelFileName;
+  string backupPath = filePath + "_bk";
 
   const char* backupPathPtr = backupPath.data();
-  const char* outputPathPtr = outputPath.data();
+  const char* filePathPtr = filePath.data();
 
-  int result = rename(outputPathPtr, backupPathPtr);
+  int result = rename(filePathPtr, backupPathPtr);
 
-  serialisePodcasts(outputPath, channel);
-
-  remove(backupPathPtr);
+  return backupPath;
 }

@@ -135,6 +135,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>C:\Projects\Libraries\PocoFoundation.lib;C:\Projects\Libraries\PocoXML.lib;C:\Projects\Libraries\PocoNet.lib;C:\Projects\Libraries\PodPoacherLibrary.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(ProjectDir)$(Configuration)\PodPoacher_Console.exe" "C:\Projects\PodPoacher Alpha\PodPoacher_Console.exe" /Y /V</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

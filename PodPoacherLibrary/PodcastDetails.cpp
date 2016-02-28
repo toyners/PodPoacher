@@ -3,7 +3,7 @@
 
 using namespace std;
 
-PodcastDetails::PodcastDetails(string podcastTitle, string podcastDescription, string podcastPubDate, string podcastURL, long podcastSize)
+PodcastDetails::PodcastDetails(string podcastTitle, string podcastDescription, string podcastURL, string podcastPubDate, long podcastSize)
 {
   title = podcastTitle;
   description = podcastDescription;

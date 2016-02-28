@@ -114,7 +114,7 @@ void RSSContentHandler::endElement(const XMLString& uri, const XMLString& localN
 
   if (localName == "item")
   {
-    channel->addPodcastDetails(podcastTitle, podcastDescription, podcastPubDate, podcastURL, podcastSize);
+    channel->addPodcastDetails(podcastTitle, podcastDescription, podcastURL, podcastPubDate, podcastSize);
     podcastTitle = podcastDescription = podcastPubDate = podcastURL = "";
     podcastSize = 0;
   }

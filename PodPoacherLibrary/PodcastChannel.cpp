@@ -93,18 +93,18 @@ void PodcastChannel::setPublishDate(string date)
   }
 }
 
-void PodcastChannel::addPodcastDetails(string title, string description, string pubDate, string url, long fileSize)
+void PodcastChannel::addPodcastDetails(string title, string description, string url, string pubDate, long fileSize)
 {
-  addPodcastDetails(title, description, pubDate, url, fileSize, "");
+  addPodcastDetails(title, description, url, pubDate, fileSize, "");
 }
 
-void PodcastChannel::addPodcastDetails(string title, string description, string pubDate, string url, long fileSize, string downloadDate)
+void PodcastChannel::addPodcastDetails(string title, string description, string url, string pubDate, long fileSize, string downloadDate)
 {
   PodcastDetails* podcast = new PodcastDetails(
     title,
     description,
-    pubDate,
     url,
+    pubDate,
     fileSize);
 
   podcast->setDownloadDate(downloadDate);

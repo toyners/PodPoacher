@@ -238,9 +238,9 @@ void scanChannel(int number)
   // Get the number of podcasts to download.
   string latestPublishDate = originalChannel->getPodcast(0)->getPublishedDate();
   int newPodcastCount = newChannel->getPodcastCount() - originalChannel->getPodcastCount();
-  for (int i = 0; i < newChannel->getPodcastCount(); i++)
+  for (int i = 1; i <= newChannel->getPodcastCount(); i++)
   {
-    PodcastDetails* podcast = newChannel->getPodcast(i);
+    PodcastDetails* podcast = newChannel->getPodcast(i - 1);
     if (latestPublishDate == podcast->getPublishedDate())
     {
       break;

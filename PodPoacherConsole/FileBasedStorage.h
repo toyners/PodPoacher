@@ -14,6 +14,7 @@ public:
   std::vector<PodcastChannel*>& getChannels();
   void loadChannel(PodcastChannel& channel);
   void updateChannel(PodcastChannel& channel);
+  void updateChannel(PodcastChannel& oldChannel, PodcastChannel& newChannel);
 
 private:
   std::string getChannelFileName(PodcastChannel& channel);
@@ -21,5 +22,6 @@ private:
   void deserialiseChannels();
   void serialisePodcasts(const std::string& fileName, PodcastChannel& channel);
   void deserialisePodcasts(const std::string& fileName, PodcastChannel& channel);
+  void serialiseChannel(PodcastChannel& channel, const std::string& channelFileName);
 };
 

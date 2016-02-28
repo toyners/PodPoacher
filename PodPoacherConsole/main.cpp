@@ -251,9 +251,7 @@ void scanChannel(int number)
 
   cout << "Scan completed. " << newPodcastCount << " podcast(s) added to \"" << originalChannel->getTitle() + "\"" << endl << endl;
 
-  delete originalChannel;
-  channels[number - 1] = newChannel;
-  storage->updateChannel(*newChannel);
+  storage->updateChannel(*originalChannel, *newChannel);
 }
 
 void scanChannels(int number)

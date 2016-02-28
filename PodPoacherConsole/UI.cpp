@@ -64,6 +64,13 @@ void UI::displayChannelsUI()
 {
   string input;
   int channelCount = getChannelCount();
+
+  if (channelCount == 0)
+  {
+    cout << "No channels to display." << endl;
+    return;
+  }
+
   while (true)
   {
     cout << "Display [A]ll channels, numbers [1 - " << channelCount << "] or [B]ack" << endl;
@@ -92,6 +99,13 @@ void UI::scanChannelsUI()
 {
   string input;
   int channelCount = getChannelCount();
+
+  if (channelCount == 0)
+  {
+    cout << "No channels to scan." << endl;
+    return;
+  }
+
   while (true)
   {
     cout << "Scan [A]ll channels, numbers [1 - " << channelCount << "] or [B]ack" << endl;

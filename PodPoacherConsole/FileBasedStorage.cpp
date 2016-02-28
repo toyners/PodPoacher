@@ -64,25 +64,7 @@ vector<PodcastChannel*>& FileBasedStorage::getChannels()
 
 void FileBasedStorage::loadChannel(PodcastChannel& channel)
 {
-  ifstream file;
-  file.open(getChannelFileName(channel).data());
-
-  vector<string> tokens;
-  while (!file.eof())
-  {
-    string line;
-    getline(file, line);
-    getTokensFromLine(line, tokens);
-
-    channel.addPodcastDetails(
-      tokens[0],
-      tokens[1],
-      tokens[2],
-      tokens[3],
-      stol(tokens[4]));
-  }
-
-  file.close();
+  // Do nothing.
 }
 
 void FileBasedStorage::updateChannel(PodcastChannel& channel)

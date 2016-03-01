@@ -26,6 +26,6 @@ private:
   void displayChannelDetails(int number, PodcastChannel& channel);
   void displayChannels(std::vector<PodcastChannel*>& channels);
   void displayPodcasts(PodcastChannel& channel);
-  bool haltRollingPodcastDisplay(int total, int remaining);
+  bool haltRollingDisplay(int total, int remaining);
 };
 

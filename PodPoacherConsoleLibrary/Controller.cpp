@@ -36,36 +36,6 @@ void Controller::addChannel(string url, string directory)
   storage->addChannel(*currentChannel);
 }
 
-void Controller::displayChannel(int number)
-{
-  vector<PodcastChannel*>& channels = storage->getChannels();
-  if (number == -1)
-  {
-    displayChannels(channels);
-    return;
-  }
-
-  displayChannelDetails(number, *channels[number - 1]);
-}
-
-void Controller::displayChannels(vector<PodcastChannel*>& channels)
-{
-  for (int i = 0; i < channels.size(); i++)
-  {
-    displayChannelDetails(i + 1, *channels[i]);
-  }
-}
-
-void Controller::displayChannelDetails(int number, PodcastChannel& channel)
-{
-  string label = "[" + to_string(number) + "] ";
-  string indent(label.size(), ' ');
-  cout << label << channel.getTitle() << endl;
-  cout << indent << channel.getDirectory() << endl;
-  cout << indent << "PODCASTS: " << channel.getPodcastCount() << "  PUBLISHED DATE: " << channel.getPublishedDate() << endl;
-  cout << endl;
-}
-
 string Controller::getDate()
 {
   time_t t = time(0);   // get time now

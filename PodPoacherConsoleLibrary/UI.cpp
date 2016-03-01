@@ -2,35 +2,21 @@
 #include "UI.h"
 #include "PodcastStorage.h"
 #include "PodcastChannel.h"
+#include "Util.h"
+
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
-AddChannelCallback addChannel;
-DisplayChannelsCallback displayChannel;
-GetChannelCountCallback getChannelCount;
-ScanChannelsCallback scanChannels;
-DownloadCallback download;
-
-UI::UI(
-  AddChannelCallback addChannelCallBack,
-  DisplayChannelsCallback displayChannelsCallBack,
-  GetChannelCountCallback getChannelCountCallBack,
-  ScanChannelsCallback scanChannelsCallBack,
-  DownloadCallback downloadCallBack
-  )
+UI::UI(BaseController& baseController)
 {
-  addChannel = addChannelCallBack;
-  displayChannel = displayChannelsCallBack;
-  getChannelCount = getChannelCountCallBack;
-  scanChannels = scanChannelsCallBack;
-  download = downloadCallBack;
+  controller = &baseController;
 }
 
 UI::~UI() {}
 
-void UI::topLevel()
+void UI::topLevelUI()
 {
   char input;
   while (true)
@@ -60,10 +46,20 @@ void UI::topLevel()
   }
 }
 
+void UI::outputMessage(string message, bool appendEndOfLine)
+{
+  cout << message;
+
+  if (appendEndOfLine)
+  {
+    cout << endl;
+  }
+}
+
 void UI::displayChannelsUI()
 {
   string input;
-  int channelCount = getChannelCount();
+  int channelCount = controller->getChannelCount();
 
   if (channelCount == 0)
   {
@@ -83,14 +79,14 @@ void UI::displayChannelsUI()
 
     if (input == "A" || input == "a")
     {
-      displayChannel(-1);
+      displayChannels(-1);
       continue;
     }
 
     int number;
     if (tryConvertInputToNumber(input, number, channelCount))
     {
-      displayChannel(number);
+      displayChannels(number);
     }
   }
 }
@@ -98,7 +94,7 @@ void UI::displayChannelsUI()
 void UI::scanChannelsUI()
 {
   string input;
-  int channelCount = getChannelCount();
+  int channelCount = controller->getChannelCount();
 
   if (channelCount == 0)
   {
@@ -118,24 +114,16 @@ void UI::scanChannelsUI()
 
     if (input == "A" || input == "a")
     {
-      scanChannels(-1);
+      controller->scanChannels(-1);
       continue;
     }
 
     int number;
     if (tryConvertInputToNumber(input, number, channelCount))
     {
-      scanChannels(number);
+      controller->scanChannels(number);
     }
   }
-}
-
-string getInputContainingWhiteSpace()
-{
-  string line;
-  cin.ignore(); // ignore '\n' character that is in the buffer from previous cin operation.
-  getline(cin, line);
-  return line;
 }
 
 void UI::addChannelUI()
@@ -148,8 +136,9 @@ void UI::addChannelUI()
   cout << "Enter directory for podcasts: ";
   directory = getInputContainingWhiteSpace();
 
-  PodcastChannel* channel = addChannel(url, directory);
-
+  controller->addChannel(url, directory);
+  PodcastChannel* channel = controller->getCurrentChannel();
+  
   int podcastCount = channel->getPodcastCount();
   cout << podcastCount << " Podcasts loaded." << endl << endl;
 
@@ -174,14 +163,14 @@ void UI::addChannelUI()
 
     if (c == 'a')
     {
-      download(-1);
+      controller->downloadPodcasts(-1);
       continue;
     }
 
     int number;
     if (tryConvertInputToNumber(input, number, podcastCount))
     {
-      download(number);
+      controller->downloadPodcasts(number);
       continue;
     }
   }
@@ -240,14 +229,14 @@ bool UI::haltRollingPodcastDisplay(int total, int remaining)
 
     if (c == 'a')
     {
-      download(-1);
+      controller->downloadPodcasts(-1);
       continue;
     }
 
     int number;
     if (tryConvertInputToNumber(input, number, total))
     {
-      download(number);
+      controller->downloadPodcasts(number);
       continue;
     }
   }
@@ -280,4 +269,34 @@ void UI::displayPodcasts(PodcastChannel& channel)
       }
     }
   }
+}
+
+void UI::displayChannelDetails(int number, PodcastChannel& channel)
+{
+  string label = "[" + to_string(number) + "] ";
+  string indent(label.size(), ' ');
+  cout << label << channel.getTitle() << endl;
+  cout << indent << channel.getDirectory() << endl;
+  cout << indent << "PODCASTS: " << channel.getPodcastCount() << "  PUBLISHED DATE: " << channel.getPublishedDate() << endl;
+  cout << endl;
+}
+
+void UI::displayChannels(vector<PodcastChannel*>& channels)
+{
+  for (int i = 0; i < channels.size(); i++)
+  {
+    displayChannelDetails(i + 1, *channels[i]);
+  }
+}
+
+void UI::displayChannels(int number)
+{
+  vector<PodcastChannel*>& channels = controller->getChannels();
+  if (number == -1)
+  {
+    displayChannels(channels);
+    return;
+  }
+
+  displayChannelDetails(number, *channels[number - 1]);
 }

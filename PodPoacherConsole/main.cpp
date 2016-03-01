@@ -6,8 +6,10 @@
 #include "XMLFileParser.h"
 #include "HTTPFileStreamer.h"
 #include "RSSContentHandler.h"
-#include "FileBasedStorage.h"
+//#include "FileBasedStorage.h"
 #include "UI.h"
+#include "Util.h"
+#include "Controller.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -16,7 +18,7 @@
 
 using namespace std;
 
-string workingPath;
+/*string workingPath;
 PodcastStorage* storage;
 long tickSize;
 long tickCount = 0;
@@ -293,17 +295,15 @@ string getWorkingDirectory()
   configFile.close();
 
   return line;
-}
+}*/
 
 int main(int argc, char* argv[])
 {
-  workingPath = getWorkingDirectory();
+  string workingPath = getWorkingDirectory();
 
-  storage = new FileBasedStorage(workingPath);
-  
-  UI ui(addChannel, displayChannel, getChannelCount, scanChannels, downloadPodcasts);
+  Controller controller(workingPath);
 
-  ui.topLevel();
+  controller.execute();
 
   return 0;
 }

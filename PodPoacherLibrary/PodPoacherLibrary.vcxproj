@@ -145,6 +145,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseController.h" />
     <ClInclude Include="HTTPFileDownload.h" />
     <ClInclude Include="PodcastChannel.h" />
     <ClInclude Include="PodcastDetails.h" />

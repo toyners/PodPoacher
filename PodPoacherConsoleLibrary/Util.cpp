@@ -14,14 +14,6 @@ void downloadRSSFile(string url, string rssFilePath)
   cout << "DONE" << endl;
 }
 
-string getInputContainingWhiteSpace()
-{
-  string line;
-  cin.ignore(); // ignore '\n' character that is in the buffer from previous cin operation.
-  getline(cin, line);
-  return line;
-}
-
 void parseRSSFile(string url, string rssFilePath, PodcastChannel* channel)
 {
   cout << "Parsing RSS file...";

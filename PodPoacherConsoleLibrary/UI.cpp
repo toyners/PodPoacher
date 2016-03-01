@@ -134,7 +134,7 @@ void UI::addChannelUI()
 
   string directory;
   cout << "Enter directory for podcasts: ";
-  directory = getInputContainingWhiteSpace();
+  directory = getInputStringContainingWhiteSpace();
 
   controller->addChannel(url, directory);
   PodcastChannel* channel = controller->getCurrentChannel();
@@ -299,4 +299,12 @@ void UI::displayChannels(int number)
   }
 
   displayChannelDetails(number, *channels[number - 1]);
+}
+
+std::string UI::getInputStringContainingWhiteSpace()
+{
+  string line;
+  cin.ignore(); // ignore '\n' character that is in the buffer from previous cin operation.
+  getline(cin, line);
+  return line;
 }

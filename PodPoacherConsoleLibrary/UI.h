@@ -26,6 +26,7 @@ private:
   void displayChannelDetails(int number, PodcastChannel& channel);
   void displayChannels(std::vector<PodcastChannel*>& channels);
   void displayPodcasts(PodcastChannel& channel);
+  std::string getInputStringContainingWhiteSpace();
   bool haltRollingDisplay(int total, int remaining);
 };
 

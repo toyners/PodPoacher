@@ -3,7 +3,6 @@
 #include <string>
 #include "PodcastChannel.h"
 
-std::string getInputContainingWhiteSpace();
 void downloadRSSFile(std::string url, std::string rssFilePath);
 void parseRSSFile(std::string url, std::string rssFilePath, PodcastChannel* channel);
 void fileProgress(long position);

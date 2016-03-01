@@ -80,14 +80,15 @@ void UI::displayChannelsUI()
 
     if (c == 'a')
     {
-      displayChannels(-1);
+      displayChannels();
       continue;
     }
 
     int number;
     if (tryConvertInputToNumber(input, number, channelCount))
     {
-      displayChannels(number);
+      vector<PodcastChannel*>& channels = controller->getChannels();
+      displayChannel(number, *channels[number - 1]);
     }
   }
 }
@@ -165,14 +166,15 @@ void UI::addChannelUI()
 
     if (c == 'a')
     {
-      controller->downloadPodcasts(-1);
+      downloadAllPodcasts(channel);
       continue;
     }
 
     int number;
     if (tryConvertInputToNumber(input, number, podcastCount))
     {
-      controller->downloadPodcasts(number);
+      cout << "Getting MP3 file";
+      controller->downloadPodcast(channel, number);
       continue;
     }
   }
@@ -231,14 +233,14 @@ bool UI::haltRollingDisplay(int total, int remaining)
 
     if (c == 'a')
     {
-      controller->downloadPodcasts(-1);
+      downloadAllPodcasts(controller->getCurrentChannel());
       continue;
     }
 
     int number;
     if (tryConvertInputToNumber(input, number, total))
     {
-      controller->downloadPodcasts(number);
+      controller->downloadPodcast(controller->getCurrentChannel(), number);
       continue;
     }
   }
@@ -273,7 +275,7 @@ void UI::displayPodcasts(PodcastChannel& channel)
   }
 }
 
-void UI::displayChannelDetails(int number, PodcastChannel& channel)
+void UI::displayChannel(int number, PodcastChannel& channel)
 {
   string label = "[" + to_string(number) + "] ";
   string indent(label.size(), ' ');
@@ -281,26 +283,52 @@ void UI::displayChannelDetails(int number, PodcastChannel& channel)
   cout << indent << channel.getDirectory() << endl;
   cout << indent << "PODCASTS: " << channel.getPodcastCount() << "  PUBLISHED DATE: " << channel.getPublishedDate() << endl;
   cout << endl;
-}
 
-void UI::displayChannels(vector<PodcastChannel*>& channels)
-{
-  for (int i = 0; i < channels.size(); i++)
+  int podcastCount = channel.getPodcastCount();
+  while (true)
   {
-    displayChannelDetails(i + 1, *channels[i]);
+    string input;
+    cout <<  "Display [A]ll podcasts. Download individual podcast [1 - " << podcastCount << "] or [B]ack" << endl;
+    cin >> input;
+
+    char c = tolower(input[0]);
+    if (c == 'b')
+    {
+      return;
+    }
+
+    if (c == 'a')
+    {
+      displayPodcasts(channel);
+      continue;
+    }
+
+    int number;
+    if (tryConvertInputToNumber(input, number, podcastCount))
+    {
+      controller->downloadPodcast(&channel, number);
+    }
   }
+
 }
 
-void UI::displayChannels(int number)
+void UI::displayChannels()
 {
   vector<PodcastChannel*>& channels = controller->getChannels();
-  if (number == -1)
+  for (int i = 0; i < channels.size(); i++)
   {
-    displayChannels(channels);
-    return;
+    displayChannel(i + 1, *channels[i]);
   }
+}
 
-  displayChannelDetails(number, *channels[number - 1]);
+void UI::downloadAllPodcasts(PodcastChannel* channel)
+{
+  int total = channel->getPodcastCount();
+  for (int number = 1; number <= total; number++)
+  {
+    cout << "Getting MP3 file [" << number << " of " << total << "]";
+    controller->downloadPodcast(channel, number);
+  }
 }
 
 std::string UI::getInputStringContainingWhiteSpace()

@@ -27,11 +27,7 @@ void Controller::addChannel(string url, string directory)
 {
   verifyChannelIsNotInList(url);
 
-  string rssFilePath = workingPath + "podcast.rss";
-  HTTPFileDownload::downloadTextFile(url, rssFilePath);
-
-  currentChannel = new PodcastChannel(url, directory);
-  parseRSSFile(url, rssFilePath, currentChannel);
+  currentChannel = createChannelFromFeed(url, directory);
 
   storage->addChannel(*currentChannel);
 }
@@ -88,36 +84,6 @@ void Controller::downloadPodcast(PodcastChannel* channel, int number)
   long fileSize = downloadPodcastFile(podcast->getURL(), filePath, podcast->getFileSize());
   podcast->setFileSize(fileSize);
   podcast->setDownloadDate(date + " " + time);
-}
-
-void Controller::downloadOneOfMultiplePodcasts(PodcastChannel* channel, int number, int total)
-{
-  cout << "Getting MP3 file [" << number << " of " << total << "]";
-  downloadPodcast(channel, number);
-}
-
-void Controller::downloadSinglePodcast(PodcastChannel* channel, int number)
-{
-  cout << "Getting MP3 file";
-  downloadPodcast(channel, number);
-}
-
-void Controller::downloadPodcasts(int number)
-{
-  if (number == -1)
-  {
-    int count = currentChannel->getPodcastCount();
-    for (int i = 1; i <= count; i++)
-    {
-      downloadOneOfMultiplePodcasts(currentChannel, i, count);
-    }
-  }
-  else
-  {
-    downloadSinglePodcast(currentChannel, number);
-  }
-
-  storage->updateChannel(*currentChannel);
 }
 
 void Controller::execute()
@@ -192,7 +158,7 @@ void Controller::scanChannel(int number)
       break;
     }
 
-    downloadOneOfMultiplePodcasts(newChannel, i, newPodcastCount);
+    downloadPodcast(newChannel, i);
   }
 
   cout << "Scan completed. " << newPodcastCount << " podcast(s) added to \"" << originalChannel->getTitle() + "\"" << endl << endl;

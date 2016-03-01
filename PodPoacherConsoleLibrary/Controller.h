@@ -20,7 +20,7 @@ public:
   ~Controller();
 
   void addChannel(std::string url, std::string directory);
-  void downloadPodcasts(int number);
+  void downloadPodcast(PodcastChannel* channel, int number);
   void execute();
   std::vector<PodcastChannel*>& getChannels() { return storage->getChannels(); }
   int getChannelCount() { return storage->getChannels().size(); }
@@ -29,10 +29,7 @@ public:
 
 private:
   PodcastChannel* createChannelFromFeed(std::string feedURL, std::string directory);
-  void downloadOneOfMultiplePodcasts(PodcastChannel* channel, int number, int total);
   long downloadPodcastFile(std::string url, std::string filePath, long fileSize);
-  void downloadPodcast(PodcastChannel* channel, int number);
-  void downloadSinglePodcast(PodcastChannel* channel, int number);
   std::string getDate();
   std::string getReadableFileSize(long size);
   std::string getTime();

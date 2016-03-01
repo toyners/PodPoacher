@@ -3,8 +3,6 @@
 #include "HTTPFileDownload.h"
 #include "RSSContentHandler.h"
 #include "XMLFileParser.h"
-//#include <string>
-//#include <iostream>
 #include <fstream>
 
 using namespace std;

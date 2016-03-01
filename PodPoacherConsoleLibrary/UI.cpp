@@ -72,12 +72,13 @@ void UI::displayChannelsUI()
     cout << "Display [A]ll channels, numbers [1 - " << channelCount << "] or [B]ack" << endl;
     cin >> input;
 
-    if (input == "B" || input == "b")
+    char c = tolower(input[0]);
+    if (c == 'b')
     {
       return;
     }
 
-    if (input == "A" || input == "a")
+    if (c == 'a')
     {
       displayChannels(-1);
       continue;
@@ -107,12 +108,13 @@ void UI::scanChannelsUI()
     cout << "Scan [A]ll channels, numbers [1 - " << channelCount << "] or [B]ack" << endl;
     cin >> input;
 
-    if (input == "B" || input == "b")
+    char c = tolower(input[0]);
+    if (c == 'b')
     {
       return;
     }
 
-    if (input == "A" || input == "a")
+    if (c == 'a')
     {
       controller->scanChannels(-1);
       continue;

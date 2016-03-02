@@ -4,6 +4,7 @@
 #include "RSSContentHandler.h"
 #include "XMLFileParser.h"
 #include <fstream>
+#include <iostream>
 
 using namespace std;
 

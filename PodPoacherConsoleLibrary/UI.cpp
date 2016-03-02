@@ -342,7 +342,8 @@ void UI::displayChannels()
     int number = index + 1;
     displayChannelDetails(number, *channels[index]);
 
-    if (number > 0 && number % 5 == 0 && haltRollingDisplayOfChannels(total - number))
+    int remaining = total - number;
+    if (number > 0 && number % 5 == 0 && remaining > 0 && haltRollingDisplayOfChannels(remaining))
     {
       break;
     }

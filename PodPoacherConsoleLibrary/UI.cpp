@@ -18,9 +18,11 @@ UI::~UI() {}
 
 void UI::topLevelUI()
 {
-  char input;
+  std::cout << "PodPoacher v0.9" << std::endl << std::endl;
+
   while (true)
   {
+    char input;
     cout << "[A]dd channel, [D]isplay channels, [S]can channels or e[X]it" << endl;
     cin >> input;
 

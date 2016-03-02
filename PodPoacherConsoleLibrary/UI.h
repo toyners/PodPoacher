@@ -29,7 +29,7 @@ private:
   void downloadPodcast(PodcastChannel* channel, int number);
   void downloadAllPodcasts(PodcastChannel* channel);
   std::string getInputStringContainingWhiteSpace();
-  bool haltRollingDisplay(int total, int remaining);
+  bool haltRollingDisplayOfPodcasts(int total, int remaining);
   bool haltRollingDisplayOfChannels(int remaining);
 };
 

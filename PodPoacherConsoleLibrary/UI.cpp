@@ -211,7 +211,7 @@ bool UI::tryConvertInputToNumber(string input, int& number, int podcastCount)
   return false;
 }
 
-bool UI::haltRollingDisplay(int total, int remaining)
+bool UI::haltRollingDisplayOfPodcasts(int total, int remaining)
 {
   while (true)
   {
@@ -284,7 +284,7 @@ void UI::displayPodcasts(PodcastChannel& channel)
 
     if (i > 0 && i % 5 == 0)
     {
-      if (!haltRollingDisplay(count, count - i))
+      if (!haltRollingDisplayOfPodcasts(count, count - i))
       {
         break;
       }

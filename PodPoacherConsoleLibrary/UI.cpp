@@ -266,25 +266,26 @@ bool UI::haltRollingDisplayOfChannels(int remaining)
 void UI::displayPodcasts(PodcastChannel& channel)
 {
   int count = channel.getPodcastCount();
-  for (int i = 1; i < count + 1; i++)
+  for (int index = 0; index < count; index++)
   {
-    string number = "<" + to_string(i) + "> ";
-    string indent(number.size(), ' ');
-    PodcastDetails* podcast = channel.getPodcast(i - 1);
-    cout << number << "TITLE: " << podcast->getTitle() << endl
+    int number = index + 1;
+    string label = "<" + to_string(number) + "> ";
+    string indent(label.size(), ' ');
+    PodcastDetails* podcast = channel.getPodcast(index);
+    cout << label << "TITLE: " << podcast->getTitle() << endl
       << indent << "PUB DATE: " << podcast->getPublishedDate() 
       << "  SIZE: " << podcast->getFileSize();
 
     if (podcast->isDownloaded())
     {
-      cout << "DOWNLOAD DATE: " << podcast->getDownloadDate();
+      cout << endl << label << "DOWNLOAD DATE: " << podcast->getDownloadDate();
     }
 
     cout << endl << endl;
 
-    if (i > 0 && i % 5 == 0)
+    if (number > 0 && number % 5 == 0)
     {
-      if (!haltRollingDisplayOfPodcasts(count, count - i))
+      if (!haltRollingDisplayOfPodcasts(count, count - number))
       {
         break;
       }

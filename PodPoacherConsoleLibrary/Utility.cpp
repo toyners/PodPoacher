@@ -65,3 +65,14 @@ long getFileSize(string filePath)
   ifstream in(filePath, std::ifstream::ate | std::ifstream::binary);
   return in.tellg();
 }
+
+string removeIllegalFilePathCharactersFromText(string text)
+{
+  size_t position = -1;
+  while ((position = text.find_first_of("\\/:*?\"<>|", position + 1)) != string::npos)
+  {
+    text[position] = '-';
+  }
+
+  return text;
+}

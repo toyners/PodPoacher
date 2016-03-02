@@ -1,4 +1,4 @@
 # PodPoacher
 **PodPoacher** is a podcast catcher written in C++.
 
-Not feature complete.
+Now feature complete (Alpha). Testing and bug fixing continue.

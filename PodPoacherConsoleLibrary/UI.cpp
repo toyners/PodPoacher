@@ -222,12 +222,12 @@ bool UI::haltRollingDisplayOfPodcasts(int total, int remaining)
     char c = tolower(input[0]);
     if (c == 'b')
     {
-      return false;
+      return true;
     }
 
     if (c == 'd')
     {
-      return true;
+      return false;
     }
 
     if (c == 'a')
@@ -265,8 +265,8 @@ bool UI::haltRollingDisplayOfChannels(int remaining)
 
 void UI::displayPodcasts(PodcastChannel& channel)
 {
-  int count = channel.getPodcastCount();
-  for (int index = 0; index < count; index++)
+  int total = channel.getPodcastCount();
+  for (int index = 0; index < total; index++)
   {
     int number = index + 1;
     string label = "<" + to_string(number) + "> ";
@@ -283,12 +283,10 @@ void UI::displayPodcasts(PodcastChannel& channel)
 
     cout << endl << endl;
 
-    if (number > 0 && number % 5 == 0)
+    int remaining = total - number;
+    if (number > 0 && number % 5 == 0 && remaining > 0 && haltRollingDisplayOfPodcasts(total, remaining))
     {
-      if (!haltRollingDisplayOfPodcasts(count, count - number))
-      {
-        break;
-      }
+      break;
     }
   }
 }

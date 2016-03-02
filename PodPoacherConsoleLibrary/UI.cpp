@@ -245,6 +245,24 @@ bool UI::haltRollingDisplay(int total, int remaining)
   }
 }
 
+bool UI::haltRollingDisplayOfChannels(int remaining)
+{
+  string input;
+  cout << remaining << " Channels to go. [D]own or [B]reak" << endl;
+  cin >> input;
+
+  char c = tolower(input[0]);
+  if (c == 'b')
+  {
+    return true;
+  }
+
+  if (c == 'd')
+  {
+    return false;
+  }
+}
+
 void UI::displayPodcasts(PodcastChannel& channel)
 {
   int count = channel.getPodcastCount();
@@ -262,7 +280,7 @@ void UI::displayPodcasts(PodcastChannel& channel)
       cout << "DOWNLOAD DATE: " << podcast->getDownloadDate();
     }
 
-    cout << endl;
+    cout << endl << endl;
 
     if (i > 0 && i % 5 == 0)
     {
@@ -276,12 +294,7 @@ void UI::displayPodcasts(PodcastChannel& channel)
 
 void UI::displayChannel(int number, PodcastChannel& channel)
 {
-  string label = "[" + to_string(number) + "] ";
-  string indent(label.size(), ' ');
-  cout << label << channel.getTitle() << endl;
-  cout << indent << channel.getDirectory() << endl;
-  cout << indent << "PODCASTS: " << channel.getPodcastCount() << "  PUBLISHED DATE: " << channel.getPublishedDate() << endl;
-  cout << endl;
+  displayChannelDetails(number, channel);
 
   int podcastCount = channel.getPodcastCount();
   while (true)
@@ -310,12 +323,29 @@ void UI::displayChannel(int number, PodcastChannel& channel)
   }
 }
 
+void UI::displayChannelDetails(int number, PodcastChannel& channel)
+{
+  string label = "[" + to_string(number) + "] ";
+  string indent(label.size(), ' ');
+  cout << label << channel.getTitle() << endl;
+  cout << indent << channel.getDirectory() << endl;
+  cout << indent << "PODCASTS: " << channel.getPodcastCount() << "  PUBLISHED DATE: " << channel.getPublishedDate() << endl;
+  cout << endl;
+}
+
 void UI::displayChannels()
 {
   vector<PodcastChannel*>& channels = controller->getChannels();
-  for (int i = 0; i < channels.size(); i++)
+  int total = channels.size();
+  for (int index = 0; index < total; index++)
   {
-    displayChannel(i + 1, *channels[i]);
+    int number = index + 1;
+    displayChannelDetails(number, *channels[index]);
+
+    if (number > 0 && number % 5 == 0 && haltRollingDisplayOfChannels(total - number))
+    {
+      break;
+    }
   }
 }
 
@@ -335,7 +365,7 @@ void UI::downloadAllPodcasts(PodcastChannel* channel)
   }
 }
 
-std::string UI::getInputStringContainingWhiteSpace()
+string UI::getInputStringContainingWhiteSpace()
 {
   string line;
   cin.ignore(); // ignore '\n' character that is in the buffer from previous cin operation.

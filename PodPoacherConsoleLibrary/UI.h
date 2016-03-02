@@ -25,6 +25,7 @@ private:
   void displayChannel(int number, PodcastChannel& channel);
   void displayChannels();
   void displayPodcasts(PodcastChannel& channel);
+  void downloadPodcast(PodcastChannel* channel, int number);
   void downloadAllPodcasts(PodcastChannel* channel);
   std::string getInputStringContainingWhiteSpace();
   bool haltRollingDisplay(int total, int remaining);

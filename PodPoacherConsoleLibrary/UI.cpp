@@ -173,8 +173,7 @@ void UI::addChannelUI()
     int number;
     if (tryConvertInputToNumber(input, number, podcastCount))
     {
-      cout << "Getting MP3 file";
-      controller->downloadPodcast(channel, number);
+      downloadPodcast(channel, number);
       continue;
     }
   }
@@ -240,7 +239,7 @@ bool UI::haltRollingDisplay(int total, int remaining)
     int number;
     if (tryConvertInputToNumber(input, number, total))
     {
-      controller->downloadPodcast(controller->getCurrentChannel(), number);
+      downloadPodcast(controller->getCurrentChannel(), number);
       continue;
     }
   }
@@ -306,10 +305,9 @@ void UI::displayChannel(int number, PodcastChannel& channel)
     int number;
     if (tryConvertInputToNumber(input, number, podcastCount))
     {
-      controller->downloadPodcast(&channel, number);
+      downloadPodcast(&channel, number);
     }
   }
-
 }
 
 void UI::displayChannels()
@@ -319,6 +317,12 @@ void UI::displayChannels()
   {
     displayChannel(i + 1, *channels[i]);
   }
+}
+
+void UI::downloadPodcast(PodcastChannel* channel, int number)
+{
+  cout << "Getting MP3 file";
+  controller->downloadPodcast(channel, number);
 }
 
 void UI::downloadAllPodcasts(PodcastChannel* channel)

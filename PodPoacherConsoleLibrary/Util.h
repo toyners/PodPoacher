@@ -8,7 +8,7 @@ void parseRSSFile(std::string url, std::string rssFilePath, PodcastChannel* chan
 void fileProgress(long position);
 void setupProgress(long fileSize);
 std::string getWorkingDirectory();
+long getFileSize(std::string filePath);
 
 static long tickSize;
 static long tickCount;
-static long filePosition;

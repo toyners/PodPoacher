@@ -27,7 +27,6 @@ void setupProgress(long fileSize)
 {
   tickSize = fileSize / 20;
   tickCount = 0;
-  filePosition = 0;
 }
 
 void fileProgress(long position)
@@ -38,8 +37,6 @@ void fileProgress(long position)
     tickCount++;
     cout << ".";
   }
-
-  filePosition = position;
 }
 
 string getWorkingDirectory()
@@ -61,4 +58,10 @@ string getWorkingDirectory()
   configFile.close();
 
   return line;
+}
+
+long getFileSize(string filePath)
+{
+  ifstream in(filePath, std::ifstream::ate | std::ifstream::binary);
+  return in.tellg();
 }

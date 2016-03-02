@@ -71,8 +71,11 @@ long Controller::downloadPodcastFile(string url, string filePath, long fileSize)
   setupProgress(fileSize);
 
   HTTPFileDownload::downloadBinaryFile(url, filePath, &fileProgress, 4096);
-  cout << "DONE " << getReadableFileSize(filePosition) << endl;
-  return filePosition;
+
+  long actualFileSize = getFileSize(filePath);
+
+  cout << "DONE " << getReadableFileSize(actualFileSize) << endl;
+  return actualFileSize;
 }
 
 void Controller::downloadPodcast(PodcastChannel* channel, int number)

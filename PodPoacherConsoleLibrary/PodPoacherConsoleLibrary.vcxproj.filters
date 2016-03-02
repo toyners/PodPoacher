@@ -33,7 +33,7 @@
     <ClInclude Include="UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Util.h">
+    <ClInclude Include="Utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,7 +50,7 @@
     <ClCompile Include="UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Util.cpp">
+    <ClCompile Include="Utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

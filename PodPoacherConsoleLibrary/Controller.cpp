@@ -4,7 +4,7 @@
 #include "RSSContentHandler.h"
 #include "XMLFileParser.h"
 #include "FileBasedStorage.h"
-#include "Util.h"
+#include "Utility.h"
 #include <vector>
 #include <ctime>
 

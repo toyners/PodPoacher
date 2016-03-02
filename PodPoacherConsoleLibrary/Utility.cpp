@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Util.h"
+#include "Utility.h"
 #include "HTTPFileDownload.h"
 #include "RSSContentHandler.h"
 #include "XMLFileParser.h"

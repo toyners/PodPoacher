@@ -21,8 +21,6 @@ using Poco::URIStreamOpener;
 
 using namespace std;
 
-#define stringify( name ) # name
-
 void HTTPFileDownload::downloadTextFile(string url, string filePath)
 {
   URI uri(url);

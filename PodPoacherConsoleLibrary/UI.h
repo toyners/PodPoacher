@@ -15,8 +15,6 @@ public:
 
   void topLevelUI();
 
-  void outputMessage(std::string message, bool appendEndOfLine);
-
 private:
   void displayChannelsUI();
   void scanChannelsUI();

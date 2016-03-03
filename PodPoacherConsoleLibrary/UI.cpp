@@ -48,16 +48,6 @@ void UI::topLevelUI()
   }
 }
 
-void UI::outputMessage(string message, bool appendEndOfLine)
-{
-  cout << message;
-
-  if (appendEndOfLine)
-  {
-    cout << endl;
-  }
-}
-
 void UI::displayChannelsUI()
 {
   string input;

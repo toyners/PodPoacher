@@ -79,9 +79,9 @@ long Controller::downloadPodcastFile(string url, string filePath, long fileSize)
   return actualFileSize;
 }
 
-void Controller::downloadPodcast(PodcastChannel* channel, int number)
+void Controller::downloadPodcast(PodcastChannel* channel, int podcastIndex)
 {
-  PodcastDetails* podcast = channel->getPodcast(number - 1);
+  PodcastDetails* podcast = channel->getPodcast(podcastIndex);
   string date = getDate();
   string time = getTime();
   string cleanChannelTitle = removeIllegalFilePathCharactersFromText(channel->getTitle());
@@ -95,21 +95,6 @@ void Controller::downloadPodcast(PodcastChannel* channel, int number)
 void Controller::execute()
 {
   ui->topLevelUI();
-}
-
-void Controller::scanChannels(int number)
-{
-  if (number == -1)
-  {
-    for (int i = 1; i <= storage->getChannels().size(); i++)
-    {
-      scanChannel(i);
-    }
-  }
-  else
-  {
-    scanChannel(number);
-  }
 }
 
 PodcastChannel* Controller::createChannelFromFeed(string feedURL, string directory)
@@ -139,37 +124,46 @@ int Controller::indexOfChannelInList(const string& feedURL, vector<PodcastChanne
   return -1;
 }
 
-void Controller::scanChannel(int number)
+PodcastChannel* Controller::getChannel(int channelIndex)
 {
   vector<PodcastChannel*> channels = storage->getChannels();
-  PodcastChannel* originalChannel = channels[number - 1];
+  if (channelIndex >= 0 && channelIndex < channels.size())
+  {
+    return channels[channelIndex];
+  }
 
-  cout << "Scanning \"" + originalChannel->getTitle() << "\"" << endl;
+  return nullptr; // TODO Put in exception.
+}
+
+int Controller::scanChannel(int channelIndex)
+{
+  vector<PodcastChannel*> channels = storage->getChannels();
+  PodcastChannel* originalChannel = channels[channelIndex];
+
   PodcastChannel* newChannel = createChannelFromFeed(originalChannel->getFeedURL(), originalChannel->getDirectory());
 
   if (newChannel->getPublishedDate() == originalChannel->getPublishedDate())
   {
-    cout << "Scan completed. No change to \"" + originalChannel->getTitle() << "\"" << endl << endl;
-    return;
+    return 0;
   }
 
   // Get the number of podcasts to download.
+  int podcastCount = 0;
   string latestPublishDate = originalChannel->getPodcast(0)->getPublishedDate();
-  int newPodcastCount = newChannel->getPodcastCount() - originalChannel->getPodcastCount();
-  for (int i = 1; i <= newChannel->getPodcastCount(); i++)
+  for (int index = 0; index < newChannel->getPodcastCount(); index++)
   {
-    PodcastDetails* podcast = newChannel->getPodcast(i - 1);
+    PodcastDetails* podcast = newChannel->getPodcast(index);
     if (latestPublishDate == podcast->getPublishedDate())
     {
       break;
     }
 
-    downloadPodcast(newChannel, i);
+    podcastCount++;
   }
 
-  cout << "Scan completed. " << newPodcastCount << " podcast(s) added to \"" << originalChannel->getTitle() + "\"" << endl << endl;
-
   storage->updateChannel(*originalChannel, *newChannel);
+
+  return podcastCount;
 }
 
 void Controller::verifyChannelIsNotInList(const string& url)

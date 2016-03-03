@@ -18,7 +18,7 @@ UI::~UI() {}
 
 void UI::topLevelUI()
 {
-  std::cout << "PodPoacher v0.9" << std::endl << std::endl;
+  std::cout << "PodPoacher v0.91" << std::endl << std::endl;
 
   while (true)
   {
@@ -119,14 +119,19 @@ void UI::scanChannelsUI()
 
     if (c == 'a')
     {
-      controller->scanChannels(-1);
+      scanChannels();
       continue;
     }
 
     int number;
     if (tryConvertInputToNumber(input, number, channelCount))
     {
-      controller->scanChannels(number);
+      int channelIndex = number - 1;
+      int downloadCount = scanChannel(channelIndex);
+      if (downloadCount > 0)
+      { 
+        downloadPodcasts(controller->getChannel(channelIndex), downloadCount);
+      }
     }
   }
 }
@@ -168,7 +173,7 @@ void UI::addChannelUI()
 
     if (c == 'a')
     {
-      downloadAllPodcasts(channel);
+      downloadPodcasts(channel, channel->getPodcastCount());
       continue;
     }
 
@@ -234,7 +239,7 @@ bool UI::haltRollingDisplayOfPodcasts(int total, int remaining)
 
     if (c == 'a')
     {
-      downloadAllPodcasts(controller->getCurrentChannel());
+      downloadPodcasts(controller->getCurrentChannel());
       continue;
     }
 
@@ -351,19 +356,23 @@ void UI::displayChannels()
   }
 }
 
-void UI::downloadPodcast(PodcastChannel* channel, int number)
+void UI::downloadPodcast(PodcastChannel* channel, int podcastIndex)
 {
   cout << "Getting MP3 file";
-  controller->downloadPodcast(channel, number);
+  controller->downloadPodcast(channel, podcastIndex);
 }
 
-void UI::downloadAllPodcasts(PodcastChannel* channel)
+void UI::downloadPodcasts(PodcastChannel* channel)
 {
-  int total = channel->getPodcastCount();
-  for (int number = 1; number <= total; number++)
+  downloadPodcasts(channel, channel->getPodcastCount());
+}
+
+void UI::downloadPodcasts(PodcastChannel* channel, int total)
+{
+  for (int podcastIndex = 1; podcastIndex < total; podcastIndex++)
   {
-    cout << "Getting MP3 file [" << number << " of " << total << "]";
-    controller->downloadPodcast(channel, number);
+    cout << "Getting MP3 file [" << (podcastIndex + 1) << " of " << total << "]";
+    controller->downloadPodcast(channel, podcastIndex);
   }
 }
 
@@ -373,4 +382,35 @@ string UI::getInputStringContainingWhiteSpace()
   cin.ignore(); // ignore '\n' character that is in the buffer from previous cin operation.
   getline(cin, line);
   return line;
+}
+
+int UI::scanChannel(int channelIndex)
+{
+  string title = controller->getChannel(channelIndex)->getTitle();
+
+  cout << "Scanning \"" + title << "\"" << endl;
+  int podcastCount = controller->scanChannel(channelIndex);
+
+  if (podcastCount == 0)
+  {
+    cout << "Scan completed. No change to \"" + title << "\"" << endl << endl;
+    return 0;
+  }
+
+  cout << "Scan completed. " << podcastCount << " podcast(s) added to \"" << title + "\"" << endl << endl;
+  return podcastCount;
+}
+
+void UI::scanChannels()
+{
+  vector<PodcastChannel*>& channels = controller->getChannels();
+  int total = channels.size();
+  for (int channelIndex = 0; channelIndex < total; channelIndex++)
+  {
+    int downloadCount = scanChannel(channelIndex);
+    if (downloadCount > 0)
+    {
+      downloadPodcasts(controller->getChannel(channelIndex), downloadCount);
+    }
+  }
 }

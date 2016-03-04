@@ -348,8 +348,31 @@ void UI::displayChannels()
 
 void UI::downloadPodcast(PodcastChannel* channel, int podcastIndex)
 {
-  cout << "Getting MP3 file";
-  controller->downloadPodcast(channel, podcastIndex);
+  do
+  {
+    try
+    {
+      cout << "Getting MP3 file";
+      controller->downloadPodcast(channel, podcastIndex);
+    }
+    catch (exception& e)
+    {
+      if (retryDownloadAfterException(e))
+      {
+        continue;
+      }
+    }
+  } while (false);
+}
+
+bool UI::retryDownloadAfterException(exception& e)
+{
+  char input;
+  cout << "Exception occurred while downloading: " << e.what() << endl;
+  cout << "[R]etry or any other key to Cancel";
+  cin >> input;
+
+  return (tolower(input) == 'r');
 }
 
 void UI::downloadPodcasts(PodcastChannel* channel)

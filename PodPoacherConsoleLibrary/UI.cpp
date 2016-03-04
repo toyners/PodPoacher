@@ -382,7 +382,7 @@ void UI::downloadPodcasts(PodcastChannel* channel)
 
 void UI::downloadPodcasts(PodcastChannel* channel, int total)
 {
-  for (int podcastIndex = 1; podcastIndex < total; podcastIndex++)
+  for (int podcastIndex = 0; podcastIndex < total; podcastIndex++)
   {
     cout << "Getting MP3 file [" << (podcastIndex + 1) << " of " << total << "]";
     controller->downloadPodcast(channel, podcastIndex);

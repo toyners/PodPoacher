@@ -80,7 +80,7 @@ void FileBasedStorage::updateChannel(PodcastChannel& oldChannel, PodcastChannel&
   { 
     if (channelList[i] == &oldChannel)
     {
-      channelList[i] == &newChannel;
+      channelList[i] = &newChannel;
       delete &oldChannel;
 
       serialisePodcasts(to_string(i + 1) + ".txt", newChannel);

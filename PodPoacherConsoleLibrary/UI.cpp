@@ -18,7 +18,7 @@ UI::~UI() {}
 
 void UI::topLevelUI()
 {
-  std::cout << "PodPoacher v0.91" << std::endl << std::endl;
+  std::cout << "PodPoacher v0.92" << std::endl << std::endl;
 
   while (true)
   {

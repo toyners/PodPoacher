@@ -132,7 +132,9 @@ PodcastChannel* Controller::getChannel(int channelIndex)
     return channels[channelIndex];
   }
 
-  return nullptr; // TODO Put in exception.
+  string message = "Illegal value for parameter channelIndex. Is " + 
+    to_string(channelIndex) + " but should be 0.." + to_string(channels.size() - 1) + ".";
+  throw range_error(message.data());
 }
 
 int Controller::scanChannel(int channelIndex)

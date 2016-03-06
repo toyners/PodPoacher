@@ -89,7 +89,7 @@ void FileBasedStorage::updateChannel(PodcastChannel& oldChannel, PodcastChannel&
     }
   }
 
-  throw new exception(); // TODO
+  throw range_error("Old channel not found when updating channel.");
 }
 
 string FileBasedStorage::getChannelFileName(PodcastChannel& channel)
@@ -102,7 +102,8 @@ string FileBasedStorage::getChannelFileName(PodcastChannel& channel)
     }
   }
 
-  throw new exception(); // TODO
+  string message = "Channel '" + channel.getTitle() + "' not found when getting file name.";
+  throw range_error(message.data());
 }
 
 void FileBasedStorage::getTokensFromLine(const string& line, vector<string>& tokens)

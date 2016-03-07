@@ -8,8 +8,6 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
 UI::UI(BaseController& baseController)
 {
   controller = &baseController;
@@ -24,8 +22,8 @@ void UI::topLevelUI()
   while (true)
   {
     char input;
-    cout << "[A]dd channel, [D]isplay channels, [S]can channels or e[X]it" << endl;
-    cin >> input;
+    std::cout << "[A]dd channel, [D]isplay channels, [S]can channels or e[X]it" << std::endl;
+    std::cin >> input;
 
     if (input == 'X' || input == 'x')
     {
@@ -51,19 +49,19 @@ void UI::topLevelUI()
 
 void UI::displayChannelsUI()
 {
-  string input;
+  std::string input;
   int channelCount = controller->getChannelCount();
 
   if (channelCount == 0)
   {
-    cout << "No channels to display." << endl;
+    std::cout << "No channels to display." << std::endl;
     return;
   }
 
   while (true)
   {
-    cout << "Display [A]ll channels, numbers [1 - " << channelCount << "] or [B]ack" << endl;
-    cin >> input;
+    std::cout << "Display [A]ll channels, numbers [1 - " << channelCount << "] or [B]ack" << std::endl;
+    std::cin >> input;
 
     char c = tolower(input[0]);
     if (c == 'b')
@@ -80,7 +78,7 @@ void UI::displayChannelsUI()
     int number;
     if (tryConvertInputToNumber(input, number, channelCount))
     {
-      vector<PodcastChannel*>& channels = controller->getChannels();
+      std::vector<PodcastChannel*>& channels = controller->getChannels();
       displayChannel(number, *channels[number - 1]);
     }
   }
@@ -88,19 +86,19 @@ void UI::displayChannelsUI()
 
 void UI::scanChannelsUI()
 {
-  string input;
+  std::string input;
   int channelCount = controller->getChannelCount();
 
   if (channelCount == 0)
   {
-    cout << "No channels to scan." << endl;
+    std::cout << "No channels to scan." << std::endl;
     return;
   }
 
   while (true)
   {
-    cout << "Scan [A]ll channels, numbers [1 - " << channelCount << "] or [B]ack" << endl;
-    cin >> input;
+    std::cout << "Scan [A]ll channels, numbers [1 - " << channelCount << "] or [B]ack" << std::endl;
+    std::cin >> input;
 
     char c = tolower(input[0]);
     if (c == 'b')
@@ -129,12 +127,12 @@ void UI::scanChannelsUI()
 
 void UI::addChannelUI()
 {
-  string url;
-  cout << "Enter feed URL: ";
-  cin >> url;
+  std::string url;
+  std::cout << "Enter feed URL: ";
+  std::cin >> url;
 
-  string directory;
-  cout << "Enter directory for podcasts: ";
+  std::string directory;
+  std::cout << "Enter directory for podcasts: ";
   directory = getInputStringContainingWhiteSpace();
 
   controller->addChannel(url, directory);
@@ -142,14 +140,14 @@ void UI::addChannelUI()
   PodcastChannel* channel = controller->getChannel(channelIndex);
   
   int podcastCount = channel->getPodcastCount();
-  cout << podcastCount << " Podcasts loaded." << endl << endl;
+  std::cout << podcastCount << " Podcasts loaded." << std::endl << std::endl;
 
   // Display podcasts, download all or download some
   while (true)
   {
-    string input;
-    cout << "[D]isplay podcasts, Download [A]ll podcasts, Download individual podcasts [1 - " << podcastCount << "] or [B]ack" << endl;
-    cin >> input;
+    std::string input;
+    std::cout << "[D]isplay podcasts, Download [A]ll podcasts, Download individual podcasts [1 - " << podcastCount << "] or [B]ack" << std::endl;
+    std::cin >> input;
     char c = tolower(input[0]);
 
     if (c == 'b')
@@ -178,7 +176,7 @@ void UI::addChannelUI()
   }
 }
 
-bool UI::tryConvertInputToNumber(string input, int& number, int podcastCount)
+bool UI::tryConvertInputToNumber(std::string input, int& number, int podcastCount)
 {
   try
   {
@@ -186,25 +184,25 @@ bool UI::tryConvertInputToNumber(string input, int& number, int podcastCount)
 
     if (number <= 0)
     {
-      cout << "'" << input << "' is negative! Range is [1 - " << podcastCount << "]" << endl;
+      std::cout << "'" << input << "' is negative! Range is [1 - " << podcastCount << "]" << std::endl;
       return false;
     }
 
     if (number > podcastCount)
     {
-      cout << "'" << input << "' is out of range! Range is [1 - " << podcastCount << "]" << endl;
+      std::cout << "'" << input << "' is out of range! Range is [1 - " << podcastCount << "]" << std::endl;
       return false;
     }
 
     return true;
   }
-  catch (invalid_argument& i)
+  catch (std::invalid_argument& i)
   {
-    cout << "'" << input << "' is not a valid option! Options are [A], [B] or [1 - " << podcastCount << "]" << endl;
+    std::cout << "'" << input << "' is not a valid option! Options are [A], [B] or [1 - " << podcastCount << "]" << std::endl;
   }
-  catch (out_of_range& o)
+  catch (std::out_of_range& o)
   {
-    cout << "'" << input << "' is out of range! Range is [1 - " << podcastCount << "]" << endl;
+    std::cout << "'" << input << "' is out of range! Range is [1 - " << podcastCount << "]" << std::endl;
   }
 
   return false;
@@ -215,9 +213,9 @@ bool UI::haltRollingDisplayOfPodcasts(PodcastChannel* channel, int remaining)
   int total = channel->getPodcastCount();
   while (true)
   {
-    string input;
-    cout << remaining << " Podcasts to go. [D]own, Download [A]ll podcasts, Download individual podcasts [1 - " << total << "] or [B]reak" << endl;
-    cin >> input;
+    std::string input;
+    std::cout << remaining << " Podcasts to go. [D]own, Download [A]ll podcasts, Download individual podcasts [1 - " << total << "] or [B]reak" << std::endl;
+    std::cin >> input;
 
     char c = tolower(input[0]);
     if (c == 'b')
@@ -247,9 +245,9 @@ bool UI::haltRollingDisplayOfPodcasts(PodcastChannel* channel, int remaining)
 
 bool UI::haltRollingDisplayOfChannels(int remaining)
 {
-  string input;
-  cout << remaining << " Channels to go. [D]own or [B]reak" << endl;
-  cin >> input;
+  std::string input;
+  std::cout << remaining << " Channels to go. [D]own or [B]reak" << std::endl;
+  std::cin >> input;
 
   char c = tolower(input[0]);
   if (c == 'b')
@@ -269,19 +267,19 @@ void UI::displayPodcasts(PodcastChannel& channel)
   for (int index = 0; index < total; index++)
   {
     int number = index + 1;
-    string label = "<" + to_string(number) + "> ";
-    string indent(label.size(), ' ');
+    std::string label = "<" + std::to_string(number) + "> ";
+    std::string indent(label.size(), ' ');
     PodcastDetails* podcast = channel.getPodcast(index);
-    cout << label << "TITLE: " << podcast->getTitle() << endl
+    std::cout << label << "TITLE: " << podcast->getTitle() << std::endl
       << indent << "PUB DATE: " << podcast->getPublishedDate() 
       << "  SIZE: " << podcast->getFileSize();
 
     if (podcast->isDownloaded())
     {
-      cout << endl << label << "DOWNLOAD DATE: " << podcast->getDownloadDate();
+      std::cout << std::endl << label << "DOWNLOAD DATE: " << podcast->getDownloadDate();
     }
 
-    cout << endl << endl;
+    std::cout << std::endl << std::endl;
 
     int remaining = total - number;
     if (number > 0 && number % 5 == 0 && remaining > 0 && haltRollingDisplayOfPodcasts(&channel, remaining))
@@ -298,9 +296,9 @@ void UI::displayChannel(int number, PodcastChannel& channel)
   int podcastCount = channel.getPodcastCount();
   while (true)
   {
-    string input;
-    cout <<  "Display [A]ll podcasts. Download individual podcast [1 - " << podcastCount << "] or [B]ack" << endl;
-    cin >> input;
+    std::string input;
+    std::cout <<  "Display [A]ll podcasts. Download individual podcast [1 - " << podcastCount << "] or [B]ack" << std::endl;
+    std::cin >> input;
 
     char c = tolower(input[0]);
     if (c == 'b')
@@ -324,17 +322,17 @@ void UI::displayChannel(int number, PodcastChannel& channel)
 
 void UI::displayChannelDetails(int number, PodcastChannel& channel)
 {
-  string label = "[" + to_string(number) + "] ";
-  string indent(label.size(), ' ');
-  cout << label << channel.getTitle() << endl;
-  cout << indent << channel.getDirectory() << endl;
-  cout << indent << "PODCASTS: " << channel.getPodcastCount() << "  PUBLISHED DATE: " << channel.getPublishedDate() << endl;
-  cout << endl;
+  std::string label = "[" + std::to_string(number) + "] ";
+  std::string indent(label.size(), ' ');
+  std::cout << label << channel.getTitle() << std::endl;
+  std::cout << indent << channel.getDirectory() << std::endl;
+  std::cout << indent << "PODCASTS: " << channel.getPodcastCount() << "  PUBLISHED DATE: " << channel.getPublishedDate() << std::endl;
+  std::cout << std::endl;
 }
 
 void UI::displayChannels()
 {
-  vector<PodcastChannel*>& channels = controller->getChannels();
+  std::vector<PodcastChannel*>& channels = controller->getChannels();
   int total = channels.size();
   for (int index = 0; index < total; index++)
   {
@@ -355,7 +353,7 @@ void UI::downloadPodcast(PodcastChannel* channel, int podcastIndex)
   {
     try
     {
-      cout << "Getting MP3 file";
+      std::cout << "Getting MP3 file";
       controller->downloadPodcast(channel, podcastIndex);
       return;
     }
@@ -368,9 +366,9 @@ void UI::downloadPodcast(PodcastChannel* channel, int podcastIndex)
 
       return;
     }
-    catch (exception& e)
+    catch (std::exception& e)
     {
-      if (retryDownloadAfterException(string(e.what())))
+      if (retryDownloadAfterException(std::string(e.what())))
       {
         continue;
       }
@@ -380,12 +378,12 @@ void UI::downloadPodcast(PodcastChannel* channel, int podcastIndex)
   }
 }
 
-bool UI::retryDownloadAfterException(string& message)
+bool UI::retryDownloadAfterException(std::string& message)
 {
   char input;
-  cout << endl << "EXCEPTION OCCURRED DURING DOWNLOAD: " << message << endl;
-  cout << "[R]etry or [C]ancel" << endl;
-  cin >> input;
+  std::cout << std::endl << "EXCEPTION OCCURRED DURING DOWNLOAD: " << message << std::endl;
+  std::cout << "[R]etry or [C]ancel" << std::endl;
+  std::cin >> input;
 
   return (tolower(input) == 'r');
 }
@@ -399,39 +397,39 @@ void UI::downloadPodcasts(PodcastChannel* channel, int total)
 {
   for (int podcastIndex = 0; podcastIndex < total; podcastIndex++)
   {
-    cout << "Getting MP3 file [" << (podcastIndex + 1) << " of " << total << "]";
+    std::cout << "Getting MP3 file [" << (podcastIndex + 1) << " of " << total << "]";
     controller->downloadPodcast(channel, podcastIndex);
   }
 }
 
-string UI::getInputStringContainingWhiteSpace()
+std::string UI::getInputStringContainingWhiteSpace()
 {
-  string line;
-  cin.ignore(); // ignore '\n' character that is in the buffer from previous cin operation.
-  getline(cin, line);
+  std::string line;
+  std::cin.ignore(); // ignore '\n' character that is in the buffer from previous cin operation.
+  std::getline(std::cin, line);
   return line;
 }
 
 int UI::scanChannel(int channelIndex)
 {
-  string title = controller->getChannel(channelIndex)->getTitle();
+  std::string title = controller->getChannel(channelIndex)->getTitle();
 
-  cout << "Scanning \"" + title << "\"" << endl;
+  std::cout << "Scanning \"" + title << "\"" << std::endl;
   int podcastCount = controller->scanChannel(channelIndex);
 
   if (podcastCount == 0)
   {
-    cout << "Scan completed. No change to \"" + title << "\"" << endl << endl;
+    std::cout << "Scan completed. No change to \"" + title << "\"" << std::endl << std::endl;
     return 0;
   }
 
-  cout << "Scan completed. " << podcastCount << " podcast(s) added to \"" << title + "\"" << endl << endl;
+  std::cout << "Scan completed. " << podcastCount << " podcast(s) added to \"" << title + "\"" << std::endl << std::endl;
   return podcastCount;
 }
 
 void UI::scanChannels()
 {
-  vector<PodcastChannel*>& channels = controller->getChannels();
+  std::vector<PodcastChannel*>& channels = controller->getChannels();
   int total = channels.size();
   for (int channelIndex = 0; channelIndex < total; channelIndex++)
   {

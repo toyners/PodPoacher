@@ -3,9 +3,7 @@
 #include <string>
 #include <sstream>
 
-using namespace std;
-
-PodcastChannel::PodcastChannel(const string& url, const string& directory)
+PodcastChannel::PodcastChannel(const std::string& url, const std::string& directory)
 {
   feedURL = url;
   podcastDirectory = directory;
@@ -16,10 +14,10 @@ PodcastChannel::PodcastChannel(const string& url, const string& directory)
     podcastDirectory += '\\';
   }
 
-  podcasts = new list<PodcastDetails*>;
+  podcasts = new std::list<PodcastDetails*>;
 }
 
-PodcastChannel::PodcastChannel(string url, string channelTitle, string channelDescription, string channelDirectory, string channelWebsite, string date)
+PodcastChannel::PodcastChannel(std::string url, std::string channelTitle, std::string channelDescription, std::string channelDirectory, std::string channelWebsite, std::string date)
 {
   feedURL = url;
   title = channelTitle;
@@ -27,7 +25,7 @@ PodcastChannel::PodcastChannel(string url, string channelTitle, string channelDe
   podcastDirectory = channelDirectory;
   website = channelWebsite;
   publishedDate = date;
-  podcasts = new list<PodcastDetails*>;
+  podcasts = new std::list<PodcastDetails*>;
 }
 
 PodcastChannel::~PodcastChannel()
@@ -40,19 +38,19 @@ PodcastDetails* PodcastChannel::getPodcast(int index)
 {
   if (podcasts->size() == 0)
   {
-    throw new exception("No podcasts loaded.");
+    throw new std::exception("No podcasts loaded.");
   }
 
   if (index >= podcasts->size())
   {
-    stringstream messageBuilder;
+    std::stringstream messageBuilder;
     messageBuilder << "Index " << index << " is outside range 0.." << podcasts->size() - 1;
 
-    throw new exception(messageBuilder.str().c_str());
+    throw new std::exception(messageBuilder.str().c_str());
   }
 
   int count = index;
-  list<PodcastDetails*>::iterator it;
+  std::list<PodcastDetails*>::iterator it;
   for (it = podcasts->begin(); count > 0; it++)
   {
     count--;
@@ -61,7 +59,7 @@ PodcastDetails* PodcastChannel::getPodcast(int index)
   return it._Ptr->_Myval;
 }
 
-void PodcastChannel::setTitle(string channelTitle)
+void PodcastChannel::setTitle(std::string channelTitle)
 {
   if (title == "" && channelTitle != "")
   {
@@ -69,7 +67,7 @@ void PodcastChannel::setTitle(string channelTitle)
   }
 }
 
-void PodcastChannel::setDescription(string channelDescription)
+void PodcastChannel::setDescription(std::string channelDescription)
 {
   if (description == "" && channelDescription != "")
   {
@@ -77,7 +75,7 @@ void PodcastChannel::setDescription(string channelDescription)
   }
 }
 
-void PodcastChannel::setWebsite(string channelWebsite)
+void PodcastChannel::setWebsite(std::string channelWebsite)
 {
   if (website == "" && channelWebsite != "")
   {
@@ -85,7 +83,7 @@ void PodcastChannel::setWebsite(string channelWebsite)
   }
 }
 
-void PodcastChannel::setPublishDate(string date)
+void PodcastChannel::setPublishDate(std::string date)
 {
   if (publishedDate == "" && date != "")
   {
@@ -93,12 +91,12 @@ void PodcastChannel::setPublishDate(string date)
   }
 }
 
-void PodcastChannel::addPodcastDetails(string title, string description, string url, string pubDate, long fileSize)
+void PodcastChannel::addPodcastDetails(std::string title, std::string description, std::string url, std::string pubDate, long fileSize)
 {
   addPodcastDetails(title, description, url, pubDate, fileSize, "");
 }
 
-void PodcastChannel::addPodcastDetails(string title, string description, string url, string pubDate, long fileSize, string downloadDate)
+void PodcastChannel::addPodcastDetails(std::string title, std::string description, std::string url, std::string pubDate, long fileSize, std::string downloadDate)
 {
   PodcastDetails* podcast = new PodcastDetails(
     title,

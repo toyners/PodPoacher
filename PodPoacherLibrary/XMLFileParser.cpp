@@ -9,8 +9,6 @@ using Poco::XML::LexicalHandler;
 using Poco::XML::SAXParser;
 using Poco::XML::XMLReader;
 
-using namespace std;
-
 XMLFileParser::XMLFileParser(ContentHandler* contentHander, LexicalHandler* lexicalHandler)
 {
   XMLFileParser::contentHandler = contentHander;
@@ -19,7 +17,7 @@ XMLFileParser::XMLFileParser(ContentHandler* contentHander, LexicalHandler* lexi
 
 XMLFileParser::~XMLFileParser() {}
 
-void XMLFileParser::ParseFile(string filePath)
+void XMLFileParser::ParseFile(std::string filePath)
 {
   SAXParser parser;
   parser.setFeature(XMLReader::FEATURE_NAMESPACES, true);

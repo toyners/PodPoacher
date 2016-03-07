@@ -19,13 +19,11 @@ using Poco::StreamCopier;
 using Poco::Net::HTTPStreamFactory;
 using Poco::URIStreamOpener;
 
-using namespace std;
-
-void HTTPFileDownload::downloadTextFile(string url, string filePath)
+void HTTPFileDownload::downloadTextFile(std::string url, std::string filePath)
 {
   URI uri(url);
 
-  string path(uri.getPathAndQuery());
+  std::string path(uri.getPathAndQuery());
   if (path.empty())
   {
     path = "/";
@@ -36,25 +34,25 @@ void HTTPFileDownload::downloadTextFile(string url, string filePath)
   HTTPResponse response;
 
   session.sendRequest(request);
-  istream& rs = session.receiveResponse(response);
+  std::istream& rs = session.receiveResponse(response);
 
   if (response.getStatus() != Poco::Net::HTTPResponse::HTTP_OK)
   {
-    string message = "Can't get file from '" + url + "'. Status is " + std::to_string(response.getStatus()) + ". Reason is '" + response.getReason() + "'.";
-    throw new exception(message.data());
+    std::string message = "Can't get file from '" + url + "'. Status is " + std::to_string(response.getStatus()) + ". Reason is '" + response.getReason() + "'.";
+    throw new std::exception(message.data());
   }
 
-  ofstream file;
-  file.open(filePath, ios::out | ios::trunc);
+  std::ofstream file;
+  file.open(filePath, std::ios::out | std::ios::trunc);
   StreamCopier::copyStream(rs, file);
   file.close();
 }
 
-void HTTPFileDownload::downloadBinaryFile(string url, string filePath, FileProgressCallback progressCallback, int bufferSize)
+void HTTPFileDownload::downloadBinaryFile(std::string url, std::string filePath, FileProgressCallback progressCallback, int bufferSize)
 {
   HTTPStreamFactory::registerFactory();
 
-  istream* rs;
+  std::istream* rs;
   try
   {
     URI uri(url);
@@ -66,15 +64,15 @@ void HTTPFileDownload::downloadBinaryFile(string url, string filePath, FileProgr
     throw;
   }
 
-  ofstream file;
-  file.open(filePath, ios::out | ios::trunc | ios::binary);
+  std::ofstream file;
+  file.open(filePath, std::ios::out | std::ios::trunc | std::ios::binary);
 
   char* buffer = new char[bufferSize];
   long writeCount = 0;
   while (!rs->eof())
   {
     rs->read(buffer, bufferSize);
-    streamsize readCount = rs->gcount();
+    std::streamsize readCount = rs->gcount();
     file.write(buffer, readCount);
 
     if (progressCallback != 0)

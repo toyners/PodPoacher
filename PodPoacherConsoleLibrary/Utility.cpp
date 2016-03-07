@@ -6,22 +6,20 @@
 #include <fstream>
 #include <iostream>
 
-using namespace std;
-
-void downloadRSSFile(string url, string rssFilePath)
+void downloadRSSFile(std::string url, std::string rssFilePath)
 {
-  cout << "Getting RSS file...";
+  std::cout << "Getting RSS file...";
   HTTPFileDownload::downloadTextFile(url, rssFilePath);
-  cout << "DONE" << endl;
+  std::cout << "DONE" << std::endl;
 }
 
-void parseRSSFile(string url, string rssFilePath, PodcastChannel* channel)
+void parseRSSFile(std::string url, std::string rssFilePath, PodcastChannel* channel)
 {
-  cout << "Parsing RSS file...";
+  std::cout << "Parsing RSS file...";
   RSSContentHandler contentHandler(channel);
   XMLFileParser parser(&contentHandler);
   parser.ParseFile(rssFilePath);
-  cout << "DONE" << endl;
+  std::cout << "DONE" << std::endl;
 }
 
 void setupProgress(long fileSize)
@@ -36,41 +34,41 @@ void fileProgress(long position)
   while (ticks > tickCount)
   {
     tickCount++;
-    cout << ".";
+    std::cout << ".";
   }
 }
 
-string getWorkingDirectory()
+std::string getWorkingDirectory()
 {
   char* pathPtr;
   _get_pgmptr(&pathPtr);
-  string path(pathPtr);
+  std::string path(pathPtr);
   path = path.substr(0, path.find_last_of('\\') + 1);
 
-  ifstream configFile;
+  std::ifstream configFile;
   configFile.open(path + "config.txt");
   if (!configFile.good())
   {
-    throw new ios::failure("Config file not opened.");
+    throw new std::ios::failure("Config file not opened.");
   }
 
-  string line;
-  getline(configFile, line);
+  std::string line;
+  std::getline(configFile, line);
   configFile.close();
 
   return line;
 }
 
-long getFileSize(string filePath)
+long getFileSize(std::string filePath)
 {
-  ifstream in(filePath, std::ifstream::ate | std::ifstream::binary);
+  std::ifstream in(filePath, std::ifstream::ate | std::ifstream::binary);
   return in.tellg();
 }
 
-string removeIllegalFilePathCharactersFromText(string text)
+std::string removeIllegalFilePathCharactersFromText(std::string text)
 {
   size_t position = -1;
-  while ((position = text.find_first_of("\\/:*?\"<>|", position + 1)) != string::npos)
+  while ((position = text.find_first_of("\\/:*?\"<>|", position + 1)) != std::string::npos)
   {
     text[position] = '-';
   }

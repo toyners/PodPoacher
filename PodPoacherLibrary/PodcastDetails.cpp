@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #include "PodcastDetails.h"
 
-using namespace std;
-
-PodcastDetails::PodcastDetails(string podcastTitle, string podcastDescription, string podcastURL, string podcastPubDate, long podcastSize)
+PodcastDetails::PodcastDetails(std::string podcastTitle, std::string podcastDescription, std::string podcastURL, std::string podcastPubDate, long podcastSize)
 {
   title = podcastTitle;
   description = podcastDescription;
@@ -14,22 +12,22 @@ PodcastDetails::PodcastDetails(string podcastTitle, string podcastDescription, s
 
 PodcastDetails::~PodcastDetails() {}
 
-string PodcastDetails::getTitle()
+std::string PodcastDetails::getTitle()
 {
   return title;
 }
 
-string PodcastDetails::getDescription()
+std::string PodcastDetails::getDescription()
 {
   return description;
 }
 
-string PodcastDetails::getPublishedDate()
+std::string PodcastDetails::getPublishedDate()
 {
   return pubDate;
 }
 
-string PodcastDetails::getURL()
+std::string PodcastDetails::getURL()
 {
   return url;
 }

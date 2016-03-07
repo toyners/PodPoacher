@@ -9,9 +9,7 @@
 #include <ctime>
 #include <iostream>
 
-using namespace std;
-
-Controller::Controller(const string& path)
+Controller::Controller(const std::string& path)
 {
   workingPath = path;
   storage = new FileBasedStorage(workingPath);
@@ -24,7 +22,7 @@ Controller::~Controller()
   delete ui;
 }
 
-void Controller::addChannel(string url, string directory)
+void Controller::addChannel(std::string url, std::string directory)
 {
   verifyChannelIsNotInList(url);
 
@@ -33,41 +31,41 @@ void Controller::addChannel(string url, string directory)
   storage->addChannel(*channel);
 }
 
-string Controller::getDate()
+std::string Controller::getDate()
 {
   time_t t = time(0);   // get time now
   struct tm * now = localtime(&t);
-  return to_string(now->tm_mday) + "-" + to_string(now->tm_mon) + "-" + to_string(now->tm_year + 1900);
+  return std::to_string(now->tm_mday) + "-" + std::to_string(now->tm_mon) + "-" + std::to_string(now->tm_year + 1900);
 }
 
-string Controller::getReadableFileSize(long size)
+std::string Controller::getReadableFileSize(long size)
 {
   char buffer[25];
   float sizeInKB = (float)size / 1024;
   if (sizeInKB < 0)
   {
-    return to_string(size) + " b";
+    return std::to_string(size) + " b";
   }
 
   float sizeInMB = sizeInKB / 1024;
   if (sizeInMB < 0)
   {
     sprintf(buffer, "%.1f", sizeInKB);
-    return string(buffer) + " KB";
+    return std::string(buffer) + " KB";
   }
 
   sprintf(buffer, "%.1f", sizeInMB);
-  return string(buffer) + " MB";
+  return std::string(buffer) + " MB";
 }
 
-string Controller::getTime()
+std::string Controller::getTime()
 {
   time_t t = time(0);   // get time now
   struct tm * now = localtime(&t);
-  return to_string(now->tm_hour) + "-" + to_string(now->tm_min) + "-" + to_string(now->tm_sec);
+  return std::to_string(now->tm_hour) + "-" + std::to_string(now->tm_min) + "-" + std::to_string(now->tm_sec);
 }
 
-long Controller::downloadPodcastFile(string url, string filePath, long fileSize)
+long Controller::downloadPodcastFile(std::string url, std::string filePath, long fileSize)
 {
   setupProgress(fileSize);
 
@@ -75,18 +73,18 @@ long Controller::downloadPodcastFile(string url, string filePath, long fileSize)
 
   long actualFileSize = getFileSize(filePath);
 
-  cout << "DONE " << getReadableFileSize(actualFileSize) << endl;
+  std::cout << "DONE " << getReadableFileSize(actualFileSize) << std::endl;
   return actualFileSize;
 }
 
 void Controller::downloadPodcast(PodcastChannel* channel, int podcastIndex)
 {
   PodcastDetails* podcast = channel->getPodcast(podcastIndex);
-  string date = getDate();
-  string time = getTime();
-  string cleanChannelTitle = removeIllegalFilePathCharactersFromText(channel->getTitle());
-  string cleanPodcastTitle = removeIllegalFilePathCharactersFromText(podcast->getTitle());
-  string filePath = channel->getDirectory() + cleanChannelTitle + "_" + cleanPodcastTitle + "_" + date + "_" + time + ".mp3";
+  std::string date = getDate();
+  std::string time = getTime();
+  std::string cleanChannelTitle = removeIllegalFilePathCharactersFromText(channel->getTitle());
+  std::string cleanPodcastTitle = removeIllegalFilePathCharactersFromText(podcast->getTitle());
+  std::string filePath = channel->getDirectory() + cleanChannelTitle + "_" + cleanPodcastTitle + "_" + date + "_" + time + ".mp3";
   long fileSize = downloadPodcastFile(podcast->getURL(), filePath, podcast->getFileSize());
   podcast->setFileSize(fileSize);
   podcast->setDownloadDate(date + " " + time);
@@ -97,9 +95,9 @@ void Controller::execute()
   ui->topLevelUI();
 }
 
-PodcastChannel* Controller::createChannelFromFeed(string feedURL, string directory)
+PodcastChannel* Controller::createChannelFromFeed(std::string feedURL, std::string directory)
 {
-  string rssFilePath = workingPath + "podcast.rss";
+  std::string rssFilePath = workingPath + "podcast.rss";
 
   downloadRSSFile(feedURL, rssFilePath);
 
@@ -110,7 +108,7 @@ PodcastChannel* Controller::createChannelFromFeed(string feedURL, string directo
   return channel;
 }
 
-int Controller::indexOfChannelInList(const string& feedURL, vector<PodcastChannel*>& channels)
+int Controller::indexOfChannelInList(const std::string& feedURL, std::vector<PodcastChannel*>& channels)
 {
   for (int i = 0; i < channels.size(); i++)
   {
@@ -126,20 +124,20 @@ int Controller::indexOfChannelInList(const string& feedURL, vector<PodcastChanne
 
 PodcastChannel* Controller::getChannel(int channelIndex)
 {
-  vector<PodcastChannel*> channels = storage->getChannels();
+  std::vector<PodcastChannel*> channels = storage->getChannels();
   if (channelIndex >= 0 && channelIndex < channels.size())
   {
     return channels[channelIndex];
   }
 
-  string message = "Illegal value for parameter channelIndex. Is " + 
-    to_string(channelIndex) + " but should be 0.." + to_string(channels.size() - 1) + ".";
-  throw range_error(message.data());
+  std::string message = "Illegal value for parameter channelIndex. Is " +
+    std::to_string(channelIndex) + " but should be 0.." + std::to_string(channels.size() - 1) + ".";
+  throw std::range_error(message.data());
 }
 
 int Controller::scanChannel(int channelIndex)
 {
-  vector<PodcastChannel*> channels = storage->getChannels();
+  std::vector<PodcastChannel*> channels = storage->getChannels();
   PodcastChannel* originalChannel = channels[channelIndex];
 
   PodcastChannel* newChannel = createChannelFromFeed(originalChannel->getFeedURL(), originalChannel->getDirectory());
@@ -151,7 +149,7 @@ int Controller::scanChannel(int channelIndex)
 
   // Get the number of podcasts to download.
   int podcastCount = 0;
-  string latestPublishDate = originalChannel->getPodcast(0)->getPublishedDate();
+  std::string latestPublishDate = originalChannel->getPodcast(0)->getPublishedDate();
   for (int index = 0; index < newChannel->getPodcastCount(); index++)
   {
     PodcastDetails* podcast = newChannel->getPodcast(index);
@@ -168,14 +166,14 @@ int Controller::scanChannel(int channelIndex)
   return podcastCount;
 }
 
-void Controller::verifyChannelIsNotInList(const string& url)
+void Controller::verifyChannelIsNotInList(const std::string& url)
 {
-  vector<PodcastChannel*>& channels = storage->getChannels();
+  std::vector<PodcastChannel*>& channels = storage->getChannels();
 
   int index;
   if ((index = indexOfChannelInList(url, channels)) != -1)
   {
-    string message = "Channel already in storage!" + channels[index]->getTitle();
-    throw new invalid_argument(message.data());
+    std::string message = "Channel already in storage!" + channels[index]->getTitle();
+    throw new std::invalid_argument(message.data());
   }
 }

@@ -5,13 +5,11 @@
 #include <vector>
 #include <cstdio>
 
-using namespace std;
+std::string storagePath;
+std::string channelPath;
+std::vector<PodcastChannel*> channelList;
 
-string storagePath;
-string channelPath;
-vector<PodcastChannel*> channelList;
-
-FileBasedStorage::FileBasedStorage(string path)
+FileBasedStorage::FileBasedStorage(std::string path)
 {
   if (path.size() > 0 && path[path.size() - 1] != '\\')
   {
@@ -34,8 +32,8 @@ FileBasedStorage::~FileBasedStorage()
 
 void FileBasedStorage::addChannel(PodcastChannel& channel)
 {
-  ofstream outputFile;
-  outputFile.open(channelPath, ios::app);
+  std::ofstream outputFile;
+  outputFile.open(channelPath, std::ios::app);
 
   outputFile << channel.getFeedURL() << "|"
     << channel.getTitle() << "|"
@@ -43,11 +41,11 @@ void FileBasedStorage::addChannel(PodcastChannel& channel)
     << channel.getDirectory() << "|"
     << channel.getWebsite() << "|"
     << channel.getPublishedDate() << "|"
-    << endl;
+    << std::endl;
 
   outputFile.close();
 
-  string fileName = storagePath + to_string(channelList.size() + 1) + ".txt";
+  std::string fileName = storagePath + std::to_string(channelList.size() + 1) + ".txt";
 
   if (channel.getPodcastCount() > 0)
   {
@@ -57,7 +55,7 @@ void FileBasedStorage::addChannel(PodcastChannel& channel)
   channelList.push_back(&channel);
 }
 
-vector<PodcastChannel*>& FileBasedStorage::getChannels()
+std::vector<PodcastChannel*>& FileBasedStorage::getChannels()
 {
   return channelList;
 }
@@ -69,7 +67,7 @@ void FileBasedStorage::loadChannel(PodcastChannel& channel)
 
 void FileBasedStorage::updateChannel(PodcastChannel& channel)
 {
-  string channelFileName = getChannelFileName(channel);
+  std::string channelFileName = getChannelFileName(channel);
   
   serialisePodcasts(channelFileName, channel);
 }
@@ -83,35 +81,35 @@ void FileBasedStorage::updateChannel(PodcastChannel& oldChannel, PodcastChannel&
       channelList[i] = &newChannel;
       delete &oldChannel;
 
-      serialisePodcasts(storagePath + to_string(i + 1) + ".txt", newChannel);
+      serialisePodcasts(storagePath + std::to_string(i + 1) + ".txt", newChannel);
       serialiseChannelsOnly();
       return;
     }
   }
 
-  throw range_error("Old channel not found when updating channel.");
+  throw std::range_error("Old channel not found when updating channel.");
 }
 
-string FileBasedStorage::getChannelFileName(PodcastChannel& channel)
+std::string FileBasedStorage::getChannelFileName(PodcastChannel& channel)
 {
   for (int i = 0; i < channelList.size(); i++)
   {
     if (channelList[i] == &channel)
     {
-      return to_string(i + 1) + ".txt";
+      return std::to_string(i + 1) + ".txt";
     }
   }
 
-  string message = "Channel '" + channel.getTitle() + "' not found when getting file name.";
-  throw range_error(message.data());
+  std::string message = "Channel '" + channel.getTitle() + "' not found when getting file name.";
+  throw std::range_error(message.data());
 }
 
-void FileBasedStorage::getTokensFromLine(const string& line, vector<string>& tokens)
+void FileBasedStorage::getTokensFromLine(const std::string& line, std::vector<std::string>& tokens)
 {
-  stringstream ss(line);
-  string item;
+  std::stringstream ss(line);
+  std::string item;
   tokens.clear();
-  while (getline(ss, item, '|'))
+  while (std::getline(ss, item, '|'))
   {
     tokens.push_back(item);
   }
@@ -119,7 +117,7 @@ void FileBasedStorage::getTokensFromLine(const string& line, vector<string>& tok
 
 void FileBasedStorage::deserialiseChannelsComplete()
 {
-  ifstream file;
+  std::ifstream file;
   file.open(channelPath);
 
   if (!file.good())
@@ -128,11 +126,11 @@ void FileBasedStorage::deserialiseChannelsComplete()
     return;
   }
 
-  vector<string> tokens;
+  std::vector<std::string> tokens;
   while (!file.eof())
   {
-    string line;
-    getline(file, line);
+    std::string line;
+    std::getline(file, line);
 
     if (line.empty())
     {
@@ -151,7 +149,7 @@ void FileBasedStorage::deserialiseChannelsComplete()
       tokens[5]
       );
 
-    string fileName = storagePath + to_string(channelList.size() + 1) + ".txt";
+    std::string fileName = storagePath + std::to_string(channelList.size() + 1) + ".txt";
     deserialisePodcasts(fileName, *channel);
 
     channelList.push_back(channel);
@@ -162,10 +160,10 @@ void FileBasedStorage::deserialiseChannelsComplete()
 
 void FileBasedStorage::serialiseChannelsOnly()
 {
-  string backupPath = createBackup(channelPath);
+  std::string backupPath = createBackup(channelPath);
 
-  ofstream outputFile;
-  outputFile.open(channelPath, ios::trunc);
+  std::ofstream outputFile;
+  outputFile.open(channelPath, std::ios::trunc);
 
   for (int index = 0; index < channelList.size(); index++)
   {
@@ -177,7 +175,7 @@ void FileBasedStorage::serialiseChannelsOnly()
       << channel.getDirectory() << "|"
       << channel.getWebsite() << "|"
       << channel.getPublishedDate() << "|"
-      << endl;
+      << std::endl;
   }
 
   outputFile.close();
@@ -185,11 +183,11 @@ void FileBasedStorage::serialiseChannelsOnly()
   remove(backupPath.data());
 }
 
-void FileBasedStorage::serialisePodcasts(const string& filePath, PodcastChannel& channel)
+void FileBasedStorage::serialisePodcasts(const std::string& filePath, PodcastChannel& channel)
 {
-  string backupPath = createBackup(filePath);
+  std::string backupPath = createBackup(filePath);
 
-  ofstream outputFile;
+  std::ofstream outputFile;
   outputFile.open(filePath);
 
   for (int i = 0; i < channel.getPodcastCount(); i++)
@@ -202,7 +200,7 @@ void FileBasedStorage::serialisePodcasts(const string& filePath, PodcastChannel&
       << podcast.getPublishedDate() << "|"
       << podcast.getFileSize() << "|"
       << podcast.getDownloadDate() << "|"
-      << endl;
+      << std::endl;
   }
 
   outputFile.close();
@@ -210,15 +208,15 @@ void FileBasedStorage::serialisePodcasts(const string& filePath, PodcastChannel&
   remove(backupPath.data());
 }
 
-void FileBasedStorage::deserialisePodcasts(const string& fileName, PodcastChannel& channel)
+void FileBasedStorage::deserialisePodcasts(const std::string& fileName, PodcastChannel& channel)
 {
-  ifstream inputFile;
+  std::ifstream inputFile;
   inputFile.open(fileName);
 
-  vector<string> tokens;
+  std::vector<std::string> tokens;
   while (!inputFile.eof())
   {
-    string line;
+    std::string line;
     getline(inputFile, line);
 
     if (line.empty())
@@ -238,9 +236,9 @@ void FileBasedStorage::deserialisePodcasts(const string& fileName, PodcastChanne
   }
 }
 
-string FileBasedStorage::createBackup(const string& filePath)
+std::string FileBasedStorage::createBackup(const std::string& filePath)
 {
-  string backupPath = filePath + "_bk";
+  std::string backupPath = filePath + "_bk";
 
   const char* backupPathPtr = backupPath.data();
   const char* filePathPtr = filePath.data();

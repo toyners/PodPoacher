@@ -7,8 +7,6 @@ using Poco::XML::Attributes;
 using Poco::XML::XMLChar;
 using Poco::XML::XMLString;
 
-using namespace std;
-
 RSSContentHandler::RSSContentHandler(PodcastChannel* podcastChannel)
 {
   channel = podcastChannel;
@@ -91,7 +89,7 @@ void RSSContentHandler::startElement(const XMLString& uri, const XMLString& loca
       }
       else if (attributes.getLocalName(i) == "length")
       {
-        string value = attributes.getValue(i);
+        std::string value = attributes.getValue(i);
         if (value == "")
         {
           podcastSize = 0;
@@ -188,9 +186,9 @@ void RSSContentHandler::endPrefixMapping(const XMLString& prefix) {}
 
 void RSSContentHandler::skippedEntity(const XMLString& name) {}
 
-string RSSContentHandler::getCleanString(const Poco::XML::XMLChar ch[], int start, int length)
+std::string RSSContentHandler::getCleanString(const Poco::XML::XMLChar ch[], int start, int length)
 {
-  string text(&ch[start], length);
+  std::string text(&ch[start], length);
 
   int index = 0;
   while (index < length && text[index] == '\n')

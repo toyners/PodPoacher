@@ -183,8 +183,7 @@
     <ResourceCompile Include="PodPoacherConsole.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon.ico" />
-    <Image Include="icon1.ico" />
+    <Image Include="MainIcon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

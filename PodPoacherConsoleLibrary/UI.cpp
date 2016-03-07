@@ -350,12 +350,13 @@ void UI::displayChannels()
 
 void UI::downloadPodcast(PodcastChannel* channel, int podcastIndex)
 {
-  do
+  while (true)
   {
     try
     {
       cout << "Getting MP3 file";
       controller->downloadPodcast(channel, podcastIndex);
+      return;
     }
     catch (exception& e)
     {
@@ -363,15 +364,17 @@ void UI::downloadPodcast(PodcastChannel* channel, int podcastIndex)
       {
         continue;
       }
+
+      return;
     }
-  } while (false);
+  }
 }
 
 bool UI::retryDownloadAfterException(exception& e)
 {
   char input;
-  cout << "Exception occurred while downloading: " << e.what() << endl;
-  cout << "[R]etry or any other key to Cancel";
+  cout << endl << "EXCEPTION OCCURRED DURING DOWNLOAD: " << e.what() << endl;
+  cout << "[R]etry or [C]ancel" << endl;
   cin >> input;
 
   return (tolower(input) == 'r');

@@ -3,6 +3,7 @@
 #include "PodcastStorage.h"
 #include "PodcastChannel.h"
 #include "Utility.h"
+#include "Poco/Net/NetException.h"
 
 #include <iostream>
 #include <vector>
@@ -358,9 +359,18 @@ void UI::downloadPodcast(PodcastChannel* channel, int podcastIndex)
       controller->downloadPodcast(channel, podcastIndex);
       return;
     }
+    catch (Poco::Net::HTTPException& h)
+    {
+      if (retryDownloadAfterException(h.displayText()))
+      {
+        continue;
+      }
+
+      return;
+    }
     catch (exception& e)
     {
-      if (retryDownloadAfterException(e))
+      if (retryDownloadAfterException(string(e.what())))
       {
         continue;
       }
@@ -370,10 +380,10 @@ void UI::downloadPodcast(PodcastChannel* channel, int podcastIndex)
   }
 }
 
-bool UI::retryDownloadAfterException(exception& e)
+bool UI::retryDownloadAfterException(string& message)
 {
   char input;
-  cout << endl << "EXCEPTION OCCURRED DURING DOWNLOAD: " << e.what() << endl;
+  cout << endl << "EXCEPTION OCCURRED DURING DOWNLOAD: " << message << endl;
   cout << "[R]etry or [C]ancel" << endl;
   cin >> input;
 

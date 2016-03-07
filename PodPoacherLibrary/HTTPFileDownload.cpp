@@ -54,8 +54,17 @@ void HTTPFileDownload::downloadBinaryFile(string url, string filePath, FileProgr
 {
   HTTPStreamFactory::registerFactory();
 
-  URI uri(url);
-  istream* rs = URIStreamOpener::defaultOpener().open(uri);
+  istream* rs;
+  try
+  {
+    URI uri(url);
+    rs = URIStreamOpener::defaultOpener().open(uri);
+  }
+  catch (...)
+  {
+    HTTPStreamFactory::unregisterFactory();
+    throw;
+  }
 
   ofstream file;
   file.open(filePath, ios::out | ios::trunc | ios::binary);

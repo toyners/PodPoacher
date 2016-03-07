@@ -30,7 +30,7 @@ private:
   std::string getInputStringContainingWhiteSpace();
   bool haltRollingDisplayOfPodcasts(PodcastChannel* channel, int remaining);
   bool haltRollingDisplayOfChannels(int remaining);
-  bool retryDownloadAfterException(std::exception& e);
+  bool retryDownloadAfterException(std::string& message);
   int scanChannel(int number);
   void scanChannels();
 };

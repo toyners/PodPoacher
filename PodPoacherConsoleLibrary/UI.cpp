@@ -18,7 +18,7 @@ UI::~UI() {}
 
 void UI::topLevelUI()
 {
-  std::cout << "PodPoacher v0.92" << std::endl << std::endl;
+  std::cout << "PodPoacher v0.93" << std::endl << std::endl;
 
   while (true)
   {
@@ -137,7 +137,8 @@ void UI::addChannelUI()
   directory = getInputStringContainingWhiteSpace();
 
   controller->addChannel(url, directory);
-  PodcastChannel* channel = controller->getCurrentChannel();
+  int channelIndex = controller->getChannelCount() - 1;
+  PodcastChannel* channel = controller->getChannel(channelIndex);
   
   int podcastCount = channel->getPodcastCount();
   cout << podcastCount << " Podcasts loaded." << endl << endl;
@@ -208,8 +209,9 @@ bool UI::tryConvertInputToNumber(string input, int& number, int podcastCount)
   return false;
 }
 
-bool UI::haltRollingDisplayOfPodcasts(int total, int remaining)
+bool UI::haltRollingDisplayOfPodcasts(PodcastChannel* channel, int remaining)
 {
+  int total = channel->getPodcastCount();
   while (true)
   {
     string input;
@@ -229,14 +231,14 @@ bool UI::haltRollingDisplayOfPodcasts(int total, int remaining)
 
     if (c == 'a')
     {
-      downloadPodcasts(controller->getCurrentChannel());
+      downloadPodcasts(channel);
       continue;
     }
 
     int number;
     if (tryConvertInputToNumber(input, number, total))
     {
-      downloadPodcast(controller->getCurrentChannel(), number);
+      downloadPodcast(channel, number);
       continue;
     }
   }
@@ -281,7 +283,7 @@ void UI::displayPodcasts(PodcastChannel& channel)
     cout << endl << endl;
 
     int remaining = total - number;
-    if (number > 0 && number % 5 == 0 && remaining > 0 && haltRollingDisplayOfPodcasts(total, remaining))
+    if (number > 0 && number % 5 == 0 && remaining > 0 && haltRollingDisplayOfPodcasts(&channel, remaining))
     {
       break;
     }

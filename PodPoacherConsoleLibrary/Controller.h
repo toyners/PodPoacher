@@ -12,7 +12,6 @@ class Controller : public BaseController
 private:
   std::string workingPath;
   PodcastStorage* storage;
-  PodcastChannel* currentChannel;
   UI* ui;
 
 public:
@@ -25,7 +24,6 @@ public:
   std::vector<PodcastChannel*>& getChannels() { return storage->getChannels(); }
   int getChannelCount() { return storage->getChannels().size(); }
   PodcastChannel* getChannel(int channelIndex);
-  PodcastChannel* getCurrentChannel() { return currentChannel; }
   int scanChannel(int channelIndex);
 
 private:

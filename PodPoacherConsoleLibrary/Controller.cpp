@@ -28,9 +28,9 @@ void Controller::addChannel(string url, string directory)
 {
   verifyChannelIsNotInList(url);
 
-  currentChannel = createChannelFromFeed(url, directory);
+  PodcastChannel* channel = createChannelFromFeed(url, directory);
 
-  storage->addChannel(*currentChannel);
+  storage->addChannel(*channel);
 }
 
 string Controller::getDate()

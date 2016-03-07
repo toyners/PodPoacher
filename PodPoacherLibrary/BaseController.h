@@ -12,7 +12,6 @@ public:
   virtual PodcastChannel* getChannel(int channelIndex) = 0;
   virtual int getChannelCount() = 0;
   virtual std::vector<PodcastChannel*>& getChannels() = 0;
-  virtual PodcastChannel* getCurrentChannel() = 0;
   virtual int scanChannel(int channelIndex) = 0;
 };
 

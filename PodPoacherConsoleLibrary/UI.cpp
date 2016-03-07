@@ -17,7 +17,7 @@ UI::~UI() {}
 
 void UI::topLevelUI()
 {
-  std::cout << "PodPoacher v0.93" << std::endl << std::endl;
+  std::cout << "PodPoacher v0.94" << std::endl << std::endl;
 
   while (true)
   {
@@ -170,7 +170,7 @@ void UI::addChannelUI()
     int number;
     if (tryConvertInputToNumber(input, number, podcastCount))
     {
-      downloadPodcast(channel, number);
+      downloadPodcast(channel, number - 1);
       continue;
     }
   }
@@ -237,7 +237,7 @@ bool UI::haltRollingDisplayOfPodcasts(PodcastChannel* channel, int remaining)
     int number;
     if (tryConvertInputToNumber(input, number, total))
     {
-      downloadPodcast(channel, number);
+      downloadPodcast(channel, number - 1);
       continue;
     }
   }
@@ -315,7 +315,7 @@ void UI::displayChannel(int number, PodcastChannel& channel)
     int number;
     if (tryConvertInputToNumber(input, number, podcastCount))
     {
-      downloadPodcast(&channel, number);
+      downloadPodcast(&channel, number - 1);
     }
   }
 }

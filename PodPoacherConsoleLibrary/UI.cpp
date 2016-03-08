@@ -17,7 +17,7 @@ UI::~UI() {}
 
 void UI::topLevelUI()
 {
-  std::cout << "PodPoacher v0.94" << std::endl << std::endl;
+  std::cout << "PodPoacher v0.941" << std::endl << std::endl;
 
   while (true)
   {
@@ -125,7 +125,7 @@ void UI::scanChannelsUI()
   }
 }
 
-void UI::addChannelUI()
+bool UI::addChannel()
 {
   std::string url;
   std::cout << "Enter feed URL: ";
@@ -135,7 +135,26 @@ void UI::addChannelUI()
   std::cout << "Enter directory for podcasts: ";
   directory = getInputStringContainingWhiteSpace();
 
-  controller->addChannel(url, directory);
+  try
+  {
+    controller->addChannel(url, directory);
+  }
+  catch (std::exception& e)
+  {
+    std::cout << std::endl << "EXCEPTION OCCURRED DURING CHANNEL ADD: " << e.what() << std::endl << std::endl;
+    return false;
+  }
+
+  return true;
+}
+
+void UI::addChannelUI()
+{
+  if (!addChannel())
+  {
+    return;
+  }
+
   int channelIndex = controller->getChannelCount() - 1;
   PodcastChannel* channel = controller->getChannel(channelIndex);
   

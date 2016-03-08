@@ -18,6 +18,7 @@ public:
 private:
   void displayChannelsUI();
   void scanChannelsUI();
+  bool addChannel();
   void addChannelUI();
   bool tryConvertInputToNumber(std::string input, int& number, int total);
   void displayChannel(int number, PodcastChannel& channel);

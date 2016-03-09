@@ -38,26 +38,6 @@ std::string Controller::getDate()
   return std::to_string(now->tm_mday) + "-" + std::to_string(now->tm_mon) + "-" + std::to_string(now->tm_year + 1900);
 }
 
-std::string Controller::getReadableFileSize(long size)
-{
-  char buffer[25];
-  float sizeInKB = (float)size / 1024;
-  if (sizeInKB < 0)
-  {
-    return std::to_string(size) + " b";
-  }
-
-  float sizeInMB = sizeInKB / 1024;
-  if (sizeInMB < 0)
-  {
-    sprintf(buffer, "%.1f", sizeInKB);
-    return std::string(buffer) + " KB";
-  }
-
-  sprintf(buffer, "%.1f", sizeInMB);
-  return std::string(buffer) + " MB";
-}
-
 std::string Controller::getTime()
 {
   time_t t = time(0);   // get time now

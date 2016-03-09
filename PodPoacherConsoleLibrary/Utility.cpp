@@ -75,3 +75,23 @@ std::string removeIllegalFilePathCharactersFromText(std::string text)
 
   return text;
 }
+
+std::string getReadableFileSize(long size)
+{
+  char buffer[25];
+  float sizeInKB = (float)size / 1024;
+  if (sizeInKB < 0)
+  {
+    return std::to_string(size) + " b";
+  }
+
+  float sizeInMB = sizeInKB / 1024;
+  if (sizeInMB < 0)
+  {
+    sprintf(buffer, "%.1f", sizeInKB);
+    return std::string(buffer) + " KB";
+  }
+
+  sprintf(buffer, "%.1f", sizeInMB);
+  return std::string(buffer) + " MB";
+}

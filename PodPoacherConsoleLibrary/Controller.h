@@ -30,7 +30,6 @@ private:
   PodcastChannel* createChannelFromFeed(std::string feedURL, std::string directory);
   long downloadPodcastFile(std::string url, std::string filePath, long fileSize);
   std::string getDate();
-  std::string getReadableFileSize(long size);
   std::string getTime();
   int indexOfChannelInList(const std::string& feedURL, std::vector<PodcastChannel*>& channels);
   void verifyChannelIsNotInList(const std::string& url);

@@ -10,6 +10,7 @@ void setupProgress(long fileSize);
 std::string getWorkingDirectory();
 long getFileSize(std::string filePath);
 std::string removeIllegalFilePathCharactersFromText(std::string text);
+std::string getReadableFileSize(long size);
 
 static long tickSize;
 static long tickCount;

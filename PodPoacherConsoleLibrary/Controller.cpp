@@ -47,9 +47,16 @@ std::string Controller::getTime()
 
 long Controller::downloadPodcastFile(std::string url, std::string filePath, long fileSize)
 {
-  setupProgress(fileSize);
+  if (fileSize == 0)
+  {
+    HTTPFileDownload::downloadBinaryFile(url, filePath, nullptr, 4096);
+  }
+  else
+  {
+    setupProgress(fileSize);
 
-  HTTPFileDownload::downloadBinaryFile(url, filePath, &fileProgress, 4096);
+    HTTPFileDownload::downloadBinaryFile(url, filePath, &fileProgress, 4096);
+  }
 
   long actualFileSize = getFileSize(filePath);
 

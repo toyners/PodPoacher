@@ -368,11 +368,16 @@ void UI::displayChannels()
 
 void UI::downloadPodcast(PodcastChannel* channel, int podcastIndex)
 {
+  std::cout << "Getting MP3 file ";
+  tryDownloadPodcast(channel, podcastIndex);
+}
+
+void UI::tryDownloadPodcast(PodcastChannel* channel, int podcastIndex)
+{
   while (true)
   {
     try
     {
-      std::cout << "Getting MP3 file ";
       controller->downloadPodcast(channel, podcastIndex);
 
       std::cout << "DONE " << getReadableFileSize(channel->getPodcast(podcastIndex)->getFileSize()) << std::endl;
@@ -419,9 +424,7 @@ void UI::downloadPodcasts(PodcastChannel* channel, int total)
   for (int podcastIndex = 0; podcastIndex < total; podcastIndex++)
   {
     std::cout << "Getting MP3 file [" << (podcastIndex + 1) << " of " << total << "] ";
-    controller->downloadPodcast(channel, podcastIndex);
-
-    std::cout << "DONE " << getReadableFileSize(channel->getPodcast(podcastIndex)->getFileSize()) << std::endl;
+    tryDownloadPodcast(channel, podcastIndex);
   }
 }
 

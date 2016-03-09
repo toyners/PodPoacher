@@ -25,7 +25,7 @@ private:
   void displayChannelDetails(int number, PodcastChannel& channel);
   void displayChannels();
   void displayPodcasts(PodcastChannel& channel);
-  void downloadPodcast(PodcastChannel* channel, int number);
+  void downloadPodcast(PodcastChannel* channel, int podcastIndex);
   void downloadPodcasts(PodcastChannel* channel);
   void downloadPodcasts(PodcastChannel* channel, int total);
   std::string getInputStringContainingWhiteSpace();
@@ -34,5 +34,6 @@ private:
   bool retryDownloadAfterException(std::string& message);
   int scanChannel(int number);
   void scanChannels();
+  void tryDownloadPodcast(PodcastChannel* channel, int podcastIndex);
 };
 

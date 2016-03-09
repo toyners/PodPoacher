@@ -5,10 +5,6 @@
 #include <vector>
 #include <cstdio>
 
-std::string storagePath;
-std::string channelPath;
-std::vector<PodcastChannel*> channelList;
-
 FileBasedStorage::FileBasedStorage(std::string path)
 {
   if (path.size() > 0 && path[path.size() - 1] != '\\')

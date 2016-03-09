@@ -6,6 +6,11 @@
 
 class FileBasedStorage : public PodcastStorage
 {
+private:
+  std::string storagePath;
+  std::string channelPath;
+  std::vector<PodcastChannel*> channelList;
+
 public:
   FileBasedStorage(std::string storagePath);
   ~FileBasedStorage();

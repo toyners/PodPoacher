@@ -374,6 +374,8 @@ void UI::downloadPodcast(PodcastChannel* channel, int podcastIndex)
     {
       std::cout << "Getting MP3 file ";
       controller->downloadPodcast(channel, podcastIndex);
+
+      std::cout << "DONE " << getReadableFileSize(channel->getPodcast(podcastIndex)->getFileSize()) << std::endl;
       return;
     }
     catch (Poco::Net::HTTPException& h)
@@ -418,6 +420,8 @@ void UI::downloadPodcasts(PodcastChannel* channel, int total)
   {
     std::cout << "Getting MP3 file [" << (podcastIndex + 1) << " of " << total << "] ";
     controller->downloadPodcast(channel, podcastIndex);
+
+    std::cout << "DONE " << getReadableFileSize(channel->getPodcast(podcastIndex)->getFileSize()) << std::endl;
   }
 }
 

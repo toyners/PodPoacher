@@ -58,10 +58,7 @@ long Controller::downloadPodcastFile(std::string url, std::string filePath, long
     HTTPFileDownload::downloadBinaryFile(url, filePath, &fileProgress, 4096);
   }
 
-  long actualFileSize = getFileSize(filePath);
-
-  std::cout << "DONE " << getReadableFileSize(actualFileSize) << std::endl;
-  return actualFileSize;
+  return getFileSize(filePath);
 }
 
 void Controller::downloadPodcast(PodcastChannel* channel, int podcastIndex)

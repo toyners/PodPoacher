@@ -17,7 +17,7 @@ UI::~UI() {}
 
 void UI::topLevelUI()
 {
-  std::cout << "PodPoacher v0.941" << std::endl << std::endl;
+  std::cout << "PodPoacher v0.942" << std::endl << std::endl;
 
   while (true)
   {
@@ -383,9 +383,9 @@ void UI::tryDownloadPodcast(PodcastChannel* channel, int podcastIndex)
       std::cout << "DONE " << getReadableFileSize(channel->getPodcast(podcastIndex)->getFileSize()) << std::endl;
       return;
     }
-    catch (Poco::Net::HTTPException& h)
+    catch (Poco::Exception& p)
     {
-      if (retryDownloadAfterException(h.displayText()))
+      if (retryDownloadAfterException(p.displayText()))
       {
         continue;
       }
@@ -438,19 +438,32 @@ std::string UI::getInputStringContainingWhiteSpace()
 
 int UI::scanChannel(int channelIndex)
 {
-  std::string title = controller->getChannel(channelIndex)->getTitle();
-
-  std::cout << "Scanning \"" + title << "\"" << std::endl;
-  int podcastCount = controller->scanChannel(channelIndex);
-
-  if (podcastCount == 0)
+  try
   {
-    std::cout << "Scan completed. No change to \"" + title << "\"" << std::endl << std::endl;
-    return 0;
+    std::string title = controller->getChannel(channelIndex)->getTitle();
+
+    std::cout << "Scanning \"" + title << "\"" << std::endl;
+    int podcastCount = controller->scanChannel(channelIndex);
+
+    if (podcastCount == 0)
+    {
+      std::cout << "Scan completed. No change to \"" + title << "\"" << std::endl << std::endl;
+      return 0;
+    }
+
+    std::cout << "Scan completed. " << podcastCount << " podcast(s) added to \"" << title + "\"" << std::endl << std::endl;
+    return podcastCount;
+  }
+  catch (Poco::Exception& p)
+  {
+    std::cout << std::endl << "EXCEPTION OCCURRED DURING SCAN: " << p.displayText() << std::endl << std::endl;
+  }
+  catch (std::exception& e)
+  {
+    std::cout << std::endl << "EXCEPTION OCCURRED DURING SCAN: " << e.what() << std::endl << std::endl;
   }
 
-  std::cout << "Scan completed. " << podcastCount << " podcast(s) added to \"" << title + "\"" << std::endl << std::endl;
-  return podcastCount;
+  return 0;
 }
 
 void UI::scanChannels()

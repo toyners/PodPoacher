@@ -291,7 +291,7 @@ void UI::displayPodcasts(PodcastChannel& channel)
     PodcastDetails* podcast = channel.getPodcast(index);
     std::cout << label << "TITLE: " << podcast->getTitle() << std::endl
       << indent << "PUB DATE: " << podcast->getPublishedDate() 
-      << "  SIZE: " << podcast->getFileSize();
+      << "  SIZE: " << getReadableFileSize(podcast->getFileSize());
 
     if (podcast->isDownloaded())
     {

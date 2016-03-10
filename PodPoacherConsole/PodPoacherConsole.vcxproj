@@ -96,7 +96,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.6.1\Foundation\include;C:\Projects\POCO\poco-1.6.1\XML\include;C:\Projects\PodPoacher\PodPoacherLibrary;C:\Projects\PodPoacher\PodPoacherConsoleLibrary;C:\Projects\Jabberwocky.BasicHTTPLibrary\Jabberwocky.BasicHTTPLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.7.0-all\Foundation\include;C:\Projects\POCO\poco-1.7.0-all\XML\include;C:\Projects\PodPoacher\PodPoacherLibrary;C:\Projects\PodPoacher\PodPoacherConsoleLibrary;C:\Projects\Jabberwocky.BasicHTTPLibrary\Jabberwocky.BasicHTTPLibrary</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,7 +126,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Projects\PodPoacher\PodPoacherConsoleLibrary;C:\Projects\POCO\poco-1.6.1\Foundation\include;C:\Projects\POCO\poco-1.6.1\XML\include;C:\Projects\PodPoacher\PodPoacherLibrary;C:\Projects\Jabberwocky.BasicHTTPLibrary\Jabberwocky.BasicHTTPLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Projects\PodPoacher\PodPoacherConsoleLibrary;C:\Projects\POCO\poco-1.7.0-all\Foundation\include;C:\Projects\POCO\poco-1.7.0-all\XML\include;C:\Projects\PodPoacher\PodPoacherLibrary;C:\Projects\Jabberwocky.BasicHTTPLibrary\Jabberwocky.BasicHTTPLibrary</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

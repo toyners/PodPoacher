@@ -83,7 +83,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.6.1\Net\include;C:\Projects\POCO\poco-1.6.1\Foundation\include;C:\Projects\POCO\poco-1.6.1\XML\include;C:\Projects\PodPoacher\PodPoacherLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.7.0-all\Net\include;C:\Projects\POCO\poco-1.7.0-all\Foundation\include;C:\Projects\POCO\poco-1.7.0-all\XML\include;C:\Projects\PodPoacher\PodPoacherLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -113,7 +113,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.6.1\Foundation\include;C:\Projects\POCO\poco-1.6.1\Net\include;C:\Projects\POCO\poco-1.6.1\XML\include;C:\Projects\PodPoacher\PodPoacherLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.7.0-all\Foundation\include;C:\Projects\POCO\poco-1.7.0-all\Net\include;C:\Projects\POCO\poco-1.7.0-all\XML\include;C:\Projects\PodPoacher\PodPoacherLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -134,11 +134,6 @@ int Controller::scanChannel(int channelIndex)
 
   PodcastChannel* newChannel = createChannelFromFeed(originalChannel->getFeedURL(), originalChannel->getDirectory());
 
-  if (newChannel->getPublishedDate() == originalChannel->getPublishedDate())
-  {
-    return 0;
-  }
-
   // Get the number of podcasts to download.
   int podcastCount = 0;
   std::string latestPublishDate = originalChannel->getPodcast(0)->getPublishedDate();

@@ -64,12 +64,20 @@ long Controller::downloadPodcastFile(std::string url, std::string filePath, long
 void Controller::downloadPodcast(PodcastChannel* channel, int podcastIndex)
 {
   PodcastDetails* podcast = channel->getPodcast(podcastIndex);
+  
   std::string date = getDate();
   std::string time = getTime();
-  std::string cleanChannelTitle = removeIllegalFilePathCharactersFromText(channel->getTitle());
-  std::string cleanPodcastTitle = removeIllegalFilePathCharactersFromText(podcast->getTitle());
-  std::string filePath = channel->getDirectory() + cleanChannelTitle + "_" + cleanPodcastTitle + "_" + date + "_" + time + ".mp3";
-  long fileSize = downloadPodcastFile(podcast->getURL(), filePath, podcast->getFileSize());
+  std::string url = podcast->getURL();
+  std::string fileName;
+  if (!tryGetFileNameFromURL(url, fileName))
+  {
+    fileName = removeIllegalFilePathCharactersFromText(channel->getTitle())
+      + "_" + removeIllegalFilePathCharactersFromText(podcast->getTitle())
+      + "_" + date + "_" + time + ".mp3";
+  }
+
+  std::string filePath = channel->getDirectory() + fileName;
+  long fileSize = downloadPodcastFile(url, filePath, podcast->getFileSize());
   podcast->setFileSize(fileSize);
   podcast->setDownloadDate(date + " " + time);
 }

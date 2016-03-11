@@ -54,6 +54,18 @@ void fileProgress(long position)
   }
 }
 
+bool tryGetFileNameFromURL(std::string& url, std::string& fileName)
+{
+  int lastBackslashPos = url.find_last_of('/');
+  if (lastBackslashPos == std::string::npos)
+  {
+    return false;
+  }
+
+  fileName = url.substr(lastBackslashPos + 1);
+  return true;
+}
+
 std::string getWorkingDirectory()
 {
   char* pathPtr;

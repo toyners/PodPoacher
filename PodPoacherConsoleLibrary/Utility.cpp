@@ -5,11 +5,27 @@
 #include "XMLFileParser.h"
 #include <fstream>
 #include <iostream>
+#include <algorithm>
+#include <cctype>
 
 void downloadRSSFile(std::string url, std::string rssFilePath)
 {
   std::cout << "Getting RSS file...";
-  HTTPFileDownload::downloadTextFile(url, rssFilePath);
+  std::string scheme = getSchemeFromURL(url);
+  if (scheme == "http")
+  {
+    HTTPFileDownload::downloadTextFile(url, rssFilePath);
+  }
+  else if (scheme == "https")
+  {
+    HTTPFileDownload::downloadSecureTextFile(url, rssFilePath);
+  }
+  else
+  {
+    std::string message = "Scheme '" + scheme + "' not handled.";
+    throw std::exception(message.data());
+  }
+
   std::cout << "DONE" << std::endl;
 }
 
@@ -57,6 +73,21 @@ std::string getWorkingDirectory()
   configFile.close();
 
   return line;
+}
+
+std::string getSchemeFromURL(std::string& url)
+{
+  size_t colonPos = url.find_first_of(':');
+  if (colonPos == std::string::npos)
+  { 
+    std::string message = "No colon found in URL '" + url + "'.";
+    throw std::exception(message.data());
+  }
+
+  std::string scheme = url.substr(0, colonPos);
+  std::transform(scheme.begin(), scheme.end(), scheme.begin(), std::tolower);
+
+  return scheme;
 }
 
 long getFileSize(std::string filePath)

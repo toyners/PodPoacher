@@ -4,6 +4,7 @@
 #include "Poco/Net/HTTPRequest.h"
 #include "Poco/Net/HTTPResponse.h"
 #include "Poco/Net/HTTPStreamFactory.h"
+#include "Poco/Net/HTTPSClientSession.h"
 #include "Poco/URI.h"
 #include "Poco/URIStreamOpener.h"
 #include "Poco/StreamCopier.h"
@@ -11,6 +12,7 @@
 #include <fstream>
 
 using Poco::Net::HTTPClientSession;
+using Poco::Net::HTTPSClientSession;
 using Poco::Net::HTTPRequest;
 using Poco::Net::HTTPResponse;
 using Poco::Net::HTTPMessage;
@@ -30,6 +32,34 @@ void HTTPFileDownload::downloadTextFile(std::string url, std::string filePath)
   }
 
   HTTPClientSession session(uri.getHost(), uri.getPort());
+  HTTPRequest request(HTTPRequest::HTTP_GET, path, HTTPMessage::HTTP_1_1);
+  HTTPResponse response;
+
+  session.sendRequest(request);
+  std::istream& rs = session.receiveResponse(response);
+
+  if (response.getStatus() != Poco::Net::HTTPResponse::HTTP_OK)
+  {
+    std::string message = "Can't get file from '" + url + "'. Status is " + std::to_string(response.getStatus()) + ". Reason is '" + response.getReason() + "'.";
+    throw std::exception(message.data());
+  }
+
+  std::ofstream file;
+  file.open(filePath, std::ios::out | std::ios::trunc);
+  StreamCopier::copyStream(rs, file);
+  file.close();
+}
+
+void HTTPFileDownload::downloadSecureTextFile(std::string url, std::string filePath)
+{
+  URI uri(url);
+  std::string path(uri.getPathAndQuery());
+  if (path.empty())
+  {
+    path = "/";
+  }
+
+  HTTPSClientSession session(uri.getHost(), uri.getPort());
   HTTPRequest request(HTTPRequest::HTTP_GET, path, HTTPMessage::HTTP_1_1);
   HTTPResponse response;
 

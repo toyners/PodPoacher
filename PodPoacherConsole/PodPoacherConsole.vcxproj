@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Projects\RSSViewer\RSSLibrary;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Projects\RSSViewer\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -96,12 +96,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.7.0-all\Foundation\include;C:\Projects\POCO\poco-1.7.0-all\XML\include;C:\Projects\PodPoacher\PodPoacherLibrary;C:\Projects\PodPoacher\PodPoacherConsoleLibrary;C:\Projects\Jabberwocky.BasicHTTPLibrary\Jabberwocky.BasicHTTPLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.7.0-all\Foundation\include;C:\Projects\POCO\poco-1.7.0-all\XML\include;C:\Projects\PodPoacher\PodPoacherLibrary;C:\Projects\PodPoacher\PodPoacherConsoleLibrary</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>C:\Projects\Libraries\PocoFoundationd.lib;C:\Projects\Libraries\PocoXMLd.lib;C:\Projects\Libraries\PocoNetd.lib;C:\Projects\Libraries\PodPoacherConsoleLibraryd.lib;C:\Projects\Libraries\PodPoacherLibraryd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>C:\Projects\Libraries\PocoFoundationd.lib;C:\Projects\Libraries\PocoXMLd.lib;C:\Projects\Libraries\PocoNetd.lib;C:\Projects\Libraries\PodPoacherConsoleLibraryd.lib;C:\Projects\Libraries\PodPoacherLibraryd.lib;C:\Projects\Libraries\PocoNetSSLd.lib;C:\Projects\Libraries\PocoCryptod.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -126,17 +126,18 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Projects\PodPoacher\PodPoacherConsoleLibrary;C:\Projects\POCO\poco-1.7.0-all\Foundation\include;C:\Projects\POCO\poco-1.7.0-all\XML\include;C:\Projects\PodPoacher\PodPoacherLibrary;C:\Projects\Jabberwocky.BasicHTTPLibrary\Jabberwocky.BasicHTTPLibrary</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Projects\PodPoacher\PodPoacherConsoleLibrary;C:\Projects\POCO\poco-1.7.0-all\Foundation\include;C:\Projects\POCO\poco-1.7.0-all\XML\include;C:\Projects\PodPoacher\PodPoacherLibrary</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>C:\Projects\Libraries\PocoFoundation.lib;C:\Projects\Libraries\PocoXML.lib;C:\Projects\Libraries\PocoNet.lib;C:\Projects\Libraries\PodPoacherConsoleLibrary.lib;C:\Projects\Libraries\PodPoacherLibrary.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>C:\Projects\Libraries\PocoFoundation.lib;C:\Projects\Libraries\PocoXML.lib;C:\Projects\Libraries\PocoNet.lib;C:\Projects\Libraries\PodPoacherConsoleLibrary.lib;C:\Projects\Libraries\PodPoacherLibrary.lib;C:\Projects\Libraries\PocoNetSSL.lib;C:\Projects\Libraries\PocoCrypto.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)$(Configuration)\PodPoacher_Console.exe" "C:\Projects\PodPoacher Alpha\PodPoacher_Console.exe" /Y /V</Command>
+      <Command>xcopy "$(ProjectDir)$(Configuration)\*.exe" "C:\Projects\PodPoacher Alpha\*.exe" /Y /V
+xcopy "$(ProjectDir)$(Configuration)\*.dll" "C:\Projects\PodPoacher Alpha\*.dll" /Y /V</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

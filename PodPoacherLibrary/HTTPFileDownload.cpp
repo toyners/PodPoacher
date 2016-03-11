@@ -10,6 +10,12 @@
 #include "Poco/StreamCopier.h"
 #include <iostream>
 #include <fstream>
+#include <memory>
+
+#include "Poco/Net/SSLManager.h"
+#include "Poco/Net/KeyConsoleHandler.h"
+#include "Poco/Net/ConsoleCertificateHandler.h"
+#include "Poco/Net/Context.h"
 
 using Poco::Net::HTTPClientSession;
 using Poco::Net::HTTPSClientSession;
@@ -20,6 +26,12 @@ using Poco::URI;
 using Poco::StreamCopier;
 using Poco::Net::HTTPStreamFactory;
 using Poco::URIStreamOpener;
+
+using Poco::Net::SSLManager;
+using Poco::Net::ConsoleCertificateHandler;
+using Poco::Net::InvalidCertificateHandler;
+using Poco::SharedPtr;
+using Poco::Net::Context;
 
 void HTTPFileDownload::downloadTextFile(std::string url, std::string filePath)
 {
@@ -52,30 +64,42 @@ void HTTPFileDownload::downloadTextFile(std::string url, std::string filePath)
 
 void HTTPFileDownload::downloadSecureTextFile(std::string url, std::string filePath)
 {
-  URI uri(url);
-  std::string path(uri.getPathAndQuery());
-  if (path.empty())
+  Poco::Net::initializeSSL();
+
+  try
   {
-    path = "/";
+    SharedPtr<InvalidCertificateHandler> ptrCert = new ConsoleCertificateHandler(false);
+    Context::Ptr ptrContext = new Context(Context::CLIENT_USE, "", "", "", Context::VERIFY_RELAXED, 9, false, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
+    SSLManager::instance().initializeClient(0, ptrCert, ptrContext);
+
+    URI uri(url);
+
+    HTTPSClientSession session(uri.getHost(), uri.getPort());
+    HTTPRequest request(HTTPRequest::HTTP_GET, uri.getPath());
+
+    session.sendRequest(request);
+
+    HTTPResponse response;
+    std::istream& rs = session.receiveResponse(response);
+
+    if (response.getStatus() != Poco::Net::HTTPResponse::HTTP_OK)
+    {
+      std::string message = "Can't get file from '" + url + "'. Status is " + std::to_string(response.getStatus()) + ". Reason is '" + response.getReason() + "'.";
+      throw std::exception(message.data());
+    }
+
+    std::ofstream file;
+    file.open(filePath, std::ios::out | std::ios::trunc);
+    StreamCopier::copyStream(rs, file);
+    file.close();
+  }
+  catch (...)
+  {
+    Poco::Net::uninitializeSSL();
+    throw;
   }
 
-  HTTPSClientSession session(uri.getHost(), uri.getPort());
-  HTTPRequest request(HTTPRequest::HTTP_GET, path, HTTPMessage::HTTP_1_1);
-  HTTPResponse response;
-
-  session.sendRequest(request);
-  std::istream& rs = session.receiveResponse(response);
-
-  if (response.getStatus() != Poco::Net::HTTPResponse::HTTP_OK)
-  {
-    std::string message = "Can't get file from '" + url + "'. Status is " + std::to_string(response.getStatus()) + ". Reason is '" + response.getReason() + "'.";
-    throw std::exception(message.data());
-  }
-
-  std::ofstream file;
-  file.open(filePath, std::ios::out | std::ios::trunc);
-  StreamCopier::copyStream(rs, file);
-  file.close();
+  Poco::Net::uninitializeSSL();
 }
 
 void HTTPFileDownload::downloadBinaryFile(std::string url, std::string filePath, FileProgressCallback progressCallback, int bufferSize)

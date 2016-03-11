@@ -84,7 +84,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\OpenSSL-Win32\include;C:\Projects\POCO\poco-1.7.0-all\Crypto\include;C:\Projects\POCO\poco-1.7.0-all\NetSSL_OpenSSL\include;C:\Projects\POCO\poco-1.7.0-all\Net\include;C:\Projects\POCO\poco-1.7.0-all\Foundation\include;C:\Projects\POCO\poco-1.7.0-all\XML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.7.0-all\Util\include;C:\OpenSSL-Win32\include;C:\Projects\POCO\poco-1.7.0-all\Crypto\include;C:\Projects\POCO\poco-1.7.0-all\NetSSL_OpenSSL\include;C:\Projects\POCO\poco-1.7.0-all\Net\include;C:\Projects\POCO\poco-1.7.0-all\Foundation\include;C:\Projects\POCO\poco-1.7.0-all\XML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -114,7 +114,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\OpenSSL-Win32\include;C:\Projects\POCO\poco-1.7.0-all\Crypto\include;C:\Projects\POCO\poco-1.7.0-all\NetSSL_OpenSSL\include;C:\Projects\POCO\poco-1.7.0-all\Net\include;C:\Projects\POCO\poco-1.7.0-all\Foundation\include;C:\Projects\POCO\poco-1.7.0-all\XML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Projects\POCO\poco-1.7.0-all\Util\include;C:\OpenSSL-Win32\include;C:\Projects\POCO\poco-1.7.0-all\Crypto\include;C:\Projects\POCO\poco-1.7.0-all\NetSSL_OpenSSL\include;C:\Projects\POCO\poco-1.7.0-all\Net\include;C:\Projects\POCO\poco-1.7.0-all\Foundation\include;C:\Projects\POCO\poco-1.7.0-all\XML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

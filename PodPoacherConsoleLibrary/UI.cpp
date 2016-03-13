@@ -4,6 +4,7 @@
 #include "PodcastChannel.h"
 #include "Utility.h"
 #include "Poco/Net/NetException.h"
+#include "IndexParser.h"
 
 #include <iostream>
 #include <vector>
@@ -11,13 +12,17 @@
 UI::UI(BaseController& baseController)
 {
   controller = &baseController;
+  indexParser = new IndexParser();
 }
 
-UI::~UI() {}
+UI::~UI() 
+{
+  delete indexParser;
+}
 
 void UI::topLevelUI()
 {
-  std::cout << "PodPoacher v0.952" << std::endl << std::endl;
+  std::cout << "PodPoacher v0.96" << std::endl << std::endl;
 
   while (true)
   {
@@ -186,12 +191,7 @@ void UI::addChannelUI()
       continue;
     }
 
-    int number;
-    if (tryConvertInputToNumber(input, number, podcastCount))
-    {
-      downloadPodcast(channel, number - 1);
-      continue;
-    }
+    handleIndexInput(input, *channel);
   }
 }
 
@@ -253,12 +253,7 @@ bool UI::haltRollingDisplayOfPodcasts(PodcastChannel* channel, int remaining)
       continue;
     }
 
-    int number;
-    if (tryConvertInputToNumber(input, number, total))
-    {
-      downloadPodcast(channel, number - 1);
-      continue;
-    }
+    handleIndexInput(input, *channel);
   }
 }
 
@@ -278,6 +273,13 @@ bool UI::haltRollingDisplayOfChannels(int remaining)
   {
     return false;
   }
+}
+
+void UI::handleIndexInput(std::string & input, PodcastChannel& channel)
+{
+  std::vector<int>* indicies = indexParser->parseInput(input);
+  downloadPodcasts(&channel, *indicies);
+  delete indicies;
 }
 
 void UI::displayPodcasts(PodcastChannel& channel)
@@ -331,11 +333,7 @@ void UI::displayChannel(int number, PodcastChannel& channel)
       continue;
     }
 
-    int number;
-    if (tryConvertInputToNumber(input, number, podcastCount))
-    {
-      downloadPodcast(&channel, number - 1);
-    }
+    handleIndexInput(input, channel);
   }
 }
 
@@ -364,12 +362,6 @@ void UI::displayChannels()
       break;
     }
   }
-}
-
-void UI::downloadPodcast(PodcastChannel* channel, int podcastIndex)
-{
-  std::cout << "Getting MP3 file ";
-  tryDownloadPodcast(channel, podcastIndex);
 }
 
 void UI::tryDownloadPodcast(PodcastChannel* channel, int podcastIndex)
@@ -425,6 +417,16 @@ void UI::downloadPodcasts(PodcastChannel* channel, int total)
   {
     std::cout << "Getting MP3 file [" << (podcastIndex + 1) << " of " << total << "] ";
     tryDownloadPodcast(channel, podcastIndex);
+  }
+}
+
+void UI::downloadPodcasts(PodcastChannel* channel, std::vector<int>& indexes)
+{
+  int total = indexes.size();
+  for (int index = 0; index < total; index++)
+  {
+    std::cout << "Getting MP3 file [" << (index + 1) << " of " << total << "] ";
+    tryDownloadPodcast(channel, indexes[index] - 1);
   }
 }
 

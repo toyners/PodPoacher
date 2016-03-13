@@ -2,11 +2,13 @@
 
 #include "PodcastStorage.h"
 #include "BaseController.h"
+#include "IndexParser.h"
 
 class UI
 {
 private:
   BaseController* controller;
+  IndexParser* indexParser;
 
 public:
   UI(BaseController& baseController);
@@ -25,12 +27,13 @@ private:
   void displayChannelDetails(int number, PodcastChannel& channel);
   void displayChannels();
   void displayPodcasts(PodcastChannel& channel);
-  void downloadPodcast(PodcastChannel* channel, int podcastIndex);
   void downloadPodcasts(PodcastChannel* channel);
   void downloadPodcasts(PodcastChannel* channel, int total);
+  void downloadPodcasts(PodcastChannel* channel, std::vector<int>& indexes);
   std::string getInputStringContainingWhiteSpace();
   bool haltRollingDisplayOfPodcasts(PodcastChannel* channel, int remaining);
   bool haltRollingDisplayOfChannels(int remaining);
+  void handleIndexInput(std::string& input, PodcastChannel& channel);
   bool retryDownloadAfterException(std::string& message);
   int scanChannel(int number);
   void scanChannels();

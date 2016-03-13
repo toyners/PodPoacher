@@ -32,7 +32,7 @@ private:
   void downloadPodcasts(PodcastChannel* channel, std::vector<int>& indexes);
   std::string getInputStringContainingWhiteSpace();
   bool haltRollingDisplayOfPodcasts(PodcastChannel* channel, int remaining);
-  bool haltRollingDisplayOfChannels(int remaining);
+  bool haltRollingDisplayOfChannels(int remaining, int total, std::vector<PodcastChannel*>& channels);
   void handleIndexInput(std::string& input, PodcastChannel& channel);
   bool retryDownloadAfterException(std::string& message);
   int scanChannel(int number);

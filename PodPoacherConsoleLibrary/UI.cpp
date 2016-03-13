@@ -22,7 +22,7 @@ UI::~UI()
 
 void UI::topLevelUI()
 {
-  std::cout << "PodPoacher v0.96" << std::endl << std::endl;
+  std::cout << "PodPoacher v0.961" << std::endl << std::endl;
 
   while (true)
   {
@@ -257,10 +257,10 @@ bool UI::haltRollingDisplayOfPodcasts(PodcastChannel* channel, int remaining)
   }
 }
 
-bool UI::haltRollingDisplayOfChannels(int remaining)
+bool UI::haltRollingDisplayOfChannels(int remaining, int total, std::vector<PodcastChannel*>& channels)
 {
   std::string input;
-  std::cout << remaining << " Channels to go. [D]own or [B]reak" << std::endl;
+  std::cout << remaining << " Channels to go. [D]own, Select Channel [1 - " << total << "] or [B]reak" << std::endl;
   std::cin >> input;
 
   char c = tolower(input[0]);
@@ -272,6 +272,12 @@ bool UI::haltRollingDisplayOfChannels(int remaining)
   if (c == 'd')
   {
     return false;
+  }
+
+  int number;
+  if (tryConvertInputToNumber(input, number, total))
+  {
+    displayChannel(number, *channels[number - 1]);
   }
 }
 
@@ -357,7 +363,7 @@ void UI::displayChannels()
     displayChannelDetails(number, *channels[index]);
 
     int remaining = total - number;
-    if (number > 0 && number % 5 == 0 && remaining > 0 && haltRollingDisplayOfChannels(remaining))
+    if (number > 0 && number % 5 == 0 && remaining > 0 && haltRollingDisplayOfChannels(remaining, total, channels))
     {
       break;
     }

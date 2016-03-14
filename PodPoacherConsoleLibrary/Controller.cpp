@@ -127,6 +127,13 @@ PodcastChannel* Controller::getChannel(int channelIndex)
   throw std::range_error(message.data());
 }
 
+void Controller::removeChannel(int channelIndex)
+{
+  std::vector<PodcastChannel*> channels = storage->getChannels();
+  PodcastChannel* channel = channels[channelIndex];
+  storage->removeChannel(*channel);
+}
+
 int Controller::scanChannel(int channelIndex)
 {
   std::vector<PodcastChannel*> channels = storage->getChannels();

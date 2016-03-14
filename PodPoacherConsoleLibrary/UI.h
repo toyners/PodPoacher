@@ -34,6 +34,7 @@ private:
   bool haltRollingDisplayOfPodcasts(PodcastChannel* channel, int remaining);
   bool haltRollingDisplayOfChannels(int remaining, int total, std::vector<PodcastChannel*>& channels);
   void handleIndexInput(std::string& input, PodcastChannel& channel);
+  void removeChannelsUI();
   bool retryDownloadAfterException(std::string& message);
   int scanChannel(int number);
   void scanChannels();

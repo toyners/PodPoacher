@@ -27,25 +27,31 @@ void UI::topLevelUI()
   while (true)
   {
     char input;
-    std::cout << "[A]dd channel, [D]isplay channels, [S]can channels or e[X]it" << std::endl;
+    std::cout << "[A]dd channel, [D]isplay channels, [R]emove Channel, [S]can channels or e[X]it" << std::endl;
     std::cin >> input;
 
-    if (input == 'X' || input == 'x')
+    input = tolower(input);
+    if (input == 'x')
     {
       return;
     }
 
-    if (input == 'A' || input == 'a')
+    if (input == 'a')
     {
       addChannelUI();
     }
 
-    if (input == 'D' || input == 'd')
+    if (input == 'd')
     {
       displayChannelsUI();
     }
 
-    if (input == 'S' || input == 's')
+    if (input == 'r')
+    {
+      removeChannelsUI();
+    }
+
+    if (input == 's')
     {
       scanChannelsUI();
     }
@@ -286,6 +292,36 @@ void UI::handleIndexInput(std::string & input, PodcastChannel& channel)
   std::vector<int>* indicies = indexParser->parseInput(input);
   downloadPodcasts(&channel, *indicies);
   delete indicies;
+}
+
+void UI::removeChannelsUI()
+{
+  std::string input;
+  int channelCount = controller->getChannelCount();
+
+  while (true)
+  {
+    if (channelCount == 0)
+    {
+      std::cout << "No channels to remove." << std::endl;
+      return;
+    }
+
+    std::cout << "Remove channel [1 - " << channelCount << "] or [B]ack" << std::endl;
+    std::cin >> input;
+    char c = tolower(input[0]);
+    if (c == 'b')
+    {
+      break;
+    }
+
+    int number;
+    if (tryConvertInputToNumber(input, number, channelCount))
+    {
+      controller->removeChannel(number - 1);
+      channelCount = controller->getChannelCount();
+    }
+  }
 }
 
 void UI::displayPodcasts(PodcastChannel& channel)

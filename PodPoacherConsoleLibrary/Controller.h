@@ -24,6 +24,7 @@ public:
   std::vector<PodcastChannel*>& getChannels() { return storage->getChannels(); }
   int getChannelCount() { return storage->getChannels().size(); }
   PodcastChannel* getChannel(int channelIndex);
+  void removeChannel(int channelIndex);
   int scanChannel(int channelIndex);
 
 private:

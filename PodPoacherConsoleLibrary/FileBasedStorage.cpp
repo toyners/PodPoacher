@@ -61,6 +61,26 @@ void FileBasedStorage::loadChannel(PodcastChannel& channel)
   // Do nothing.
 }
 
+void FileBasedStorage::removeChannel(PodcastChannel& channel)
+{
+  // Remove the channel file itself.
+  std::string channelFileName = getChannelFileName(channel);
+  remove(channelFileName.data());
+
+  // Erase the channel from the vector.
+  for (int i = 0; i < channelList.size(); i++)
+  {
+    if (channelList[i] == &channel)
+    {
+      channelList.erase(channelList.begin() + i);
+      break;
+    }
+  }
+
+  // Write out the channel vector to file.
+  serialiseChannelsOnly();
+}
+
 void FileBasedStorage::updateChannel(PodcastChannel& channel)
 {
   std::string channelFileName = getChannelFileName(channel);

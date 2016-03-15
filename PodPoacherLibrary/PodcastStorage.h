@@ -12,6 +12,5 @@ public:
   virtual std::vector<PodcastChannel*>& getChannels() = 0;
   virtual void loadChannel(PodcastChannel& channel) = 0;
   virtual void removeChannel(PodcastChannel& channel) = 0;
-  virtual void updateChannel(PodcastChannel& channel) = 0;
   virtual void updateChannel(PodcastChannel& oldChannel, PodcastChannel& newChannel) = 0;
 };

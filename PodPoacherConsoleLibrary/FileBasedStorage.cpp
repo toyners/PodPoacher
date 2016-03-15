@@ -64,17 +64,26 @@ void FileBasedStorage::loadChannel(PodcastChannel& channel)
 void FileBasedStorage::removeChannel(PodcastChannel& channel)
 {
   // Rename the channel file itself.
-  std::string channelFileName = getChannelFileName(channel);
-  remove(channelFileName.data());
+  std::string channelFilePath = storagePath + getChannelFileName(channel);
+  remove(channelFilePath.data());
 
   // Erase the channel from the vector.
-  for (int i = 0; i < channelList.size(); i++)
+  int i = 0;
+  for (; i < channelList.size(); i++)
   {
     if (channelList[i] == &channel)
     {
       channelList.erase(channelList.begin() + i);
       break;
     }
+  }
+
+  // Rename all the channel files for the channels that come AFTER the deleted channel in the vector.
+  for (; i < channelList.size(); i++)
+  {
+    std::string oldChannelPath = storagePath + std::to_string(i + 2) + ".txt";
+    std::string newChannelPath = storagePath + getChannelFileName(*channelList[i]);
+    rename(oldChannelPath.data(), newChannelPath.data());
   }
 
   // Write out the channel vector to file.

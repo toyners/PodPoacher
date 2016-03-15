@@ -460,6 +460,8 @@ void UI::downloadPodcasts(PodcastChannel* channel, int total)
     std::cout << "Getting MP3 file [" << (podcastIndex + 1) << " of " << total << "] ";
     tryDownloadPodcast(channel, podcastIndex);
   }
+
+  std::cout << std::endl;
 }
 
 void UI::downloadPodcasts(PodcastChannel* channel, std::vector<int>& indexes)
@@ -470,6 +472,8 @@ void UI::downloadPodcasts(PodcastChannel* channel, std::vector<int>& indexes)
     std::cout << "Getting MP3 file [" << (index + 1) << " of " << total << "] ";
     tryDownloadPodcast(channel, indexes[index] - 1);
   }
+
+  std::cout << std::endl;
 }
 
 std::string UI::getInputStringContainingWhiteSpace()
@@ -495,7 +499,7 @@ int UI::scanChannel(int channelIndex)
       return 0;
     }
 
-    std::cout << "Scan completed. " << podcastCount << " podcast(s) added to \"" << title + "\"" << std::endl << std::endl;
+    std::cout << "Scan completed. " << podcastCount << " podcast(s) added to \"" << title + "\"" << std::endl;
     return podcastCount;
   }
   catch (Poco::Exception& p)

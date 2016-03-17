@@ -549,6 +549,6 @@ void UI::scanChannels()
       std::cout << "Downloaded " << it->second << " podcast(s) from \"" << it->first->getTitle() << "\"" << std::endl;
     }
 
-    std::cout << endl;
+    std::cout << std::endl;
   }
 }

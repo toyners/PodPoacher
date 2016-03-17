@@ -1,5 +1,5 @@
 # PodPoacher
-**PodPoacher** is a podcast catcher written in C++. Uses a console UI for simplicity and speed.
+**PodPoacher** is a podcast catcher written in C++. Uses a CLI for simplicity and speed.
 
 Version 0.963 is now complete.
 - Add channels (feeds) by setting the URL to the RSS feed and the local directory to store the podcasts

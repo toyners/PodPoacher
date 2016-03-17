@@ -3,6 +3,8 @@
 #include "PodcastStorage.h"
 #include "BaseController.h"
 #include "IndexParser.h"
+#include "PodcastChannel.h"
+#include <map>
 
 class UI
 {
@@ -28,7 +30,7 @@ private:
   void displayChannels();
   void displayPodcasts(PodcastChannel& channel);
   void downloadPodcasts(PodcastChannel* channel);
-  void downloadPodcasts(PodcastChannel* channel, int total);
+  void downloadPodcasts(PodcastChannel* channel, int total, std::map<PodcastChannel*, int>* downloadCounter = nullptr);
   void downloadPodcasts(PodcastChannel* channel, std::vector<int>& indexes);
   std::string getInputStringContainingWhiteSpace();
   bool haltRollingDisplayOfPodcasts(PodcastChannel* channel, int remaining);
@@ -38,6 +40,6 @@ private:
   bool retryDownloadAfterException(std::string& message);
   int scanChannel(int number);
   void scanChannels();
-  void tryDownloadPodcast(PodcastChannel* channel, int podcastIndex);
+  void tryDownloadPodcast(PodcastChannel* channel, int podcastIndex, std::map<PodcastChannel*, int>* downloadCounter = nullptr);
 };
 

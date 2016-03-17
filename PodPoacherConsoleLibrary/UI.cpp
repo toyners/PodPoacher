@@ -22,7 +22,7 @@ UI::~UI()
 
 void UI::topLevelUI()
 {
-  std::cout << "PodPoacher v0.963" << std::endl << std::endl;
+  std::cout << "PodPoacher v0.964" << std::endl << std::endl;
 
   while (true)
   {
@@ -406,13 +406,26 @@ void UI::displayChannels()
   }
 }
 
-void UI::tryDownloadPodcast(PodcastChannel* channel, int podcastIndex)
+void UI::tryDownloadPodcast(PodcastChannel* channel, int podcastIndex, std::map<PodcastChannel*, int>* downloadCounter)
 {
   while (true)
   {
     try
     {
       controller->downloadPodcast(channel, podcastIndex);
+
+      if (downloadCounter != nullptr)
+      {
+        std::map<PodcastChannel*, int>::iterator it;
+        if ((it = downloadCounter->find(channel)) != downloadCounter->end())
+        {
+          it->second++;
+        }
+        else
+        {
+          downloadCounter->insert(std::pair<PodcastChannel*, int>(channel, 1));
+        }
+      }
 
       std::cout << "DONE " << getReadableFileSize(channel->getPodcast(podcastIndex)->getFileSize()) << std::endl;
       return;
@@ -453,12 +466,12 @@ void UI::downloadPodcasts(PodcastChannel* channel)
   downloadPodcasts(channel, channel->getPodcastCount());
 }
 
-void UI::downloadPodcasts(PodcastChannel* channel, int total)
+void UI::downloadPodcasts(PodcastChannel* channel, int total, std::map<PodcastChannel*, int>* downloadCounter)
 {
   for (int podcastIndex = 0; podcastIndex < total; podcastIndex++)
   {
     std::cout << "Getting MP3 file [" << (podcastIndex + 1) << " of " << total << "] ";
-    tryDownloadPodcast(channel, podcastIndex);
+    tryDownloadPodcast(channel, podcastIndex, downloadCounter);
   }
 
   std::cout << std::endl;
@@ -516,14 +529,26 @@ int UI::scanChannel(int channelIndex)
 
 void UI::scanChannels()
 {
+  std::map<PodcastChannel*, int> downloadCounter;
+
   std::vector<PodcastChannel*>& channels = controller->getChannels();
   int total = channels.size();
   for (int channelIndex = 0; channelIndex < total; channelIndex++)
   {
-    int downloadCount = scanChannel(channelIndex);
-    if (downloadCount > 0)
+    int podcastCount = scanChannel(channelIndex);
+    if (podcastCount > 0)
     {
-      downloadPodcasts(controller->getChannel(channelIndex), downloadCount);
+      downloadPodcasts(controller->getChannel(channelIndex), podcastCount, &downloadCounter);
     }
+  }
+
+  if (downloadCounter.size() > 0)
+  {
+    for (std::map<PodcastChannel*, int>::iterator it = downloadCounter.begin(); it != downloadCounter.end(); it++)
+    {
+      std::cout << "Downloaded " << it->second << " podcast(s) from \"" << it->first->getTitle() << "\"" << std::endl;
+    }
+
+    std::cout << endl;
   }
 }

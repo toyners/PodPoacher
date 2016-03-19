@@ -546,7 +546,7 @@ void UI::scanChannels()
   {
     for (std::map<PodcastChannel*, int>::iterator it = downloadCounter.begin(); it != downloadCounter.end(); it++)
     {
-      std::cout << "Downloaded " << it->second << " podcast(s) from \"" << it->first->getTitle() << "\"" << std::endl;
+      std::cout << "Downloaded " << it->second << " podcast(s) for \"" << it->first->getTitle() << "\"" << std::endl;
     }
 
     std::cout << std::endl;

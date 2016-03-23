@@ -22,7 +22,7 @@ UI::~UI()
 
 void UI::topLevelUI()
 {
-  std::cout << "PodPoacher v0.964" << std::endl << std::endl;
+  std::cout << "PodPoacher v0.965" << std::endl << std::endl;
 
   while (true)
   {
@@ -289,9 +289,16 @@ bool UI::haltRollingDisplayOfChannels(int remaining, int total, std::vector<Podc
 
 void UI::handleIndexInput(std::string & input, PodcastChannel& channel)
 {
-  std::vector<int>* indicies = indexParser->parseInput(input);
-  downloadPodcasts(&channel, *indicies);
-  delete indicies;
+  try
+  {
+    std::vector<int>* indicies = indexParser->parseInput(input);
+    downloadPodcasts(&channel, *indicies);
+    delete indicies;
+  }
+  catch (std::exception& e)
+  {
+    std::cout << "EXCEPTION OCCURRED: " << e.what() << std::endl << std::endl;
+  }
 }
 
 void UI::removeChannelsUI()

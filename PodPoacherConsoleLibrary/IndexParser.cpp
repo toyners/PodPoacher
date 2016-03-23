@@ -26,12 +26,12 @@ std::vector<int>* IndexParser::parseInput(std::string& url)
     {
       if (inRange)
       {
-        // TODO: throw exception
+        throw std::exception("'-' is illegal - already in range.");
       }
 
       if (firstValue.size() == 0)
       {
-        // TODO: throw exception
+        throw std::exception("No first value found in range.");
       }
 
       inRange = true;
@@ -67,10 +67,6 @@ std::vector<int>* IndexParser::parseInput(std::string& url)
     list->push_back(stoi(firstValue));
   }
 
-  // Sort and remove duplicates
-  std::sort(list->begin(), list->end());
-  list->erase(std::unique(list->begin(), list->end()), list->end());
-
   return list;
 }
 
@@ -80,13 +76,19 @@ void IndexParser::addRange(std::string firstValue, std::string secondValue, std:
   int first = stoi(secondValue);
   int second = stoi(firstValue);
 
+  int stepDirection = 1;
   if (first > second)
   {
-    // TODO: throw exception
+    while (first >= second)
+    {
+      list.push_back(first--);
+    }
   }
-
-  while (first <= second)
+  else
   {
-    list.push_back(first++);
+    while (first <= second)
+    {
+      list.push_back(first++);
+    }
   }
 }

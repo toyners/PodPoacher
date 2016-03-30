@@ -1,8 +1,11 @@
 # PodPoacher
 **PodPoacher** is a podcast catcher written in C++. Uses a CLI for simplicity and speed.
 
+Version 1.0
+- Beta testing complete. Now Live.
+
 Version 0.965
-- Can now enter a descending index range (2-1) when downloading multiple podcasts
+- Can now enter a descending index range (2-1) when downloading multiple podcasts.
 
 Version 0.964
 - Download report now displayed once Scan All is complete.
